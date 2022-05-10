@@ -1,0 +1,42 @@
+{
+  "name": "armada",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server/server.js",
+    "build": "NODE_ENV=production webpack",
+    "dev": "NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack serve --open "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oslabs-beta/Armada"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oslabs-beta/Armada"
+  },
+  "homepage": "https://github.com/oslabs-beta/Armada",
+  "dependencies": {
+    "@kubernetes/client-node": "^0.16.3",
+    "express": "^4.18.1",
+    "prom-client": "^14.0.1",
+    "react": "^18.1.0",
+    "react-redux": "^8.0.1",
+    "react-router-dom": "^6.3.0",
+    "redux": "^4.2.0",
+    "webpack": "^5.72.1",
+    "webpack-dev-server": "^4.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/preset-env": "^7.17.10",
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack-cli": "^4.9.2"
+  }
+}
