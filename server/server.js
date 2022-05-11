@@ -21,8 +21,9 @@ app.get('/fetchMetrics', async (req, res) => {
   res.status(200).json(metrics);
 });
 
-app.get('/nodeList', getLists.getNodeList, (req, res) => {
+app.get('/nodesList', getLists.getNodesList, (req, res) => {
   console.log('Num Nodes', res.locals.nodeList.response.body.items.length);
+  console.log(res.locals.nodeList.response.body);
   console.log(
     'Nodes names',
     res.locals.nodeList.response.body.items
@@ -31,6 +32,24 @@ app.get('/nodeList', getLists.getNodeList, (req, res) => {
   );
 
   res.status(201).send(res.locals.nodeList);
+});
+app.get('/deploymentsList', getLists.getDeploymentsList, (req, res) => {
+  res.status(201).send(res.locals.deploymentsList);
+});
+app.get('/podsList', getLists.getPodsList, (req, res) => {
+  res.status(201).send(res.locals.podsList);
+});
+
+app.get('/servicesList', getLists.getServicesList, (req, res) => {
+  res.status(201).send(res.locals.servicesList);
+});
+
+// app.get('/ingressesList', getLists.getIngressesList, (req, res) => {
+//   res.status(201).send(res.locals.ingressesList);
+// });
+
+app.get(['/', '/metrics', '/custom', '/alerts'], (req, res) => {
+  res.status(201).sendFile(path.join(__dirname, '../index.html'));
 });
 
 // Global route handler
