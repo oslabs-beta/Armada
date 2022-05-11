@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from "react";
-import fetch from "fetch";
+import React, { useState, useEffect } from 'react';
 
-function NodesCount() {
-	const [nodes, setNodes] = useState([]);
-	useEffect(() => {
-		fetch("/api/nodesList")
-			.then((res) => res.json())
-			.then((data) => setNodes(data));
-	});
-
-	return <div>NodeList {nodes.length}</div>;
+function NodesCount(props) {
+  const { nodes } = props;
+  const nodesCount = nodes.length ? nodes.length : '-';
+  return <div>NodeList {nodesCount}</div>;
 }
 
 export default NodesCount;
