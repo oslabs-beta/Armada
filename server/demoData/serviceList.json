@@ -1,0 +1,147 @@
+[
+  {
+    "metadata": {
+      "creationTimestamp": "2022-05-10T02:46:15.000Z",
+      "labels": {
+        "component": "apiserver",
+        "provider": "kubernetes"
+      },
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:labels": {
+                ".": {},
+                "f:component": {},
+                "f:provider": {}
+              }
+            },
+            "f:spec": {
+              "f:clusterIP": {},
+              "f:internalTrafficPolicy": {},
+              "f:ipFamilyPolicy": {},
+              "f:ports": {
+                ".": {},
+                "k:{\"port\":443,\"protocol\":\"TCP\"}": {
+                  ".": {},
+                  "f:name": {},
+                  "f:port": {},
+                  "f:protocol": {},
+                  "f:targetPort": {}
+                }
+              },
+              "f:sessionAffinity": {},
+              "f:type": {}
+            }
+          },
+          "manager": "kube-apiserver",
+          "operation": "Update",
+          "time": "2022-05-10T02:46:15.000Z"
+        }
+      ],
+      "name": "kubernetes",
+      "namespace": "default",
+      "resourceVersion": "203",
+      "uid": "a7ff19a4-c438-4dae-9be5-953767d64f27"
+    },
+    "spec": {
+      "clusterIP": "10.96.0.1",
+      "clusterIPs": ["10.96.0.1"],
+      "internalTrafficPolicy": "Cluster",
+      "ipFamilies": ["IPv4"],
+      "ipFamilyPolicy": "SingleStack",
+      "ports": [
+        {
+          "name": "https",
+          "port": 443,
+          "protocol": "TCP",
+          "targetPort": 6443
+        }
+      ],
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+    },
+    "status": {
+      "loadBalancer": {}
+    }
+  },
+  {
+    "metadata": {
+      "annotations": {
+        "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Service\",\"metadata\":{\"annotations\":{},\"labels\":{\"k8s-app\":\"kube-state-metrics\",\"prometheus\":\"cluster-monitoring\"},\"name\":\"kur8-srv\",\"namespace\":\"default\"},\"spec\":{\"ports\":[{\"name\":\"kur8\",\"port\":3000,\"protocol\":\"TCP\",\"targetPort\":3000}],\"selector\":{\"app\":\"kur8\"},\"type\":\"ClusterIP\"}}\n"
+      },
+      "creationTimestamp": "2022-05-10T03:27:41.000Z",
+      "labels": {
+        "k8s-app": "kube-state-metrics",
+        "prometheus": "cluster-monitoring"
+      },
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:annotations": {
+                ".": {},
+                "f:kubectl.kubernetes.io/last-applied-configuration": {}
+              },
+              "f:labels": {
+                ".": {},
+                "f:k8s-app": {},
+                "f:prometheus": {}
+              }
+            },
+            "f:spec": {
+              "f:internalTrafficPolicy": {},
+              "f:ports": {
+                ".": {},
+                "k:{\"port\":3000,\"protocol\":\"TCP\"}": {
+                  ".": {},
+                  "f:name": {},
+                  "f:port": {},
+                  "f:protocol": {},
+                  "f:targetPort": {}
+                }
+              },
+              "f:selector": {},
+              "f:sessionAffinity": {},
+              "f:type": {}
+            }
+          },
+          "manager": "kubectl-client-side-apply",
+          "operation": "Update",
+          "time": "2022-05-10T03:27:41.000Z"
+        }
+      ],
+      "name": "kur8-srv",
+      "namespace": "default",
+      "resourceVersion": "5588",
+      "uid": "d06e901e-0781-4c04-8cb9-c1484e2ee3ea"
+    },
+    "spec": {
+      "clusterIP": "10.96.136.100",
+      "clusterIPs": ["10.96.136.100"],
+      "internalTrafficPolicy": "Cluster",
+      "ipFamilies": ["IPv4"],
+      "ipFamilyPolicy": "SingleStack",
+      "ports": [
+        {
+          "name": "kur8",
+          "port": 3000,
+          "protocol": "TCP",
+          "targetPort": 3000
+        }
+      ],
+      "selector": {
+        "app": "kur8"
+      },
+      "sessionAffinity": "None",
+      "type": "ClusterIP"
+    },
+    "status": {
+      "loadBalancer": {}
+    }
+  }
+]

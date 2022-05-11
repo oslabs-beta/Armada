@@ -1,13 +1,13 @@
 const initialState = {
-	dummy: false,
+  dummy: false,
 };
 
-const dummyReducer = (state = initialSTate, action) => {
-	switch (action.type) {
-		default: {
-			return state;
-		}
-	}
+const dummyReducer = (state = initialState, action) => {
+  switch (action.type) {
+    default: {
+      return state;
+    }
+  }
 };
 
 export default dummyReducer;
