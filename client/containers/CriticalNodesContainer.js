@@ -6,17 +6,51 @@ import ReceivedBytesIntensiveNodes from '../components/CriticalNodes/ReceivedByt
 import TransactionBytesIntensiveNodes from '../components/CriticalNodes/TransactionBytesIntensiveNodes';
 
 const CriticalNodesContainer = () => {
-  const [nodesCpu, setNodesCpu] = useState([]);
-  useEffect(() => {});
+  const [cpu, setCpu] = useState([]);
+  const [memory, setMemory] = useState([]);
+  const getCpuByNode = () => {
+    fetch('api/prometheus/cpubynode')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setCpu(data);
+      })
+      .catch((err) => console.log('error with nodebycpu', err));
+  };
 
-  return;
-  <>
-    <ProblematicNodes />
-    <CPUIntensiveNodes />
-    <MemoryIntensiveNodes />
-    <ReceivedBytesIntensiveNodes />
-    <TransactionBytesIntensiveNodes />
-  </>;
+  const getMemoryByNode = () => {
+    fetch('/api/prometheus/memorybynode')
+      .then((res) => res.json())
+      .then((data) => setMemory(data))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getCpuByNode();
+    getMemoryByNode();
+  }, []);
+
+  const renderCpuGraph = () => {
+    if (cpu.length > 0) {
+      return <CPUIntensiveNodes nodes={cpu} />;
+    }
+  };
+  const renderMemoryGraph = () => {
+    if (memory.length > 0) {
+      return <MemoryIntensiveNodes nodes={memory} />;
+    }
+  };
+  return (
+    <>
+      <ProblematicNodes />
+      {renderCpuGraph()}
+      {renderMemoryGraph()}
+
+      <ReceivedBytesIntensiveNodes />
+      <TransactionBytesIntensiveNodes />
+    </>
+  );
 };
 
 export default CriticalNodesContainer;

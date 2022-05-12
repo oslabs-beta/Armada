@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import CountsContainer from './CountsContainer';
 import StatusContainer from './StatusContainer';
-import CriticalPodsContainer from './CriticalNodesContainer';
-import CriticalNodesContainer from './CriticalPodsContainer';
+import CriticalPodsContainer from './CriticalPodsContainer';
+import CriticalNodesContainer from './CriticalNodesContainer';
 
 const MainContainer = () => {
   const [nodes, setNodes] = useState([]);
@@ -48,10 +48,12 @@ const MainContainer = () => {
   };
 
   const getPromMetrics = () => {
-    let startDateTime = '19:00';
-    let endDateTime = '21:00';
-    let step = 2;
-    fetch(`/api/prometheus/metrics/${startDateTime}/${endDateTime}/${step}`)
+    let startDateTime = '2022-05-11T17:52:43.841Z';
+    let endDateTime = '2022-05-11T21:52:43.841Z';
+    let step = '10m';
+    fetch(
+      `/api/prometheus/metrics?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
