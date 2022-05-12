@@ -23,15 +23,15 @@ prometheusRouter.get(
 prometheusRouter.get(
   '/metrics',
   prometheusController.getCpuUsageSecondsRateByName,
-  prometheusController.getClusterFreeMemory,
-  prometheusController.getNetworkTransmitBytes,
+  // prometheusController.getClusterFreeMemory,
+  // prometheusController.getNetworkTransmitBytes,
   (req, res) => {
     const chartData = {
-      cpuUsageSecondsRate: res.locals.getCpuUsageSecondsRate,
-      clusterFreeMemory: res.locals.getClusterFreeMemory,
-      networkTransmitData: res.locals.getNetworkTransmitData,
+      cpuUsageSecondsRate: res.locals.getCpuUsageSecondsRateByName,
+      // clusterFreeMemory: res.locals.getClusterFreeMemory,
+      // networkTransmitData: res.locals.getNetworkTransmitData,
     };
-    res.sendStatus(200).json(chartData);
+    res.status(200).json(chartData);
   }
 );
 
@@ -43,8 +43,20 @@ prometheusRouter.get(
   }
 );
 
-// prometheusController.getCpuUsageSecondsRateByName
-// prometheusController.getClusterFreeMemory
-// prometheusController.getNetworkTransmitBytes
+prometheusRouter.get(
+  '/memorybynode',
+  prometheusController.getMemoryUsageByNode,
+  (req, res) => {
+    res.status(200).json(res.locals.getMemoryUsageByNode);
+  }
+);
+
+prometheusRouter.get(
+  '/cpubypod',
+  prometheusController.getCpuUsageByPod,
+  (req, res) => {
+    res.status(200).json(res.locals.getCpuUsageByPod);
+  }
+);
 
 module.exports = prometheusRouter;

@@ -1,0 +1,20 @@
+.statusBox {
+  display: flex;
+  max-width: 300px;
+  justify-content: space-between;
+  border: solid 1px gray;
+}
+
+.status-label {
+  opacity: 0;
+}
+
+/* .node-box {
+  background-color: 'green';
+  width: 20px;
+  height: 20px;
+} */
+
+.status-box:hover .status-label {
+  opacity: 1;
+}
