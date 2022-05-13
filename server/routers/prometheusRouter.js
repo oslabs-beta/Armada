@@ -22,14 +22,16 @@ prometheusRouter.get(
 
 prometheusRouter.get(
   '/metrics',
-  prometheusController.getCpuUsageSecondsRateByName,
+  // prometheusController.getCpuUsageSecondsRateByName,
   // prometheusController.getClusterFreeMemory,
-  // prometheusController.getNetworkTransmitBytes,
+  prometheusController.bytesTransmittedPerNode,
+  prometheusController.bytesReceivedPerNode,
   (req, res) => {
     const chartData = {
-      cpuUsageSecondsRate: res.locals.getCpuUsageSecondsRateByName,
+      // cpuUsageSecondsRate: res.locals.getCpuUsageSecondsRateByName,
       // clusterFreeMemory: res.locals.getClusterFreeMemory,
-      // networkTransmitData: res.locals.getNetworkTransmitData,
+      bytesTransmittedPerNode: res.locals.bytesTransmittedPerNode,
+      bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
     };
     res.status(200).json(chartData);
   }
@@ -56,6 +58,14 @@ prometheusRouter.get(
   prometheusController.getCpuUsageByPod,
   (req, res) => {
     res.status(200).json(res.locals.getCpuUsageByPod);
+  }
+);
+
+prometheusRouter.get(
+  '/memorybypod',
+  prometheusController.getMemoryUsageByPod,
+  (req, res) => {
+    res.status(200).json(res.locals.getMemoryUsageByPod);
   }
 );
 

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
+import Tooltip from '@mui/material/Tooltip';
+import Card from '@mui/material/Card';
+import ComponentWrapper from '../../utils/ComponentWrapper';
 
 const PodsStatus = (props) => {
   const { pods } = props;
@@ -12,29 +15,39 @@ const PodsStatus = (props) => {
 
   for (let key of Object.keys(podsObj)) {
     let boxStyle = {
-      'background-color': 'green',
+      backgroundColor: '#3dce2d',
+      border: '1px solid #39ba2a',
+      borderRadius: '3px',
       width: '20px',
       height: '20px',
+      margin: '1px',
     };
     if (podsObj[key] !== 'Running') {
       boxStyle['background-color'] = 'red';
     }
     PodsBoxes.push(
       <div className='pod-box-label'>
-        <Box
-          className='status-box'
-          style={boxStyle}
-          key={key}
-          name={key}
-          status={podsObj[key]}
-        >
-          <div className='status-label'>{key}</div>
-        </Box>
+        <Tooltip title={key}>
+          <Card
+            style={boxStyle}
+            key={key}
+            name={key}
+            status={podsObj[key]}
+          ></Card>
+        </Tooltip>
       </div>
     );
   }
 
-  return <div className='statusBox'>Pod Status {PodsBoxes}</div>;
+  return (
+    <ComponentWrapper title='Pod Status'>
+      <div className='card'>
+        {/* <h4 className='card-label'>Pod Status</h4> */}
+        <div className='break'></div>
+        <div className='card-content'>{PodsBoxes}</div>
+      </div>
+    </ComponentWrapper>
+  );
 };
 
 export default PodsStatus;

@@ -1,0 +1,254 @@
+[
+  {
+    "metadata": {
+      "creationTimestamp": "2022-05-10T03:48:41.000Z",
+      "generateName": "kur8-depl-bb9f57bfb-",
+      "labels": {
+        "app": "kur8",
+        "pod-template-hash": "bb9f57bfb"
+      },
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:generateName": {},
+              "f:labels": {
+                ".": {},
+                "f:app": {},
+                "f:pod-template-hash": {}
+              },
+              "f:ownerReferences": {
+                ".": {},
+                "k:{\"uid\":\"1920dc26-dc98-4438-b9da-08457003695e\"}": {}
+              }
+            },
+            "f:spec": {
+              "f:containers": {
+                "k:{\"name\":\"kur8\"}": {
+                  ".": {},
+                  "f:image": {},
+                  "f:imagePullPolicy": {},
+                  "f:name": {},
+                  "f:resources": {},
+                  "f:terminationMessagePath": {},
+                  "f:terminationMessagePolicy": {}
+                }
+              },
+              "f:dnsPolicy": {},
+              "f:enableServiceLinks": {},
+              "f:restartPolicy": {},
+              "f:schedulerName": {},
+              "f:securityContext": {},
+              "f:terminationGracePeriodSeconds": {}
+            }
+          },
+          "manager": "kube-controller-manager",
+          "operation": "Update",
+          "time": "2022-05-10T03:48:41.000Z"
+        },
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:status": {
+              "f:conditions": {
+                "k:{\"type\":\"ContainersReady\"}": {
+                  ".": {},
+                  "f:lastProbeTime": {},
+                  "f:lastTransitionTime": {},
+                  "f:status": {},
+                  "f:type": {}
+                },
+                "k:{\"type\":\"Initialized\"}": {
+                  ".": {},
+                  "f:lastProbeTime": {},
+                  "f:lastTransitionTime": {},
+                  "f:status": {},
+                  "f:type": {}
+                },
+                "k:{\"type\":\"Ready\"}": {
+                  ".": {},
+                  "f:lastProbeTime": {},
+                  "f:lastTransitionTime": {},
+                  "f:status": {},
+                  "f:type": {}
+                }
+              },
+              "f:containerStatuses": {},
+              "f:hostIP": {},
+              "f:phase": {},
+              "f:podIP": {},
+              "f:podIPs": {
+                ".": {},
+                "k:{\"ip\":\"10.244.2.7\"}": {
+                  ".": {},
+                  "f:ip": {}
+                }
+              },
+              "f:startTime": {}
+            }
+          },
+          "manager": "Go-http-client",
+          "operation": "Update",
+          "subresource": "status",
+          "time": "2022-05-12T06:05:11.000Z"
+        }
+      ],
+      "name": "kur8-depl-bb9f57bfb-rl575",
+      "namespace": "default",
+      "ownerReferences": [
+        {
+          "apiVersion": "apps/v1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ReplicaSet",
+          "name": "kur8-depl-bb9f57bfb",
+          "uid": "1920dc26-dc98-4438-b9da-08457003695e"
+        }
+      ],
+      "resourceVersion": "225867",
+      "uid": "9ec607e8-20f7-485f-9012-2b35c69c281c"
+    },
+    "spec": {
+      "containers": [
+        {
+          "image": "kur8/dashboard:latest",
+          "imagePullPolicy": "Always",
+          "name": "kur8",
+          "resources": {},
+          "terminationMessagePath": "/dev/termination-log",
+          "terminationMessagePolicy": "File",
+          "volumeMounts": [
+            {
+              "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+              "name": "kube-api-access-h2j2f",
+              "readOnly": true
+            }
+          ]
+        }
+      ],
+      "dnsPolicy": "ClusterFirst",
+      "enableServiceLinks": true,
+      "nodeName": "monitoring-worker3",
+      "preemptionPolicy": "PreemptLowerPriority",
+      "priority": 0,
+      "restartPolicy": "Always",
+      "schedulerName": "default-scheduler",
+      "securityContext": {},
+      "serviceAccount": "default",
+      "serviceAccountName": "default",
+      "terminationGracePeriodSeconds": 30,
+      "tolerations": [
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/not-ready",
+          "operator": "Exists",
+          "tolerationSeconds": 300
+        },
+        {
+          "effect": "NoExecute",
+          "key": "node.kubernetes.io/unreachable",
+          "operator": "Exists",
+          "tolerationSeconds": 300
+        }
+      ],
+      "volumes": [
+        {
+          "name": "kube-api-access-h2j2f",
+          "projected": {
+            "defaultMode": 420,
+            "sources": [
+              {
+                "serviceAccountToken": {
+                  "expirationSeconds": 3607,
+                  "path": "token"
+                }
+              },
+              {
+                "configMap": {
+                  "items": [
+                    {
+                      "key": "ca.crt",
+                      "path": "ca.crt"
+                    }
+                  ],
+                  "name": "kube-root-ca.crt"
+                }
+              },
+              {
+                "downwardAPI": {
+                  "items": [
+                    {
+                      "fieldRef": {
+                        "apiVersion": "v1",
+                        "fieldPath": "metadata.namespace"
+                      },
+                      "path": "namespace"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2022-05-10T03:48:41.000Z",
+          "status": "True",
+          "type": "Initialized"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2022-05-10T03:48:45.000Z",
+          "status": "True",
+          "type": "Ready"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2022-05-10T03:48:45.000Z",
+          "status": "True",
+          "type": "ContainersReady"
+        },
+        {
+          "lastProbeTime": null,
+          "lastTransitionTime": "2022-05-10T03:48:41.000Z",
+          "status": "True",
+          "type": "PodScheduled"
+        }
+      ],
+      "containerStatuses": [
+        {
+          "containerID": "containerd://0b649fdc4ae3f1b057474fee174754a8b68345fc6bfbb848e714ad2410a0d9dd",
+          "image": "docker.io/kur8/dashboard:latest",
+          "imageID": "docker.io/kur8/dashboard@sha256:36851750cd40aad4bfe7cab234e59838abe457621ecc8c2cf3148b062d62fb07",
+          "lastState": {},
+          "name": "kur8",
+          "ready": true,
+          "restartCount": 0,
+          "started": true,
+          "state": {
+            "running": {
+              "startedAt": "2022-05-10T03:48:44.000Z"
+            }
+          }
+        }
+      ],
+      "hostIP": "172.19.0.4",
+      "phase": "Running",
+      "podIP": "10.244.2.7",
+      "podIPs": [
+        {
+          "ip": "10.244.2.7"
+        }
+      ],
+      "qosClass": "BestEffort",
+      "startTime": "2022-05-10T03:48:41.000Z"
+    }
+  }
+]

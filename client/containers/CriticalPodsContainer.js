@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { Grid } from '@mui/material';
 import CPUIntensivePods from '../components/CriticalPods/CPUIntensivePods';
 import MemoryIntensivePods from '../components/CriticalPods/MemoryIntensivePods';
 import ProblematicPods from '../components/CriticalPods/ProblematicPods';
-import ReceivedBytesIntensivePods from '../components/CriticalPods/ReceivedBytesIntensivePods';
-import TransactionBytesIntensivePods from '../components/CriticalPods/TransactionBytesIntensivePods';
 
 const CriticalPodsContainer = () => {
   const [cpu, setCpu] = useState([]);
-  const fetchCpuByPod = () =>
+  const [memory, setMemory] = useState([]);
+  const fetchCpuByPod = () => {
     fetch('/api/prometheus/cpubypod')
       .then((res) => res.json())
       .then((data) => setCpu(data))
       .catch((err) => console.log(err));
+  };
+
+  const fetchMemoryByPod = () => {
+    fetch('/api/prometheus/memorybypod')
+      .then((res) => res.json())
+      .then((data) => {
+        setMemory(data);
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     fetchCpuByPod();
+    fetchMemoryByPod();
   }, []);
 
   const renderCpuGraph = () => {
@@ -21,14 +34,25 @@ const CriticalPodsContainer = () => {
       return <CPUIntensivePods pods={cpu} />;
     }
   };
+
+  const renderMemory = () => {
+    if (memory) {
+      return <MemoryIntensivePods pods={memory} />;
+    }
+  };
+
   return (
-    <>
-      <ProblematicPods />
-      {renderCpuGraph()}
-      <MemoryIntensivePods />
-      <ReceivedBytesIntensivePods />
-      <TransactionBytesIntensivePods />
-    </>
+    <Grid container spacing={1}>
+      <Grid item sm={6} lg={4}>
+        <ProblematicPods />
+      </Grid>
+      <Grid item sm={6} lg={4}>
+        {renderCpuGraph()}
+      </Grid>
+      <Grid item sm={6} lg={4}>
+        {renderMemory()}
+      </Grid>
+    </Grid>
   );
 };
 

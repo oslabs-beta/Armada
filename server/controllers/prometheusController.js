@@ -8,6 +8,7 @@ const fetch = (...args) =>
 
 const { spawn } = require('child_process');
 const formatChartData = require('../utils/formatChartData');
+const formatTimeToAvg = require('../utils/formatTimeToAvg');
 const formatVectorData = require('../utils/formatVectorData');
 // can use to run specified commands that you'd otherwise need to write in terminal
 
@@ -66,7 +67,6 @@ prometheusController.getCpuUsageSecondsRateByName = async (req, res, next) => {
       .then((resp) => resp.json())
       .then((resp) => {
         const formatted = formatChartData(resp.data.result);
-        // console.log(`this is our log ${formatted}`);
         res.locals.getCpuUsageSecondsRateByName = formatted;
       })
       .then(() => next());
@@ -78,6 +78,7 @@ prometheusController.getCpuUsageSecondsRateByName = async (req, res, next) => {
   }
 };
 //  let query = `${prometheusURL}query?query=100 * avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[1m]))`;
+// look to include cluster free memory in time series graph
 prometheusController.getClusterFreeMemory = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
   // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_memory_MemFree_bytes[2m]))&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
@@ -99,34 +100,59 @@ prometheusController.getClusterFreeMemory = async (req, res, next) => {
   }
 };
 
-// should we average over a period of time?
-prometheusController.getNetworkTransmitBytes = async (req, res, next) => {
+prometheusController.bytesTransmittedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
-  // console.log('start time', startDateTime);
-  // console.log('end time', endDateTime);
-  // let query = `${prometheusURL}query_range?query=sum(rate(node_network_transmit_bytes_total[2m])) by (node)`;
-  // query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+  // added bytes received per node
+  let query = `${prometheusURL}query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)`;
+  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   //let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[2m])) by (node)&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-  let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-11T21:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-
-  console.log('query before fetch', query);
+  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-11T21:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
+  //console.log('query before fetch', query);
   try {
     fetch(query)
       .then((resp) => resp.json())
       .then((resp) => {
-        const formatted = formatChartData(resp.data.result);
-        res.locals.getNetworkTransmitData = formatted;
+        const resultArr = formatTimeToAvg(resp);
+        res.locals.bytesTransmittedPerNode = resultArr;
       })
       .then(() => next())
       .catch((error) =>
         next({
-          log: 'Error in getNetworkTransmitBytes',
+          log: 'Error in bytesTransmittedPerNode',
           message: { err: error.message },
         })
       );
   } catch (err) {
     next({
-      log: `Error with getting Network Transmit Memory`,
+      log: `Error with bytes transmitted per node`,
+      message: { err: err.message },
+    });
+  }
+};
+
+prometheusController.bytesReceivedPerNode = async (req, res, next) => {
+  const { startDateTime, endDateTime, step } = req.query;
+  let query = `${prometheusURL}query_range?query=sum(rate(node_network_receive_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)`;
+  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+  //let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[2m])) by (node)&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
+  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-11T21:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
+  try {
+    fetch(query)
+      .then((resp) => resp.json())
+      .then((resp) => {
+        const resultArr = formatTimeToAvg(resp);
+        res.locals.bytesReceivedPerNode = resultArr;
+      })
+      .then(() => next())
+      .catch((error) =>
+        next({
+          log: 'Error in bytesReceivedPerNode',
+          message: { err: error.message },
+        })
+      );
+  } catch (err) {
+    next({
+      log: `Error with bytes received per node`,
       message: { err: err.message },
     });
   }
@@ -164,6 +190,23 @@ prometheusController.getMemoryUsageByNode = async (req, res, next) => {
   } catch (err) {
     return next({
       log: 'Error with getting memory usage by node',
+      message: { err: err.message },
+    });
+  }
+};
+
+prometheusController.getMemoryUsageByPod = async (req, res, next) => {
+  let query = `${prometheusURL}query?query=sum(container_memory_working_set_bytes{container_name!="POD"}) by (pod)`;
+  try {
+    const response = await fetch(query);
+    const data = await response.json();
+    const result = data.data.result;
+    console.log('result', result);
+    res.locals.getMemoryUsageByPod = formatVectorData(result, 'pod');
+    return next();
+  } catch (err) {
+    return next({
+      log: 'Error with getting memory usage by pod',
       message: { err: err.message },
     });
   }
