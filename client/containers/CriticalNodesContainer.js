@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import CPUIntensiveNodes from '../components/CriticalNodes/CPUIntensiveNodes';
 import MemoryIntensiveNodes from '../components/CriticalNodes/MemoryIntensiveNodes';
 import ProblematicNodes from '../components/CriticalNodes/ProblematicNodes';
-import ReceivedBytesIntensiveNodes from '../components/CriticalNodes/ReceivedBytesIntensiveNodes';
-import TransactionBytesIntensiveNodes from '../components/CriticalNodes/TransactionBytesIntensiveNodes';
+import BytesTransmittedPerNode from '../components/CriticalNodes/BytesTransmittedPerNode';
+import BytesReceivedPerNode from '../components/CriticalNodes/BytesReceivedPerNode';
+import { Grid } from '@mui/material';
 
-const CriticalNodesContainer = () => {
+const CriticalNodesContainer = ({ promMetrics }) => {
   const [cpu, setCpu] = useState([]);
   const [memory, setMemory] = useState([]);
   const getCpuByNode = () => {
@@ -41,15 +42,40 @@ const CriticalNodesContainer = () => {
       return <MemoryIntensiveNodes nodes={memory} />;
     }
   };
-  return (
-    <>
-      <ProblematicNodes />
-      {renderCpuGraph()}
-      {renderMemoryGraph()}
 
-      <ReceivedBytesIntensiveNodes />
-      <TransactionBytesIntensiveNodes />
-    </>
+  const renderNetworkTransmitGraph = () => {
+    // console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
+    if (promMetrics.bytesTransmittedPerNode) {
+      return <BytesTransmittedPerNode promMetrics={promMetrics} />;
+    }
+  };
+
+  const renderNetworkReceivedGraph = () => {
+    // console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
+    if (promMetrics.bytesReceivedPerNode) {
+      return <BytesReceivedPerNode promMetrics={promMetrics} />;
+    }
+  };
+
+  return (
+    <Grid container spacing={1}>
+      <Grid item sm={4}>
+        <ProblematicNodes />
+      </Grid>
+      <Grid item sm={4}>
+        {renderCpuGraph()}
+      </Grid>
+      <Grid item sm={4}>
+        {renderMemoryGraph()}
+      </Grid>
+
+      <Grid item sm={4}>
+        {renderNetworkTransmitGraph()}
+      </Grid>
+      <Grid item sm={4}>
+        {renderNetworkReceivedGraph()}
+      </Grid>
+    </Grid>
   );
 };
 

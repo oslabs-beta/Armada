@@ -1,47 +1,19 @@
 import React from 'react';
+import ComponentWrapper from '../../utils/ComponentWrapper';
 import BarChart from '../Charts/BarChartTemplate';
 
 const MemoryIntensiveNodes = ({ nodes }) => {
-  // const options = {
-  //   indexAxis: 'y',
-  //   elements: {
-  //     bar: {
-  //       borderWidth: 2,
-  //     },
-  //   },
-  //   responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       position: 'right',
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: 'Chart.js Horizontal Bar Chart',
-  //     },
-  //   },
-  // };
-  // const data = {
-  //   labels: nodes.map((el) => el.label),
-  //   datasets: [
-  //     {
-  //       label: 'Memory Usage By Node',
-  //       data: nodes.map((el) => el.data),
-  //       borderColor: 'rgb(255, 99, 132)',
-  //       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-  //     },
-  //   ],
-  // };
-
+  const unitConverted = nodes.map((el) => {
+    return { ...el, data: el.data / 1000000000 };
+  });
   return (
-    <>
-      Memory Intensive Nodes
+    <ComponentWrapper title='Memory Intensive Nodes'>
       <BarChart
-        chartData={nodes}
-        title='Memory Usage by Node'
-        label='Memory Usage by Node'
+        chartData={unitConverted}
+        title='Memory Usage (Gb) by Node'
+        label='Memory Usage by (Gb) Node'
       />
-      {/* <Bar options={options} data={data} /> */}
-    </>
+    </ComponentWrapper>
   );
 };
 

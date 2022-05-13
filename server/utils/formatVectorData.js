@@ -3,7 +3,7 @@ const formatVectorData = (arr, metricName) => {
     .sort((a, b) => parseFloat(b.value[1]) - parseFloat(a.value[1]))
     .map((node) => {
       return {
-        label: node.metric[metricName],
+        label: node.metric[metricName] ? node.metric[metricName] : 'unnamed',
         data: parseFloat(node.value[1]),
       };
     });

@@ -1,13 +1,8 @@
-const initialState = {
-  dummy: false,
-};
+import { combineReducers } from 'redux';
+import nodesReducer from './nodes';
 
-const dummyReducer = (state = initialState, action) => {
-  switch (action.type) {
-    default: {
-      return state;
-    }
-  }
-};
+const reducers = combineReducers({
+  nodes: nodesReducer,
+});
 
-export default dummyReducer;
+export default reducers;

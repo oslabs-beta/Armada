@@ -29,7 +29,7 @@ const BarChart = ({ chartData, title, label }) => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'right',
+        display: false,
       },
       title: {
         display: true,
@@ -41,7 +41,7 @@ const BarChart = ({ chartData, title, label }) => {
     labels: chartData.map((el) => el.label),
     datasets: [
       {
-        label,
+        // label,
         data: chartData.map((el) => el.data),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',

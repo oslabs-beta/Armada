@@ -17,20 +17,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../build')));
 
 app.get('/api/fetchMetrics', async (req, res) => {
-  console.log(client.collectDefaultMetrics.metricsList);
+  // console.log(client.collectDefaultMetrics.metricsList);
   const metrics = await client.register.getMetricsAsJSON();
   res.status(200).json(metrics);
 });
 
 app.get('/api/nodesList', getLists.getNodesList, (req, res) => {
-  console.log('Num Nodes', res.locals.nodeList.response.body.items.length);
-  console.log(res.locals.nodeList.response.body);
-  console.log(
-    'Nodes names',
-    res.locals.nodeList.response.body.items
-      .map((el) => el.metadata.name)
-      .join(', ')
-  );
+  // console.log('Num Nodes', res.locals.nodeList.response.body.items.length);
+  // console.log(res.locals.nodeList.response.body);
+  // console.log(
+  //   'Nodes names',
+  //   res.locals.nodeList.response.body.items
+  //     .map((el) => el.metadata.name)
+  //     .join(', ')
+  // );
 
   res.status(201).send(res.locals.nodeList.response.body.items);
 });
