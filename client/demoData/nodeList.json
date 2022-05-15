@@ -180,7 +180,7 @@
             "conditions": [
               {
                 "type": "MemoryPressure",
-                "status": "False",
+                "status": "True",
                 "lastHeartbeatTime": "2022-05-11T00:59:38Z",
                 "lastTransitionTime": "2022-05-10T13:52:47Z",
                 "reason": "KubeletHasSufficientMemory",
@@ -188,7 +188,7 @@
               },
               {
                 "type": "DiskPressure",
-                "status": "False",
+                "status": "True",
                 "lastHeartbeatTime": "2022-05-11T00:59:38Z",
                 "lastTransitionTime": "2022-05-10T13:52:47Z",
                 "reason": "KubeletHasNoDiskPressure",
@@ -204,7 +204,7 @@
               },
               {
                 "type": "Ready",
-                "status": "True",
+                "status": "False",
                 "lastHeartbeatTime": "2022-05-11T00:59:38Z",
                 "lastTransitionTime": "2022-05-10T13:52:47Z",
                 "reason": "KubeletReady",

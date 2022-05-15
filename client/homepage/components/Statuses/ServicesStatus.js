@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ComponentWrapper from '../../utils/ComponentWrapper';
+import ComponentWrapper from '../../../utils/ComponentWrapper';
 const ServicesStatus = (props) => {
   const { services } = props;
   console.log(services);

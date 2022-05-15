@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainContainer from './containers/MainContainer';
-import NavBar from './containers/NavBar';
-import Metrics from './pages/Metrics';
+import MainContainer from './homepage/containers/MainContainer';
+import NavBar from './homepage/containers/NavBar';
+import MetricsContainer from './metricspage/containers/MetricsContainer';
+// import Metrics from './pages/Metrics';
 import Alerts from './pages/Alerts';
 import { Container } from '@mui/material';
 function App() {
@@ -12,7 +13,7 @@ function App() {
       <Container maxWidth='xl'>
         <Routes>
           <Route path='/' element={<MainContainer />} />
-          <Route path='/metrics' element={<Metrics />} />
+          <Route path='/metrics' element={<MetricsContainer />} />
           <Route path='/alerts' element={<Alerts />} />
         </Routes>
       </Container>

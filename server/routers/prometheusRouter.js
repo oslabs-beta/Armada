@@ -1,5 +1,6 @@
 const express = require('express');
 const prometheusController = require('../controllers/prometheusController');
+const metricsDataController = require('../controllers/metricsDataController');
 const prometheusRouter = express.Router();
 
 // route to deploy prometheus onto the Cluster
@@ -21,17 +22,28 @@ prometheusRouter.get(
 );
 
 prometheusRouter.get(
-  '/metrics',
-  // prometheusController.getCpuUsageSecondsRateByName,
-  // prometheusController.getClusterFreeMemory,
+  '/homepage',
   prometheusController.bytesTransmittedPerNode,
   prometheusController.bytesReceivedPerNode,
   (req, res) => {
     const chartData = {
-      // cpuUsageSecondsRate: res.locals.getCpuUsageSecondsRateByName,
-      // clusterFreeMemory: res.locals.getClusterFreeMemory,
       bytesTransmittedPerNode: res.locals.bytesTransmittedPerNode,
       bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
+    };
+    res.status(200).json(chartData);
+  }
+);
+
+prometheusRouter.get(
+  '/metricspage',
+  metricsDataController.getFreeMemoryPerNode,
+  metricsDataController.getCPUUsageByNamespace,
+  metricsDataController.bytesReceivedPerNode,
+  (req, res) => {
+    const chartData = {
+      getCPUUsageByNamespace: res.locals.getCPUUsageByNamespace,
+      bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
+      getFreeMemoryPerNode: res.locals.getFreeMemoryPerNode,
     };
     res.status(200).json(chartData);
   }

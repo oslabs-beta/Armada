@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
 import Card from '@mui/material/Card';
-import ComponentWrapper from '../../utils/ComponentWrapper';
+import ComponentWrapper from '../../../utils/ComponentWrapper';
 
 const PodsStatus = (props) => {
   const { pods } = props;
@@ -26,7 +26,7 @@ const PodsStatus = (props) => {
       boxStyle['background-color'] = 'red';
     }
     PodsBoxes.push(
-      <div className='pod-box-label'>
+      <div className='pod-box-label' key={key}>
         <Tooltip title={key}>
           <Card
             style={boxStyle}
