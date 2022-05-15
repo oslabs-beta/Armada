@@ -38,7 +38,7 @@ const NodesStatus = ({ items }) => {
     }
 
     NodeBoxes.push(
-      <div className='node-box'>
+      <div className='node-box' key={key}>
         <Tooltip title={tooltipText}>
           <Box
             className='status-box'

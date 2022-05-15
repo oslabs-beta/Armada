@@ -56,49 +56,50 @@ prometheusController.portPrometheus = (req, res, next) => {
   }
 };
 
-prometheusController.getCpuUsageSecondsRateByName = async (req, res, next) => {
-  const { startDateTime, endDateTime, step } = req.query;
-  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m]))&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-  let query = `${prometheusURL}query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m])) by (namespace)`;
-  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+// // get by cluster and by namespace?
+// prometheusController.getCpuUsageSecondsRateByName = async (req, res, next) => {
+//   const { startDateTime, endDateTime, step } = req.query;
+//   // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m]))&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
+//   let query = `${prometheusURL}query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m])) by (namespace)`;
+//   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
 
-  try {
-    fetch(query)
-      .then((resp) => resp.json())
-      .then((resp) => {
-        const formatted = formatChartData(resp.data.result);
-        res.locals.getCpuUsageSecondsRateByName = formatted;
-      })
-      .then(() => next());
-  } catch (err) {
-    return next({
-      log: 'Error with getting CpuUsageSecondsRateByName',
-      message: { err: err.message },
-    });
-  }
-};
-//  let query = `${prometheusURL}query?query=100 * avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[1m]))`;
-// look to include cluster free memory in time series graph
-prometheusController.getClusterFreeMemory = async (req, res, next) => {
-  const { startDateTime, endDateTime, step } = req.query;
-  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_memory_MemFree_bytes[2m]))&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-  let query = `${prometheusURL}query_range?query=sum(rate(node_memory_MemFree_bytes[2m]))`;
-  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
-  try {
-    fetch(query)
-      .then((resp) => resp.json())
-      .then((resp) => {
-        const formatted = formatChartData(resp.data.result);
-        res.locals.getClusterFreeMemory = formatted;
-      })
-      .then(() => next());
-  } catch (err) {
-    next({
-      log: `Error with getting Cluster Free Memory`,
-      message: { err: err.message },
-    });
-  }
-};
+//   try {
+//     fetch(query)
+//       .then((resp) => resp.json())
+//       .then((resp) => {
+//         const formatted = formatChartData(resp.data.result);
+//         res.locals.getCpuUsageSecondsRateByName = formatted;
+//       })
+//       .then(() => next());
+//   } catch (err) {
+//     return next({
+//       log: 'Error with getting CpuUsageSecondsRateByName',
+//       message: { err: err.message },
+//     });
+//   }
+// };
+// //  let query = `${prometheusURL}query?query=100 * avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[1m]))`;
+// // look to include cluster free memory in time series graph
+// prometheusController.getClusterFreeMemory = async (req, res, next) => {
+//   const { startDateTime, endDateTime, step } = req.query;
+//   // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_memory_MemFree_bytes[2m]))&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
+//   let query = `${prometheusURL}query_range?query=sum(rate(node_memory_MemFree_bytes[2m]))`;
+//   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+//   try {
+//     fetch(query)
+//       .then((resp) => resp.json())
+//       .then((resp) => {
+//         const formatted = formatChartData(resp.data.result);
+//         res.locals.getClusterFreeMemory = formatted;
+//       })
+//       .then(() => next());
+//   } catch (err) {
+//     next({
+//       log: `Error with getting Cluster Free Memory`,
+//       message: { err: err.message },
+//     });
+//   }
+// };
 
 prometheusController.bytesTransmittedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
@@ -201,7 +202,7 @@ prometheusController.getMemoryUsageByPod = async (req, res, next) => {
     const response = await fetch(query);
     const data = await response.json();
     const result = data.data.result;
-    console.log('result', result);
+    // console.log('result', result);
     res.locals.getMemoryUsageByPod = formatVectorData(result, 'pod');
     return next();
   } catch (err) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import ComponentWrapper from '../../utils/ComponentWrapper';
+import ComponentWrapper from '../../../utils/ComponentWrapper';
 import BarChart from '../Charts/BarChartTemplate';
 
 const CPUIntensiveNodes = ({ nodes }) => {

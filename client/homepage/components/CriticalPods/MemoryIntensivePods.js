@@ -1,7 +1,7 @@
 import React from 'react';
 import BarChart from '../Charts/BarChartTemplate';
-import { MAX_SERIES } from '../../actions/constants/chartConstants';
-import ComponentWrapper from '../../utils/ComponentWrapper';
+import { MAX_SERIES } from '../../../actions/constants/chartConstants';
+import ComponentWrapper from '../../../utils/ComponentWrapper';
 
 const MemoryIntensivePods = ({ pods }) => {
   const unitConverted = pods.map((el) => {

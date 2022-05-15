@@ -20,7 +20,7 @@ const ProblematicNodes = ({ items, lastUpdated }) => {
   });
 
   const handleClick = (key) => {
-    setOpenState({ ...openState, [key]: !openState[key] });
+    setOpenState({ [key]: !openState[key] });
   };
   const nodeConditions = parseStatus(items);
 
@@ -29,7 +29,7 @@ const ProblematicNodes = ({ items, lastUpdated }) => {
       (key) => nodes[key][conditionType] === condition
     );
     return list.map((n) => {
-      return <ProblematicItem name={n} />;
+      return <ProblematicItem item={n} />;
     });
   };
   const down = () => {
