@@ -4,7 +4,7 @@ import MainContainer from './homepage/containers/MainContainer';
 import NavBar from './homepage/containers/NavBar';
 import MetricsContainer from './metricspage/containers/MetricsContainer';
 // import Metrics from './pages/Metrics';
-import Alerts from './pages/Alerts';
+import Alerts from './alertspage/Alerts';
 import { Container } from '@mui/material';
 function App() {
   return (
