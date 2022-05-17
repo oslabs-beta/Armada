@@ -1,0 +1,3477 @@
+{
+  "status": "success",
+  "data": {
+    "groups": [
+      {
+        "name": "alertmanager.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-alertmanager-main-rules-e520514e-c50d-44f2-8eeb-52c28af291ee.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "AlertmanagerFailedReload",
+            "query": "max_over_time(alertmanager_config_last_reload_successful{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) == 0",
+            "duration": 600,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Configuration has failed to load for {{ $labels.namespace }}/{{ $labels.pod}}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedreload",
+              "summary": "Reloading an Alertmanager configuration has failed."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000285963,
+            "lastEvaluation": "2022-05-16T15:46:39.115949428Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerMembersInconsistent",
+            "query": "max_over_time(alertmanager_cluster_members{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) < on(namespace, service) group_left() count by(namespace, service) (max_over_time(alertmanager_cluster_members{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]))",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Alertmanager {{ $labels.namespace }}/{{ $labels.pod}} has only found {{ $value }} members of the {{$labels.job}} cluster.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagermembersinconsistent",
+              "summary": "A member of an Alertmanager cluster has not found all other cluster members."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000234775,
+            "lastEvaluation": "2022-05-16T15:46:39.116236482Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerFailedToSendAlerts",
+            "query": "(rate(alertmanager_notifications_failed_total{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) / rate(alertmanager_notifications_total{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m])) > 0.01",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Alertmanager {{ $labels.namespace }}/{{ $labels.pod}} failed to send {{ $value | humanizePercentage }} of notifications to {{ $labels.integration }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerfailedtosendalerts",
+              "summary": "An Alertmanager instance failed to send notifications."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000180727,
+            "lastEvaluation": "2022-05-16T15:46:39.11647235Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerClusterFailedToSendAlerts",
+            "query": "min by(namespace, service, integration) (rate(alertmanager_notifications_failed_total{integration=~\".*\",job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) / rate(alertmanager_notifications_total{integration=~\".*\",job=\"alertmanager-main\",namespace=\"monitoring\"}[5m])) > 0.01",
+            "duration": 300,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "The minimum notification failure rate to {{ $labels.integration }} sent from any instance in the {{$labels.job}} cluster is {{ $value | humanizePercentage }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerclusterfailedtosendalerts",
+              "summary": "All Alertmanager instances in a cluster failed to send notifications to a critical integration."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.00024043,
+            "lastEvaluation": "2022-05-16T15:46:39.116654123Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerClusterFailedToSendAlerts",
+            "query": "min by(namespace, service, integration) (rate(alertmanager_notifications_failed_total{integration!~\".*\",job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) / rate(alertmanager_notifications_total{integration!~\".*\",job=\"alertmanager-main\",namespace=\"monitoring\"}[5m])) > 0.01",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "The minimum notification failure rate to {{ $labels.integration }} sent from any instance in the {{$labels.job}} cluster is {{ $value | humanizePercentage }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerclusterfailedtosendalerts",
+              "summary": "All Alertmanager instances in a cluster failed to send notifications to a non-critical integration."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000230115,
+            "lastEvaluation": "2022-05-16T15:46:39.116895619Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerConfigInconsistent",
+            "query": "count by(namespace, service) (count_values by(namespace, service) (\"config_hash\", alertmanager_config_hash{job=\"alertmanager-main\",namespace=\"monitoring\"})) != 1",
+            "duration": 1200,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Alertmanager instances within the {{$labels.job}} cluster have different configurations.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerconfiginconsistent",
+              "summary": "Alertmanager instances within the same cluster have different configurations."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000105608,
+            "lastEvaluation": "2022-05-16T15:46:39.117126689Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerClusterDown",
+            "query": "(count by(namespace, service) (avg_over_time(up{job=\"alertmanager-main\",namespace=\"monitoring\"}[5m]) < 0.5) / count by(namespace, service) (up{job=\"alertmanager-main\",namespace=\"monitoring\"})) >= 0.5",
+            "duration": 300,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "{{ $value | humanizePercentage }} of Alertmanager instances within the {{$labels.job}} cluster have been up for less than half of the last 5m.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerclusterdown",
+              "summary": "Half or more of the Alertmanager instances within the same cluster are down."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000216286,
+            "lastEvaluation": "2022-05-16T15:46:39.117233007Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "AlertmanagerClusterCrashlooping",
+            "query": "(count by(namespace, service) (changes(process_start_time_seconds{job=\"alertmanager-main\",namespace=\"monitoring\"}[10m]) > 4) / count by(namespace, service) (up{job=\"alertmanager-main\",namespace=\"monitoring\"})) >= 0.5",
+            "duration": 300,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "{{ $value | humanizePercentage }} of Alertmanager instances within the {{$labels.job}} cluster have restarted at least 5 times in the last 10m.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/alertmanager/alertmanagerclustercrashlooping",
+              "summary": "Half or more of the Alertmanager instances within the same cluster are crashlooping."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000218082,
+            "lastEvaluation": "2022-05-16T15:46:39.117450125Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "server_is_down",
+            "query": "up == 0",
+            "duration": 60,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "summary": "Server(s) are down."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000264946,
+            "lastEvaluation": "2022-05-16T15:46:39.117669173Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.001992643,
+        "lastEvaluation": "2022-05-16T15:46:39.115944395Z"
+      },
+      {
+        "name": "general.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kube-prometheus-rules-7d982c20-ffab-4f19-8324-3fa753d125f0.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "TargetDown",
+            "query": "100 * (count by(job, namespace, service) (up == 0) / count by(job, namespace, service) (up)) > 10",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ printf \"%.4g\" $value }}% of the {{ $labels.job }}/{{ $labels.service }} targets in {{ $labels.namespace }} namespace are down.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/general/targetdown",
+              "summary": "One or more targets are unreachable."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000781723,
+            "lastEvaluation": "2022-05-16T15:46:28.657887146Z",
+            "type": "alerting"
+          },
+          {
+            "state": "firing",
+            "name": "Watchdog",
+            "query": "vector(1)",
+            "duration": 0,
+            "labels": {
+              "severity": "none"
+            },
+            "annotations": {
+              "description": "This is an alert meant to ensure that the entire alerting pipeline is functional.\nThis alert is always firing, therefore it should always be firing in Alertmanager\nand always fire against a receiver. There are integrations with various notification\nmechanisms that send a notification when this alert is not firing. For example the\n\"DeadMansSnitch\" integration in PagerDuty.\n",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/general/watchdog",
+              "summary": "An alert that should always be firing to certify that Alertmanager is working properly."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "Watchdog",
+                  "severity": "none"
+                },
+                "annotations": {
+                  "description": "This is an alert meant to ensure that the entire alerting pipeline is functional.\nThis alert is always firing, therefore it should always be firing in Alertmanager\nand always fire against a receiver. There are integrations with various notification\nmechanisms that send a notification when this alert is not firing. For example the\n\"DeadMansSnitch\" integration in PagerDuty.\n",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/general/watchdog",
+                  "summary": "An alert that should always be firing to certify that Alertmanager is working properly."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-15T23:52:39.29018262Z",
+                "value": "1e+00"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.000403346,
+            "lastEvaluation": "2022-05-16T15:46:28.658670107Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.001196076,
+        "lastEvaluation": "2022-05-16T15:46:28.657881154Z"
+      },
+      {
+        "name": "kube-prometheus-general.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kube-prometheus-rules-7d982c20-ffab-4f19-8324-3fa753d125f0.yaml",
+        "rules": [
+          {
+            "name": "count:up1",
+            "query": "count without(instance, pod, node) (up == 1)",
+            "health": "ok",
+            "evaluationTime": 0.000571359,
+            "lastEvaluation": "2022-05-16T15:46:38.78611906Z",
+            "type": "recording"
+          },
+          {
+            "name": "count:up0",
+            "query": "count without(instance, pod, node) (up == 0)",
+            "health": "ok",
+            "evaluationTime": 0.000292769,
+            "lastEvaluation": "2022-05-16T15:46:38.786692037Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000874401,
+        "lastEvaluation": "2022-05-16T15:46:38.786113479Z"
+      },
+      {
+        "name": "kube-prometheus-node-recording.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kube-prometheus-rules-7d982c20-ffab-4f19-8324-3fa753d125f0.yaml",
+        "rules": [
+          {
+            "name": "instance:node_cpu:rate:sum",
+            "query": "sum by(instance) (rate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"iowait\",mode!=\"steal\"}[3m]))",
+            "health": "ok",
+            "evaluationTime": 0.001242205,
+            "lastEvaluation": "2022-05-16T15:46:11.32731814Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_network_receive_bytes:rate:sum",
+            "query": "sum by(instance) (rate(node_network_receive_bytes_total[3m]))",
+            "health": "ok",
+            "evaluationTime": 0.000425276,
+            "lastEvaluation": "2022-05-16T15:46:11.328562481Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_network_transmit_bytes:rate:sum",
+            "query": "sum by(instance) (rate(node_network_transmit_bytes_total[3m]))",
+            "health": "ok",
+            "evaluationTime": 0.000243467,
+            "lastEvaluation": "2022-05-16T15:46:11.328989623Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_cpu:ratio",
+            "query": "sum without(cpu, mode) (rate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"iowait\",mode!=\"steal\"}[5m])) / on(instance) group_left() count by(instance) (sum by(instance, cpu) (node_cpu_seconds_total))",
+            "health": "ok",
+            "evaluationTime": 0.002393962,
+            "lastEvaluation": "2022-05-16T15:46:11.329234413Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster:node_cpu:sum_rate5m",
+            "query": "sum(rate(node_cpu_seconds_total{mode!=\"idle\",mode!=\"iowait\",mode!=\"steal\"}[5m]))",
+            "health": "ok",
+            "evaluationTime": 0.001237588,
+            "lastEvaluation": "2022-05-16T15:46:11.331630207Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster:node_cpu:ratio",
+            "query": "cluster:node_cpu_seconds_total:rate5m / count(sum by(instance, cpu) (node_cpu_seconds_total))",
+            "health": "ok",
+            "evaluationTime": 0.001394008,
+            "lastEvaluation": "2022-05-16T15:46:11.332871007Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.006957828,
+        "lastEvaluation": "2022-05-16T15:46:11.327312185Z"
+      },
+      {
+        "name": "node-network",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kube-prometheus-rules-7d982c20-ffab-4f19-8324-3fa753d125f0.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "NodeNetworkInterfaceFlapping",
+            "query": "changes(node_network_up{device!~\"veth.+\",job=\"node-exporter\"}[2m]) > 2",
+            "duration": 120,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Network interface \"{{ $labels.device }}\" changing its up status often on node-exporter {{ $labels.namespace }}/{{ $labels.pod }}",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/general/nodenetworkinterfaceflapping",
+              "summary": "Network interface is often changing its status"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000458758,
+            "lastEvaluation": "2022-05-16T15:46:12.401557311Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000467434,
+        "lastEvaluation": "2022-05-16T15:46:12.401551505Z"
+      },
+      {
+        "name": "kube-state-metrics",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kube-state-metrics-rules-a102aea8-d4b7-4946-9f56-743bc300971b.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubeStateMetricsListErrors",
+            "query": "(sum(rate(kube_state_metrics_list_total{job=\"kube-state-metrics\",result=\"error\"}[5m])) / sum(rate(kube_state_metrics_list_total{job=\"kube-state-metrics\"}[5m]))) > 0.01",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "kube-state-metrics is experiencing errors at an elevated rate in list operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kube-state-metrics/kubestatemetricslisterrors",
+              "summary": "kube-state-metrics is experiencing errors in list operations."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.002502678,
+            "lastEvaluation": "2022-05-16T15:46:15.206278041Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeStateMetricsWatchErrors",
+            "query": "(sum(rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\",result=\"error\"}[5m])) / sum(rate(kube_state_metrics_watch_total{job=\"kube-state-metrics\"}[5m]))) > 0.01",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "kube-state-metrics is experiencing errors at an elevated rate in watch operations. This is likely causing it to not be able to expose metrics about Kubernetes objects correctly or at all.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kube-state-metrics/kubestatemetricswatcherrors",
+              "summary": "kube-state-metrics is experiencing errors in watch operations."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001115325,
+            "lastEvaluation": "2022-05-16T15:46:15.208782394Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeStateMetricsShardingMismatch",
+            "query": "stdvar(kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) != 0",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "kube-state-metrics pods are running with different --total-shards configuration, some Kubernetes objects may be exposed multiple times or not exposed at all.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kube-state-metrics/kubestatemetricsshardingmismatch",
+              "summary": "kube-state-metrics sharding is misconfigured."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000133984,
+            "lastEvaluation": "2022-05-16T15:46:15.209898981Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeStateMetricsShardsMissing",
+            "query": "2 ^ max(kube_state_metrics_total_shards{job=\"kube-state-metrics\"}) - 1 - sum(2 ^ max by(shard_ordinal) (kube_state_metrics_shard_ordinal{job=\"kube-state-metrics\"})) != 0",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "kube-state-metrics shards are missing, some Kubernetes objects are not being exposed.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kube-state-metrics/kubestatemetricsshardsmissing",
+              "summary": "kube-state-metrics shards are missing."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.00020489,
+            "lastEvaluation": "2022-05-16T15:46:15.210034015Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.003970622,
+        "lastEvaluation": "2022-05-16T15:46:15.206270904Z"
+      },
+      {
+        "name": "k8s.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate",
+            "query": "sum by(cluster, namespace, pod, container) (irate(container_cpu_usage_seconds_total{image!=\"\",job=\"kubelet\",metrics_path=\"/metrics/cadvisor\"}[5m])) * on(cluster, namespace, pod) group_left(node) topk by(cluster, namespace, pod) (1, max by(cluster, namespace, pod, node) (kube_pod_info{node!=\"\"}))",
+            "health": "ok",
+            "evaluationTime": 0.001819695,
+            "lastEvaluation": "2022-05-16T15:46:23.033828852Z",
+            "type": "recording"
+          },
+          {
+            "name": "node_namespace_pod_container:container_memory_working_set_bytes",
+            "query": "container_memory_working_set_bytes{image!=\"\",job=\"kubelet\",metrics_path=\"/metrics/cadvisor\"} * on(namespace, pod) group_left(node) topk by(namespace, pod) (1, max by(namespace, pod, node) (kube_pod_info{node!=\"\"}))",
+            "health": "ok",
+            "evaluationTime": 0.001559983,
+            "lastEvaluation": "2022-05-16T15:46:23.035651117Z",
+            "type": "recording"
+          },
+          {
+            "name": "node_namespace_pod_container:container_memory_rss",
+            "query": "container_memory_rss{image!=\"\",job=\"kubelet\",metrics_path=\"/metrics/cadvisor\"} * on(namespace, pod) group_left(node) topk by(namespace, pod) (1, max by(namespace, pod, node) (kube_pod_info{node!=\"\"}))",
+            "health": "ok",
+            "evaluationTime": 0.001738286,
+            "lastEvaluation": "2022-05-16T15:46:23.037213234Z",
+            "type": "recording"
+          },
+          {
+            "name": "node_namespace_pod_container:container_memory_cache",
+            "query": "container_memory_cache{image!=\"\",job=\"kubelet\",metrics_path=\"/metrics/cadvisor\"} * on(namespace, pod) group_left(node) topk by(namespace, pod) (1, max by(namespace, pod, node) (kube_pod_info{node!=\"\"}))",
+            "health": "ok",
+            "evaluationTime": 0.00148685,
+            "lastEvaluation": "2022-05-16T15:46:23.038953907Z",
+            "type": "recording"
+          },
+          {
+            "name": "node_namespace_pod_container:container_memory_swap",
+            "query": "container_memory_swap{image!=\"\",job=\"kubelet\",metrics_path=\"/metrics/cadvisor\"} * on(namespace, pod) group_left(node) topk by(namespace, pod) (1, max by(namespace, pod, node) (kube_pod_info{node!=\"\"}))",
+            "health": "ok",
+            "evaluationTime": 0.001509394,
+            "lastEvaluation": "2022-05-16T15:46:23.040442798Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster:namespace:pod_memory:active:kube_pod_container_resource_requests",
+            "query": "kube_pod_container_resource_requests{job=\"kube-state-metrics\",resource=\"memory\"} * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) ((kube_pod_status_phase{phase=~\"Pending|Running\"} == 1))",
+            "health": "ok",
+            "evaluationTime": 0.001106408,
+            "lastEvaluation": "2022-05-16T15:46:23.041954362Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_memory:kube_pod_container_resource_requests:sum",
+            "query": "sum by(namespace, cluster) (sum by(namespace, pod, cluster) (max by(namespace, pod, container, cluster) (kube_pod_container_resource_requests{job=\"kube-state-metrics\",resource=\"memory\"}) * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)))",
+            "health": "ok",
+            "evaluationTime": 0.000934844,
+            "lastEvaluation": "2022-05-16T15:46:23.043062228Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster:namespace:pod_cpu:active:kube_pod_container_resource_requests",
+            "query": "kube_pod_container_resource_requests{job=\"kube-state-metrics\",resource=\"cpu\"} * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) ((kube_pod_status_phase{phase=~\"Pending|Running\"} == 1))",
+            "health": "ok",
+            "evaluationTime": 0.001063584,
+            "lastEvaluation": "2022-05-16T15:46:23.043998545Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_cpu:kube_pod_container_resource_requests:sum",
+            "query": "sum by(namespace, cluster) (sum by(namespace, pod, cluster) (max by(namespace, pod, container, cluster) (kube_pod_container_resource_requests{job=\"kube-state-metrics\",resource=\"cpu\"}) * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)))",
+            "health": "ok",
+            "evaluationTime": 0.001116386,
+            "lastEvaluation": "2022-05-16T15:46:23.045064055Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster:namespace:pod_memory:active:kube_pod_container_resource_limits",
+            "query": "kube_pod_container_resource_limits{job=\"kube-state-metrics\",resource=\"memory\"} * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) ((kube_pod_status_phase{phase=~\"Pending|Running\"} == 1))",
+            "health": "ok",
+            "evaluationTime": 0.000940109,
+            "lastEvaluation": "2022-05-16T15:46:23.046182207Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_memory:kube_pod_container_resource_limits:sum",
+            "query": "sum by(namespace, cluster) (sum by(namespace, pod, cluster) (max by(namespace, pod, container, cluster) (kube_pod_container_resource_limits{job=\"kube-state-metrics\",resource=\"memory\"}) * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)))",
+            "health": "ok",
+            "evaluationTime": 0.000967052,
+            "lastEvaluation": "2022-05-16T15:46:23.047123786Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster:namespace:pod_cpu:active:kube_pod_container_resource_limits",
+            "query": "kube_pod_container_resource_limits{job=\"kube-state-metrics\",resource=\"cpu\"} * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) ((kube_pod_status_phase{phase=~\"Pending|Running\"} == 1))",
+            "health": "ok",
+            "evaluationTime": 0.000950982,
+            "lastEvaluation": "2022-05-16T15:46:23.048092717Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_cpu:kube_pod_container_resource_limits:sum",
+            "query": "sum by(namespace, cluster) (sum by(namespace, pod, cluster) (max by(namespace, pod, container, cluster) (kube_pod_container_resource_limits{job=\"kube-state-metrics\",resource=\"cpu\"}) * on(namespace, pod, cluster) group_left() max by(namespace, pod, cluster) (kube_pod_status_phase{phase=~\"Pending|Running\"} == 1)))",
+            "health": "ok",
+            "evaluationTime": 0.000957041,
+            "lastEvaluation": "2022-05-16T15:46:23.04904571Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_workload_pod:kube_pod_owner:relabel",
+            "query": "max by(cluster, namespace, workload, pod) (label_replace(label_replace(kube_pod_owner{job=\"kube-state-metrics\",owner_kind=\"ReplicaSet\"}, \"replicaset\", \"$1\", \"owner_name\", \"(.*)\") * on(replicaset, namespace) group_left(owner_name) topk by(replicaset, namespace) (1, max by(replicaset, namespace, owner_name) (kube_replicaset_owner{job=\"kube-state-metrics\"})), \"workload\", \"$1\", \"owner_name\", \"(.*)\"))",
+            "labels": {
+              "workload_type": "deployment"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000582623,
+            "lastEvaluation": "2022-05-16T15:46:23.050004154Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_workload_pod:kube_pod_owner:relabel",
+            "query": "max by(cluster, namespace, workload, pod) (label_replace(kube_pod_owner{job=\"kube-state-metrics\",owner_kind=\"DaemonSet\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"))",
+            "labels": {
+              "workload_type": "daemonset"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000324124,
+            "lastEvaluation": "2022-05-16T15:46:23.05058821Z",
+            "type": "recording"
+          },
+          {
+            "name": "namespace_workload_pod:kube_pod_owner:relabel",
+            "query": "max by(cluster, namespace, workload, pod) (label_replace(kube_pod_owner{job=\"kube-state-metrics\",owner_kind=\"StatefulSet\"}, \"workload\", \"$1\", \"owner_name\", \"(.*)\"))",
+            "labels": {
+              "workload_type": "statefulset"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000188756,
+            "lastEvaluation": "2022-05-16T15:46:23.050913623Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.017282475,
+        "lastEvaluation": "2022-05-16T15:46:23.033822947Z"
+      },
+      {
+        "name": "kube-apiserver-availability.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "code_verb:apiserver_request_total:increase30d",
+            "query": "avg_over_time(code_verb:apiserver_request_total:increase1h[30d]) * 24 * 30",
+            "health": "ok",
+            "evaluationTime": 0.001236782,
+            "lastEvaluation": "2022-05-16T15:45:16.581687398Z",
+            "type": "recording"
+          },
+          {
+            "name": "code:apiserver_request_total:increase30d",
+            "query": "sum by(cluster, code) (code_verb:apiserver_request_total:increase30d{verb=~\"LIST|GET\"})",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000188051,
+            "lastEvaluation": "2022-05-16T15:45:16.58292719Z",
+            "type": "recording"
+          },
+          {
+            "name": "code:apiserver_request_total:increase30d",
+            "query": "sum by(cluster, code) (code_verb:apiserver_request_total:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"})",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000204919,
+            "lastEvaluation": "2022-05-16T15:45:16.583116398Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_verb_scope:apiserver_request_duration_seconds_count:increase1h",
+            "query": "sum by(cluster, verb, scope) (increase(apiserver_request_duration_seconds_count[1h]))",
+            "health": "ok",
+            "evaluationTime": 0.003434073,
+            "lastEvaluation": "2022-05-16T15:45:16.583322517Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_verb_scope:apiserver_request_duration_seconds_count:increase30d",
+            "query": "sum by(cluster, verb, scope) (avg_over_time(cluster_verb_scope:apiserver_request_duration_seconds_count:increase1h[30d]) * 24 * 30)",
+            "health": "ok",
+            "evaluationTime": 0.000648359,
+            "lastEvaluation": "2022-05-16T15:45:16.586759351Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase1h",
+            "query": "sum by(cluster, verb, scope, le) (increase(apiserver_request_duration_seconds_bucket[1h]))",
+            "health": "ok",
+            "evaluationTime": 0.038213504,
+            "lastEvaluation": "2022-05-16T15:45:16.587409261Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d",
+            "query": "sum by(cluster, verb, scope, le) (avg_over_time(cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase1h[30d]) * 24 * 30)",
+            "health": "ok",
+            "evaluationTime": 0.006397374,
+            "lastEvaluation": "2022-05-16T15:45:16.625631331Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:availability30d",
+            "query": "1 - ((sum by(cluster) (cluster_verb_scope:apiserver_request_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"}) - sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"})) + (sum by(cluster) (cluster_verb_scope:apiserver_request_duration_seconds_count:increase30d{verb=~\"LIST|GET\"}) - ((sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}) or vector(0)) + sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}) + sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}))) + sum by(cluster) (code:apiserver_request_total:increase30d{code=~\"5..\"} or vector(0))) / sum by(cluster) (code:apiserver_request_total:increase30d)",
+            "labels": {
+              "verb": "all"
+            },
+            "health": "ok",
+            "evaluationTime": 0.001229605,
+            "lastEvaluation": "2022-05-16T15:45:16.632032155Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:availability30d",
+            "query": "1 - (sum by(cluster) (cluster_verb_scope:apiserver_request_duration_seconds_count:increase30d{verb=~\"LIST|GET\"}) - ((sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}) or vector(0)) + sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}) + sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"})) + sum by(cluster) (code:apiserver_request_total:increase30d{code=~\"5..\",verb=\"read\"} or vector(0))) / sum by(cluster) (code:apiserver_request_total:increase30d{verb=\"read\"})",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000751016,
+            "lastEvaluation": "2022-05-16T15:45:16.633263037Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:availability30d",
+            "query": "1 - ((sum by(cluster) (cluster_verb_scope:apiserver_request_duration_seconds_count:increase30d{verb=~\"POST|PUT|PATCH|DELETE\"}) - sum by(cluster) (cluster_verb_scope_le:apiserver_request_duration_seconds_bucket:increase30d{le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"})) + sum by(cluster) (code:apiserver_request_total:increase30d{code=~\"5..\",verb=\"write\"} or vector(0))) / sum by(cluster) (code:apiserver_request_total:increase30d{verb=\"write\"})",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.00044467,
+            "lastEvaluation": "2022-05-16T15:45:16.634015137Z",
+            "type": "recording"
+          },
+          {
+            "name": "code_resource:apiserver_request_total:rate5m",
+            "query": "sum by(cluster, code, resource) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[5m]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.001276978,
+            "lastEvaluation": "2022-05-16T15:45:16.634461165Z",
+            "type": "recording"
+          },
+          {
+            "name": "code_resource:apiserver_request_total:rate5m",
+            "query": "sum by(cluster, code, resource) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000534825,
+            "lastEvaluation": "2022-05-16T15:45:16.635741212Z",
+            "type": "recording"
+          },
+          {
+            "name": "code_verb:apiserver_request_total:increase1h",
+            "query": "sum by(cluster, code, verb) (increase(apiserver_request_total{code=~\"2..\",job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\"}[1h]))",
+            "health": "ok",
+            "evaluationTime": 0.003132687,
+            "lastEvaluation": "2022-05-16T15:45:16.636277436Z",
+            "type": "recording"
+          },
+          {
+            "name": "code_verb:apiserver_request_total:increase1h",
+            "query": "sum by(cluster, code, verb) (increase(apiserver_request_total{code=~\"3..\",job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\"}[1h]))",
+            "health": "ok",
+            "evaluationTime": 0.000282775,
+            "lastEvaluation": "2022-05-16T15:45:16.639414496Z",
+            "type": "recording"
+          },
+          {
+            "name": "code_verb:apiserver_request_total:increase1h",
+            "query": "sum by(cluster, code, verb) (increase(apiserver_request_total{code=~\"4..\",job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\"}[1h]))",
+            "health": "ok",
+            "evaluationTime": 0.000316743,
+            "lastEvaluation": "2022-05-16T15:45:16.639698513Z",
+            "type": "recording"
+          },
+          {
+            "name": "code_verb:apiserver_request_total:increase1h",
+            "query": "sum by(cluster, code, verb) (increase(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET|POST|PUT|PATCH|DELETE\"}[1h]))",
+            "health": "ok",
+            "evaluationTime": 0.00037162,
+            "lastEvaluation": "2022-05-16T15:45:16.640016836Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 180,
+        "evaluationTime": 0.058709678,
+        "lastEvaluation": "2022-05-16T15:45:16.581681716Z"
+      },
+      {
+        "name": "kube-apiserver-burnrate.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "apiserver_request:burnrate1d",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[1d])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[1d])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[1d])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[1d])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[1d]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[1d]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.032911166,
+            "lastEvaluation": "2022-05-16T15:46:16.907196703Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate1h",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[1h])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[1h])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[1h])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[1h])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[1h]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[1h]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.024146696,
+            "lastEvaluation": "2022-05-16T15:46:16.940112387Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate2h",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[2h])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[2h])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[2h])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[2h])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[2h]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[2h]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.022712098,
+            "lastEvaluation": "2022-05-16T15:46:16.964263969Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate30m",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[30m])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[30m])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[30m])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[30m])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[30m]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[30m]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.009161724,
+            "lastEvaluation": "2022-05-16T15:46:16.986981062Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate3d",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[3d])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[3d])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[3d])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[3d])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[3d]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[3d]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.054605361,
+            "lastEvaluation": "2022-05-16T15:46:16.996147521Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate5m",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[5m])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[5m])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[5m])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[5m])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[5m]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[5m]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.0171978,
+            "lastEvaluation": "2022-05-16T15:46:17.050758763Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate6h",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"LIST|GET\"}[6h])) - ((sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",scope=~\"resource|\",verb=~\"LIST|GET\"}[6h])) or vector(0)) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"5\",scope=\"namespace\",verb=~\"LIST|GET\"}[6h])) + sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"30\",scope=\"cluster\",verb=~\"LIST|GET\"}[6h])))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"LIST|GET\"}[6h]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"LIST|GET\"}[6h]))",
+            "labels": {
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.017639289,
+            "lastEvaluation": "2022-05-16T15:46:17.067963712Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate1d",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[1d])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[1d]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[1d]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[1d]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.018546882,
+            "lastEvaluation": "2022-05-16T15:46:17.085607442Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate1h",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[1h])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[1h]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[1h]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[1h]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.002312746,
+            "lastEvaluation": "2022-05-16T15:46:17.104159524Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate2h",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[2h])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[2h]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[2h]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[2h]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.004582541,
+            "lastEvaluation": "2022-05-16T15:46:17.106474197Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate30m",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[30m])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[30m]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[30m]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[30m]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.001865964,
+            "lastEvaluation": "2022-05-16T15:46:17.111060112Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate3d",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[3d])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[3d]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[3d]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[3d]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.018182745,
+            "lastEvaluation": "2022-05-16T15:46:17.112928181Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate5m",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.001548729,
+            "lastEvaluation": "2022-05-16T15:46:17.131116007Z",
+            "type": "recording"
+          },
+          {
+            "name": "apiserver_request:burnrate6h",
+            "query": "((sum by(cluster) (rate(apiserver_request_duration_seconds_count{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[6h])) - sum by(cluster) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",le=\"1\",verb=~\"POST|PUT|PATCH|DELETE\"}[6h]))) + sum by(cluster) (rate(apiserver_request_total{code=~\"5..\",job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[6h]))) / sum by(cluster) (rate(apiserver_request_total{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[6h]))",
+            "labels": {
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.004500894,
+            "lastEvaluation": "2022-05-16T15:46:17.132666201Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.229981476,
+        "lastEvaluation": "2022-05-16T15:46:16.907191423Z"
+      },
+      {
+        "name": "kube-apiserver-histogram.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum by(cluster, le, resource) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",verb=~\"LIST|GET\"}[5m]))) > 0",
+            "labels": {
+              "quantile": "0.99",
+              "verb": "read"
+            },
+            "health": "ok",
+            "evaluationTime": 0.010310456,
+            "lastEvaluation": "2022-05-16T15:46:28.155936118Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum by(cluster, le, resource) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",verb=~\"POST|PUT|PATCH|DELETE\"}[5m]))) > 0",
+            "labels": {
+              "quantile": "0.99",
+              "verb": "write"
+            },
+            "health": "ok",
+            "evaluationTime": 0.003057139,
+            "lastEvaluation": "2022-05-16T15:46:28.166248654Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum without(instance, pod) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",subresource!=\"log\",verb!~\"LIST|WATCH|WATCHLIST|DELETECOLLECTION|PROXY|CONNECT\"}[5m])))",
+            "labels": {
+              "quantile": "0.99"
+            },
+            "health": "ok",
+            "evaluationTime": 0.007299394,
+            "lastEvaluation": "2022-05-16T15:46:28.169307126Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.9, sum without(instance, pod) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",subresource!=\"log\",verb!~\"LIST|WATCH|WATCHLIST|DELETECOLLECTION|PROXY|CONNECT\"}[5m])))",
+            "labels": {
+              "quantile": "0.9"
+            },
+            "health": "ok",
+            "evaluationTime": 0.007151044,
+            "lastEvaluation": "2022-05-16T15:46:28.176611551Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:apiserver_request_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.5, sum without(instance, pod) (rate(apiserver_request_duration_seconds_bucket{job=\"apiserver\",subresource!=\"log\",verb!~\"LIST|WATCH|WATCHLIST|DELETECOLLECTION|PROXY|CONNECT\"}[5m])))",
+            "labels": {
+              "quantile": "0.5"
+            },
+            "health": "ok",
+            "evaluationTime": 0.008249179,
+            "lastEvaluation": "2022-05-16T15:46:28.183768953Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.036094102,
+        "lastEvaluation": "2022-05-16T15:46:28.155930365Z"
+      },
+      {
+        "name": "kube-apiserver-slos",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubeAPIErrorBudgetBurn",
+            "query": "sum(apiserver_request:burnrate1h) > (14.4 * 0.01) and sum(apiserver_request:burnrate5m) > (14.4 * 0.01)",
+            "duration": 120,
+            "labels": {
+              "long": "1h",
+              "severity": "critical",
+              "short": "5m"
+            },
+            "annotations": {
+              "description": "The API server is burning too much error budget.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn",
+              "summary": "The API server is burning too much error budget."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000310929,
+            "lastEvaluation": "2022-05-16T15:46:28.989756294Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAPIErrorBudgetBurn",
+            "query": "sum(apiserver_request:burnrate6h) > (6 * 0.01) and sum(apiserver_request:burnrate30m) > (6 * 0.01)",
+            "duration": 900,
+            "labels": {
+              "long": "6h",
+              "severity": "critical",
+              "short": "30m"
+            },
+            "annotations": {
+              "description": "The API server is burning too much error budget.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn",
+              "summary": "The API server is burning too much error budget."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000114732,
+            "lastEvaluation": "2022-05-16T15:46:28.990068404Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAPIErrorBudgetBurn",
+            "query": "sum(apiserver_request:burnrate1d) > (3 * 0.01) and sum(apiserver_request:burnrate2h) > (3 * 0.01)",
+            "duration": 3600,
+            "labels": {
+              "long": "1d",
+              "severity": "warning",
+              "short": "2h"
+            },
+            "annotations": {
+              "description": "The API server is burning too much error budget.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn",
+              "summary": "The API server is burning too much error budget."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000103328,
+            "lastEvaluation": "2022-05-16T15:46:28.990183788Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAPIErrorBudgetBurn",
+            "query": "sum(apiserver_request:burnrate3d) > (1 * 0.01) and sum(apiserver_request:burnrate6h) > (1 * 0.01)",
+            "duration": 10800,
+            "labels": {
+              "long": "3d",
+              "severity": "warning",
+              "short": "6h"
+            },
+            "annotations": {
+              "description": "The API server is burning too much error budget.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapierrorbudgetburn",
+              "summary": "The API server is burning too much error budget."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000103006,
+            "lastEvaluation": "2022-05-16T15:46:28.990287642Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000642126,
+        "lastEvaluation": "2022-05-16T15:46:28.989750266Z"
+      },
+      {
+        "name": "kube-scheduler.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "cluster_quantile:scheduler_e2e_scheduling_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum without(instance, pod) (rate(scheduler_e2e_scheduling_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.99"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000272612,
+            "lastEvaluation": "2022-05-16T15:46:19.805806373Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_scheduling_algorithm_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum without(instance, pod) (rate(scheduler_scheduling_algorithm_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.99"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000326575,
+            "lastEvaluation": "2022-05-16T15:46:19.806080174Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_binding_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum without(instance, pod) (rate(scheduler_binding_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.99"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000192802,
+            "lastEvaluation": "2022-05-16T15:46:19.806407941Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_e2e_scheduling_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.9, sum without(instance, pod) (rate(scheduler_e2e_scheduling_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.9"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000205823,
+            "lastEvaluation": "2022-05-16T15:46:19.806601675Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_scheduling_algorithm_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.9, sum without(instance, pod) (rate(scheduler_scheduling_algorithm_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.9"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000318885,
+            "lastEvaluation": "2022-05-16T15:46:19.806808455Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_binding_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.9, sum without(instance, pod) (rate(scheduler_binding_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.9"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000346331,
+            "lastEvaluation": "2022-05-16T15:46:19.807128047Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_e2e_scheduling_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.5, sum without(instance, pod) (rate(scheduler_e2e_scheduling_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.5"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000190297,
+            "lastEvaluation": "2022-05-16T15:46:19.807475192Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_scheduling_algorithm_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.5, sum without(instance, pod) (rate(scheduler_scheduling_algorithm_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.5"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000176457,
+            "lastEvaluation": "2022-05-16T15:46:19.80766619Z",
+            "type": "recording"
+          },
+          {
+            "name": "cluster_quantile:scheduler_binding_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.5, sum without(instance, pod) (rate(scheduler_binding_duration_seconds_bucket{job=\"kube-scheduler\"}[5m])))",
+            "labels": {
+              "quantile": "0.5"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000103022,
+            "lastEvaluation": "2022-05-16T15:46:19.80784355Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.00214803,
+        "lastEvaluation": "2022-05-16T15:46:19.805800655Z"
+      },
+      {
+        "name": "kubelet.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.99, sum by(instance, le) (rate(kubelet_pleg_relist_duration_seconds_bucket[5m])) * on(instance) group_left(node) kubelet_node_name{job=\"kubelet\",metrics_path=\"/metrics\"})",
+            "labels": {
+              "quantile": "0.99"
+            },
+            "health": "ok",
+            "evaluationTime": 0.001017738,
+            "lastEvaluation": "2022-05-16T15:46:38.925457956Z",
+            "type": "recording"
+          },
+          {
+            "name": "node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.9, sum by(instance, le) (rate(kubelet_pleg_relist_duration_seconds_bucket[5m])) * on(instance) group_left(node) kubelet_node_name{job=\"kubelet\",metrics_path=\"/metrics\"})",
+            "labels": {
+              "quantile": "0.9"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000775016,
+            "lastEvaluation": "2022-05-16T15:46:38.926477566Z",
+            "type": "recording"
+          },
+          {
+            "name": "node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile",
+            "query": "histogram_quantile(0.5, sum by(instance, le) (rate(kubelet_pleg_relist_duration_seconds_bucket[5m])) * on(instance) group_left(node) kubelet_node_name{job=\"kubelet\",metrics_path=\"/metrics\"})",
+            "labels": {
+              "quantile": "0.5"
+            },
+            "health": "ok",
+            "evaluationTime": 0.000769842,
+            "lastEvaluation": "2022-05-16T15:46:38.927254244Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.002574183,
+        "lastEvaluation": "2022-05-16T15:46:38.92545261Z"
+      },
+      {
+        "name": "kubernetes-apps",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubePodCrashLooping",
+            "query": "max_over_time(kube_pod_container_status_waiting_reason{job=\"kube-state-metrics\",reason=\"CrashLoopBackOff\"}[5m]) >= 1",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Pod {{ $labels.namespace }}/{{ $labels.pod }} ({{ $labels.container }}) is in waiting state (reason: \"CrashLoopBackOff\").",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodcrashlooping",
+              "summary": "Pod is crash looping."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000588988,
+            "lastEvaluation": "2022-05-16T15:46:39.743145379Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubePodNotReady",
+            "query": "sum by(namespace, pod) (max by(namespace, pod) (kube_pod_status_phase{job=\"kube-state-metrics\",phase=~\"Pending|Unknown\"}) * on(namespace, pod) group_left(owner_kind) topk by(namespace, pod) (1, max by(namespace, pod, owner_kind) (kube_pod_owner{owner_kind!=\"Job\"}))) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a non-ready state for longer than 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepodnotready",
+              "summary": "Pod has been in a non-ready state for more than 15 minutes."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001084773,
+            "lastEvaluation": "2022-05-16T15:46:39.743736132Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeDeploymentGenerationMismatch",
+            "query": "kube_deployment_status_observed_generation{job=\"kube-state-metrics\"} != kube_deployment_metadata_generation{job=\"kube-state-metrics\"}",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Deployment generation for {{ $labels.namespace }}/{{ $labels.deployment }} does not match, this indicates that the Deployment has failed but has not been rolled back.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentgenerationmismatch",
+              "summary": "Deployment generation mismatch due to possible roll-back"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000217942,
+            "lastEvaluation": "2022-05-16T15:46:39.74482187Z",
+            "type": "alerting"
+          },
+          {
+            "state": "firing",
+            "name": "KubeDeploymentReplicasMismatch",
+            "query": "(kube_deployment_spec_replicas{job=\"kube-state-metrics\"} > kube_deployment_status_replicas_available{job=\"kube-state-metrics\"}) and (changes(kube_deployment_status_replicas_updated{job=\"kube-state-metrics\"}[10m]) == 0)",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has not matched the expected number of replicas for longer than 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentreplicasmismatch",
+              "summary": "Deployment has not matched the expected number of replicas."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "KubeDeploymentReplicasMismatch",
+                  "container": "kube-rbac-proxy-main",
+                  "deployment": "metrics-server",
+                  "instance": "10.244.2.9:8443",
+                  "job": "kube-state-metrics",
+                  "namespace": "kube-system",
+                  "severity": "warning"
+                },
+                "annotations": {
+                  "description": "Deployment kube-system/metrics-server has not matched the expected number of replicas for longer than 15 minutes.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedeploymentreplicasmismatch",
+                  "summary": "Deployment has not matched the expected number of replicas."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:38:50.375994611Z",
+                "value": "1e+00"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.000661707,
+            "lastEvaluation": "2022-05-16T15:46:39.745040578Z",
+            "type": "alerting"
+          },
+          {
+            "state": "firing",
+            "name": "KubeStatefulSetReplicasMismatch",
+            "query": "(kube_statefulset_status_replicas_ready{job=\"kube-state-metrics\"} != kube_statefulset_status_replicas{job=\"kube-state-metrics\"}) and (changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[10m]) == 0)",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has not matched the expected number of replicas for longer than 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetreplicasmismatch",
+              "summary": "Deployment has not matched the expected number of replicas."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "KubeStatefulSetReplicasMismatch",
+                  "container": "kube-rbac-proxy-main",
+                  "instance": "10.244.2.9:8443",
+                  "job": "kube-state-metrics",
+                  "namespace": "monitoring",
+                  "severity": "warning",
+                  "statefulset": "alertmanager-main"
+                },
+                "annotations": {
+                  "description": "StatefulSet monitoring/alertmanager-main has not matched the expected number of replicas for longer than 15 minutes.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetreplicasmismatch",
+                  "summary": "Deployment has not matched the expected number of replicas."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:38:50.375994611Z",
+                "value": "1e+00"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.000403453,
+            "lastEvaluation": "2022-05-16T15:46:39.745703958Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeStatefulSetGenerationMismatch",
+            "query": "kube_statefulset_status_observed_generation{job=\"kube-state-metrics\"} != kube_statefulset_metadata_generation{job=\"kube-state-metrics\"}",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "StatefulSet generation for {{ $labels.namespace }}/{{ $labels.statefulset }} does not match, this indicates that the StatefulSet has failed but has not been rolled back.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetgenerationmismatch",
+              "summary": "StatefulSet generation mismatch due to possible roll-back"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000122057,
+            "lastEvaluation": "2022-05-16T15:46:39.746108697Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeStatefulSetUpdateNotRolledOut",
+            "query": "(max without(revision) (kube_statefulset_status_current_revision{job=\"kube-state-metrics\"} unless kube_statefulset_status_update_revision{job=\"kube-state-metrics\"}) * (kube_statefulset_replicas{job=\"kube-state-metrics\"} != kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"})) and (changes(kube_statefulset_status_replicas_updated{job=\"kube-state-metrics\"}[5m]) == 0)",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} update has not been rolled out.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubestatefulsetupdatenotrolledout",
+              "summary": "StatefulSet update has not been rolled out."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000402631,
+            "lastEvaluation": "2022-05-16T15:46:39.746231446Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeDaemonSetRolloutStuck",
+            "query": "((kube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"} != kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}) or (kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"} != 0) or (kube_daemonset_updated_number_scheduled{job=\"kube-state-metrics\"} != kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"}) or (kube_daemonset_status_number_available{job=\"kube-state-metrics\"} != kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"})) and (changes(kube_daemonset_updated_number_scheduled{job=\"kube-state-metrics\"}[5m]) == 0)",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} has not finished or progressed for at least 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetrolloutstuck",
+              "summary": "DaemonSet rollout is stuck."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000460529,
+            "lastEvaluation": "2022-05-16T15:46:39.746635084Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeContainerWaiting",
+            "query": "sum by(namespace, pod, container) (kube_pod_container_status_waiting_reason{job=\"kube-state-metrics\"}) > 0",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "pod/{{ $labels.pod }} in namespace {{ $labels.namespace }} on container {{ $labels.container}} has been in waiting state for longer than 1 hour.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontainerwaiting",
+              "summary": "Pod container waiting longer than 1 hour"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000093291,
+            "lastEvaluation": "2022-05-16T15:46:39.747096586Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeDaemonSetNotScheduled",
+            "query": "kube_daemonset_status_desired_number_scheduled{job=\"kube-state-metrics\"} - kube_daemonset_status_current_number_scheduled{job=\"kube-state-metrics\"} > 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are not scheduled.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetnotscheduled",
+              "summary": "DaemonSet pods are not scheduled."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000242609,
+            "lastEvaluation": "2022-05-16T15:46:39.747190582Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeDaemonSetMisScheduled",
+            "query": "kube_daemonset_status_number_misscheduled{job=\"kube-state-metrics\"} > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $value }} Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset }} are running where they are not supposed to run.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubedaemonsetmisscheduled",
+              "summary": "DaemonSet pods are misscheduled."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.00007872,
+            "lastEvaluation": "2022-05-16T15:46:39.747434114Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeJobCompletion",
+            "query": "kube_job_spec_completions{job=\"kube-state-metrics\"} - kube_job_status_succeeded{job=\"kube-state-metrics\"} > 0",
+            "duration": 43200,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Job {{ $labels.namespace }}/{{ $labels.job_name }} is taking more than 12 hours to complete.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobcompletion",
+              "summary": "Job did not complete in time"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000061561,
+            "lastEvaluation": "2022-05-16T15:46:39.747513359Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeJobFailed",
+            "query": "kube_job_failed{job=\"kube-state-metrics\"} > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to complete. Removing failed job after investigation should clear this alert.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubejobfailed",
+              "summary": "Job failed to complete."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000039789,
+            "lastEvaluation": "2022-05-16T15:46:39.747575524Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeHpaReplicasMismatch",
+            "query": "(kube_horizontalpodautoscaler_status_desired_replicas{job=\"kube-state-metrics\"} != kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}) and (kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"} > kube_horizontalpodautoscaler_spec_min_replicas{job=\"kube-state-metrics\"}) and (kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"} < kube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"}) and changes(kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"}[15m]) == 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has not matched the desired number of replicas for longer than 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpareplicasmismatch",
+              "summary": "HPA has not matched descired number of replicas."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000168319,
+            "lastEvaluation": "2022-05-16T15:46:39.747615795Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeHpaMaxedOut",
+            "query": "kube_horizontalpodautoscaler_status_current_replicas{job=\"kube-state-metrics\"} == kube_horizontalpodautoscaler_spec_max_replicas{job=\"kube-state-metrics\"}",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler  }} has been running at max replicas for longer than 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubehpamaxedout",
+              "summary": "HPA is running at max replicas"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000083358,
+            "lastEvaluation": "2022-05-16T15:46:39.747784785Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.004731485,
+        "lastEvaluation": "2022-05-16T15:46:39.743138871Z"
+      },
+      {
+        "name": "kubernetes-resources",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubeCPUOvercommit",
+            "query": "sum(namespace_cpu:kube_pod_container_resource_requests:sum) - (sum(kube_node_status_allocatable{resource=\"cpu\"}) - max(kube_node_status_allocatable{resource=\"cpu\"})) > 0 and (sum(kube_node_status_allocatable{resource=\"cpu\"}) - max(kube_node_status_allocatable{resource=\"cpu\"})) > 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Cluster has overcommitted CPU resource requests for Pods by {{ $value }} CPU shares and cannot tolerate node failure.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuovercommit",
+              "summary": "Cluster has overcommitted CPU resource requests."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000715697,
+            "lastEvaluation": "2022-05-16T15:46:23.255169362Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeMemoryOvercommit",
+            "query": "sum(namespace_memory:kube_pod_container_resource_requests:sum) - (sum(kube_node_status_allocatable{resource=\"memory\"}) - max(kube_node_status_allocatable{resource=\"memory\"})) > 0 and (sum(kube_node_status_allocatable{resource=\"memory\"}) - max(kube_node_status_allocatable{resource=\"memory\"})) > 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Cluster has overcommitted memory resource requests for Pods by {{ $value | humanize }} bytes and cannot tolerate node failure.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryovercommit",
+              "summary": "Cluster has overcommitted memory resource requests."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000358565,
+            "lastEvaluation": "2022-05-16T15:46:23.255886243Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeCPUQuotaOvercommit",
+            "query": "sum(min without(resource) (kube_resourcequota{job=\"kube-state-metrics\",resource=~\"(cpu|requests.cpu)\",type=\"hard\"})) / sum(kube_node_status_allocatable{job=\"kube-state-metrics\",resource=\"cpu\"}) > 1.5",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Cluster has overcommitted CPU resource requests for Namespaces.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecpuquotaovercommit",
+              "summary": "Cluster has overcommitted CPU resource requests."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000353001,
+            "lastEvaluation": "2022-05-16T15:46:23.256245486Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeMemoryQuotaOvercommit",
+            "query": "sum(min without(resource) (kube_resourcequota{job=\"kube-state-metrics\",resource=~\"(memory|requests.memory)\",type=\"hard\"})) / sum(kube_node_status_allocatable{job=\"kube-state-metrics\",resource=\"memory\"}) > 1.5",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Cluster has overcommitted memory resource requests for Namespaces.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubememoryquotaovercommit",
+              "summary": "Cluster has overcommitted memory resource requests."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000319766,
+            "lastEvaluation": "2022-05-16T15:46:23.256599563Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeQuotaAlmostFull",
+            "query": "kube_resourcequota{job=\"kube-state-metrics\",type=\"used\"} / ignoring(instance, job, type) (kube_resourcequota{job=\"kube-state-metrics\",type=\"hard\"} > 0) > 0.9 < 1",
+            "duration": 900,
+            "labels": {
+              "severity": "info"
+            },
+            "annotations": {
+              "description": "Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaalmostfull",
+              "summary": "Namespace quota is going to be full."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000208247,
+            "lastEvaluation": "2022-05-16T15:46:23.25692022Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeQuotaFullyUsed",
+            "query": "kube_resourcequota{job=\"kube-state-metrics\",type=\"used\"} / ignoring(instance, job, type) (kube_resourcequota{job=\"kube-state-metrics\",type=\"hard\"} > 0) == 1",
+            "duration": 900,
+            "labels": {
+              "severity": "info"
+            },
+            "annotations": {
+              "description": "Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotafullyused",
+              "summary": "Namespace quota is fully used."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000134857,
+            "lastEvaluation": "2022-05-16T15:46:23.257130149Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeQuotaExceeded",
+            "query": "kube_resourcequota{job=\"kube-state-metrics\",type=\"used\"} / ignoring(instance, job, type) (kube_resourcequota{job=\"kube-state-metrics\",type=\"hard\"} > 0) > 1",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Namespace {{ $labels.namespace }} is using {{ $value | humanizePercentage }} of its {{ $labels.resource }} quota.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubequotaexceeded",
+              "summary": "Namespace quota has exceeded the limits."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000145148,
+            "lastEvaluation": "2022-05-16T15:46:23.257265897Z",
+            "type": "alerting"
+          },
+          {
+            "state": "firing",
+            "name": "CPUThrottlingHigh",
+            "query": "sum by(container, pod, namespace) (increase(container_cpu_cfs_throttled_periods_total{container!=\"\"}[5m])) / sum by(container, pod, namespace) (increase(container_cpu_cfs_periods_total[5m])) > (25 / 100)",
+            "duration": 900,
+            "labels": {
+              "severity": "info"
+            },
+            "annotations": {
+              "description": "{{ $value | humanizePercentage }} throttling of CPU in namespace {{ $labels.namespace }} for container {{ $labels.container }} in pod {{ $labels.pod }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+              "summary": "Processes experience elevated CPU throttling."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "kube-rbac-proxy",
+                  "namespace": "monitoring",
+                  "pod": "blackbox-exporter-6b79c4588b-rzgsn",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "32.53% throttling of CPU in namespace monitoring for container kube-rbac-proxy in pod blackbox-exporter-6b79c4588b-rzgsn.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "pending",
+                "activeAt": "2022-05-16T15:43:03.888321669Z",
+                "value": "3.253012048192771e-01"
+              },
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "kube-rbac-proxy",
+                  "namespace": "monitoring",
+                  "pod": "node-exporter-h6nww",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "100% throttling of CPU in namespace monitoring for container kube-rbac-proxy in pod node-exporter-h6nww.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:39:03.888321669Z",
+                "value": "1e+00"
+              },
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "kube-rbac-proxy",
+                  "namespace": "monitoring",
+                  "pod": "prometheus-operator-6dc9f66cb7-gfs42",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "29.27% throttling of CPU in namespace monitoring for container kube-rbac-proxy in pod prometheus-operator-6dc9f66cb7-gfs42.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "pending",
+                "activeAt": "2022-05-16T15:45:33.888321669Z",
+                "value": "2.926829268292683e-01"
+              },
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "alertmanager",
+                  "namespace": "monitoring",
+                  "pod": "alertmanager-main-2",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "100% throttling of CPU in namespace monitoring for container alertmanager in pod alertmanager-main-2.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:39:33.888321669Z",
+                "value": "1e+00"
+              },
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "alertmanager",
+                  "namespace": "monitoring",
+                  "pod": "alertmanager-main-1",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "100% throttling of CPU in namespace monitoring for container alertmanager in pod alertmanager-main-1.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:39:33.888321669Z",
+                "value": "1e+00"
+              },
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "kube-rbac-proxy-main",
+                  "namespace": "monitoring",
+                  "pod": "kube-state-metrics-55f67795cd-8rdq8",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "32.43% throttling of CPU in namespace monitoring for container kube-rbac-proxy-main in pod kube-state-metrics-55f67795cd-8rdq8.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "pending",
+                "activeAt": "2022-05-16T15:39:33.888321669Z",
+                "value": "3.2432432432432434e-01"
+              },
+              {
+                "labels": {
+                  "alertname": "CPUThrottlingHigh",
+                  "container": "kube-rbac-proxy-self",
+                  "namespace": "monitoring",
+                  "pod": "kube-state-metrics-55f67795cd-8rdq8",
+                  "severity": "info"
+                },
+                "annotations": {
+                  "description": "32.35% throttling of CPU in namespace monitoring for container kube-rbac-proxy-self in pod kube-state-metrics-55f67795cd-8rdq8.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/cputhrottlinghigh",
+                  "summary": "Processes experience elevated CPU throttling."
+                },
+                "state": "pending",
+                "activeAt": "2022-05-16T15:43:03.888321669Z",
+                "value": "3.235294117647059e-01"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.003175626,
+            "lastEvaluation": "2022-05-16T15:46:23.257411892Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.005427987,
+        "lastEvaluation": "2022-05-16T15:46:23.255163932Z"
+      },
+      {
+        "name": "kubernetes-storage",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubePersistentVolumeFillingUp",
+            "query": "(kubelet_volume_stats_available_bytes{job=\"kubelet\",metrics_path=\"/metrics\"} / kubelet_volume_stats_capacity_bytes{job=\"kubelet\",metrics_path=\"/metrics\"}) < 0.03 and kubelet_volume_stats_used_bytes{job=\"kubelet\",metrics_path=\"/metrics\"} > 0 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{access_mode=\"ReadOnlyMany\"} == 1 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1",
+            "duration": 60,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "The PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is only {{ $value | humanizePercentage }} free.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup",
+              "summary": "PersistentVolume is filling up."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000358637,
+            "lastEvaluation": "2022-05-16T15:46:21.067714254Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubePersistentVolumeFillingUp",
+            "query": "(kubelet_volume_stats_available_bytes{job=\"kubelet\",metrics_path=\"/metrics\"} / kubelet_volume_stats_capacity_bytes{job=\"kubelet\",metrics_path=\"/metrics\"}) < 0.15 and kubelet_volume_stats_used_bytes{job=\"kubelet\",metrics_path=\"/metrics\"} > 0 and predict_linear(kubelet_volume_stats_available_bytes{job=\"kubelet\",metrics_path=\"/metrics\"}[6h], 4 * 24 * 3600) < 0 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_access_mode{access_mode=\"ReadOnlyMany\"} == 1 unless on(namespace, persistentvolumeclaim) kube_persistentvolumeclaim_labels{label_excluded_from_alerts=\"true\"} == 1",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Based on recent sampling, the PersistentVolume claimed by {{ $labels.persistentvolumeclaim }} in Namespace {{ $labels.namespace }} is expected to fill up within four days. Currently {{ $value | humanizePercentage }} is available.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumefillingup",
+              "summary": "PersistentVolume is filling up."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000346829,
+            "lastEvaluation": "2022-05-16T15:46:21.068073976Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubePersistentVolumeErrors",
+            "query": "kube_persistentvolume_status_phase{job=\"kube-state-metrics\",phase=~\"Failed|Pending\"} > 0",
+            "duration": 300,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "The persistent volume {{ $labels.persistentvolume }} has status {{ $labels.phase }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubepersistentvolumeerrors",
+              "summary": "PersistentVolume is having issues with provisioning."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000082697,
+            "lastEvaluation": "2022-05-16T15:46:21.068421509Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000798127,
+        "lastEvaluation": "2022-05-16T15:46:21.067708033Z"
+      },
+      {
+        "name": "kubernetes-system",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubeVersionMismatch",
+            "query": "count(count by(git_version) (label_replace(kubernetes_build_info{job!~\"kube-dns|coredns\"}, \"git_version\", \"$1\", \"git_version\", \"(v[0-9]*.[0-9]*).*\"))) > 1",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "There are {{ $value }} different semantic versions of Kubernetes components running.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeversionmismatch",
+              "summary": "Different semantic versions of Kubernetes components running."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000409169,
+            "lastEvaluation": "2022-05-16T15:46:14.802646277Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeClientErrors",
+            "query": "(sum by(instance, job, namespace) (rate(rest_client_requests_total{code=~\"5..\"}[5m])) / sum by(instance, job, namespace) (rate(rest_client_requests_total[5m]))) > 0.01",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ $value | humanizePercentage }} errors.'",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclienterrors",
+              "summary": "Kubernetes API server client is experiencing errors."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001127244,
+            "lastEvaluation": "2022-05-16T15:46:14.803056858Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.001548892,
+        "lastEvaluation": "2022-05-16T15:46:14.802639341Z"
+      },
+      {
+        "name": "kubernetes-system-apiserver",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubeClientCertificateExpiration",
+            "query": "apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job) histogram_quantile(0.01, sum by(job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 604800",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "A client certificate used to authenticate to kubernetes apiserver is expiring in less than 7.0 days.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration",
+              "summary": "Client certificate is about to expire."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000643136,
+            "lastEvaluation": "2022-05-16T15:46:24.5346346Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeClientCertificateExpiration",
+            "query": "apiserver_client_certificate_expiration_seconds_count{job=\"apiserver\"} > 0 and on(job) histogram_quantile(0.01, sum by(job, le) (rate(apiserver_client_certificate_expiration_seconds_bucket{job=\"apiserver\"}[5m]))) < 86400",
+            "duration": 0,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "A client certificate used to authenticate to kubernetes apiserver is expiring in less than 24.0 hours.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeclientcertificateexpiration",
+              "summary": "Client certificate is about to expire."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.00044639,
+            "lastEvaluation": "2022-05-16T15:46:24.535279067Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAggregatedAPIErrors",
+            "query": "sum by(name, namespace) (increase(aggregator_unavailable_apiservice_total[10m])) > 4",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has reported errors. It has appeared unavailable {{ $value | humanize }} times averaged over the past 10m.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapierrors",
+              "summary": "Kubernetes aggregated API has reported errors."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000108434,
+            "lastEvaluation": "2022-05-16T15:46:24.535727086Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAggregatedAPIDown",
+            "query": "(1 - max by(name, namespace) (avg_over_time(aggregator_unavailable_apiservice[10m]))) * 100 < 85",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Kubernetes aggregated API {{ $labels.name }}/{{ $labels.namespace }} has been only {{ $value | humanize }}% available over the last 10m.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeaggregatedapidown",
+              "summary": "Kubernetes aggregated API is down."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.00052547,
+            "lastEvaluation": "2022-05-16T15:46:24.535836376Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAPIDown",
+            "query": "absent(up{job=\"apiserver\"} == 1)",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "KubeAPI has disappeared from Prometheus target discovery.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapidown",
+              "summary": "Target disappeared from Prometheus target discovery."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000104294,
+            "lastEvaluation": "2022-05-16T15:46:24.536362735Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeAPITerminatedRequests",
+            "query": "sum(rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m])) / (sum(rate(apiserver_request_total{job=\"apiserver\"}[10m])) + sum(rate(apiserver_request_terminations_total{job=\"apiserver\"}[10m]))) > 0.2",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeapiterminatedrequests",
+              "summary": "The kubernetes apiserver has terminated {{ $value | humanizePercentage }} of its incoming requests."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.002438158,
+            "lastEvaluation": "2022-05-16T15:46:24.536467689Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.004298743,
+        "lastEvaluation": "2022-05-16T15:46:24.534610967Z"
+      },
+      {
+        "name": "kubernetes-system-controller-manager",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "firing",
+            "name": "KubeControllerManagerDown",
+            "query": "absent(up{job=\"kube-controller-manager\"} == 1)",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "KubeControllerManager has disappeared from Prometheus target discovery.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontrollermanagerdown",
+              "summary": "Target disappeared from Prometheus target discovery."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "KubeControllerManagerDown",
+                  "severity": "critical"
+                },
+                "annotations": {
+                  "description": "KubeControllerManager has disappeared from Prometheus target discovery.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubecontrollermanagerdown",
+                  "summary": "Target disappeared from Prometheus target discovery."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-15T23:52:17.401411361Z",
+                "value": "1e+00"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.000529493,
+            "lastEvaluation": "2022-05-16T15:46:36.747359125Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000539067,
+        "lastEvaluation": "2022-05-16T15:46:36.747353336Z"
+      },
+      {
+        "name": "kubernetes-system-kubelet",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "KubeNodeNotReady",
+            "query": "kube_node_status_condition{condition=\"Ready\",job=\"kube-state-metrics\",status=\"true\"} == 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $labels.node }} has been unready for more than 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodenotready",
+              "summary": "Node is not ready."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000444307,
+            "lastEvaluation": "2022-05-16T15:46:20.338590464Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeNodeUnreachable",
+            "query": "(kube_node_spec_taint{effect=\"NoSchedule\",job=\"kube-state-metrics\",key=\"node.kubernetes.io/unreachable\"} unless ignoring(key, value) kube_node_spec_taint{job=\"kube-state-metrics\",key=~\"ToBeDeletedByClusterAutoscaler|cloud.google.com/impending-node-termination|aws-node-termination-handler/spot-itn\"}) == 1",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $labels.node }} is unreachable and some workloads may be rescheduled.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodeunreachable",
+              "summary": "Node is unreachable."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000354387,
+            "lastEvaluation": "2022-05-16T15:46:20.339036149Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletTooManyPods",
+            "query": "count by(node) ((kube_pod_status_phase{job=\"kube-state-metrics\",phase=\"Running\"} == 1) * on(instance, pod, namespace, cluster) group_left(node) topk by(instance, pod, namespace, cluster) (1, kube_pod_info{job=\"kube-state-metrics\"})) / max by(node) (kube_node_status_capacity{job=\"kube-state-metrics\",resource=\"pods\"} != 1) > 0.95",
+            "duration": 900,
+            "labels": {
+              "severity": "info"
+            },
+            "annotations": {
+              "description": "Kubelet '{{ $labels.node }}' is running at {{ $value | humanizePercentage }} of its Pod capacity.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubelettoomanypods",
+              "summary": "Kubelet is running at capacity."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001095772,
+            "lastEvaluation": "2022-05-16T15:46:20.339391643Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeNodeReadinessFlapping",
+            "query": "sum by(node) (changes(kube_node_status_condition{condition=\"Ready\",status=\"true\"}[15m])) > 2",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "The readiness status of node {{ $labels.node }} has changed {{ $value }} times in the last 15 minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubenodereadinessflapping",
+              "summary": "Node readiness status is flapping."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000383973,
+            "lastEvaluation": "2022-05-16T15:46:20.340489196Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletPlegDurationHigh",
+            "query": "node_quantile:kubelet_pleg_relist_duration_seconds:histogram_quantile{quantile=\"0.99\"} >= 10",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "The Kubelet Pod Lifecycle Event Generator has a 99th percentile duration of {{ $value }} seconds on node {{ $labels.node }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletplegdurationhigh",
+              "summary": "Kubelet Pod Lifecycle Event Generator is taking too long to relist."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000129581,
+            "lastEvaluation": "2022-05-16T15:46:20.340874349Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletPodStartUpLatencyHigh",
+            "query": "histogram_quantile(0.99, sum by(instance, le) (rate(kubelet_pod_worker_duration_seconds_bucket{job=\"kubelet\",metrics_path=\"/metrics\"}[5m]))) * on(instance) group_left(node) kubelet_node_name{job=\"kubelet\",metrics_path=\"/metrics\"} > 60",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Kubelet Pod startup 99th percentile latency is {{ $value }} seconds on node {{ $labels.node }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletpodstartuplatencyhigh",
+              "summary": "Kubelet Pod startup latency is too high."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001654819,
+            "lastEvaluation": "2022-05-16T15:46:20.34100476Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletClientCertificateExpiration",
+            "query": "kubelet_certificate_manager_client_ttl_seconds < 604800",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration",
+              "summary": "Kubelet client certificate is about to expire."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000150006,
+            "lastEvaluation": "2022-05-16T15:46:20.34266074Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletClientCertificateExpiration",
+            "query": "kubelet_certificate_manager_client_ttl_seconds < 86400",
+            "duration": 0,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Client certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificateexpiration",
+              "summary": "Kubelet client certificate is about to expire."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000118036,
+            "lastEvaluation": "2022-05-16T15:46:20.342811481Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletServerCertificateExpiration",
+            "query": "kubelet_certificate_manager_server_ttl_seconds < 604800",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration",
+              "summary": "Kubelet server certificate is about to expire."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000047042,
+            "lastEvaluation": "2022-05-16T15:46:20.342930098Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletServerCertificateExpiration",
+            "query": "kubelet_certificate_manager_server_ttl_seconds < 86400",
+            "duration": 0,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Server certificate for Kubelet on node {{ $labels.node }} expires in {{ $value | humanizeDuration }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificateexpiration",
+              "summary": "Kubelet server certificate is about to expire."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000059692,
+            "lastEvaluation": "2022-05-16T15:46:20.342977678Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletClientCertificateRenewalErrors",
+            "query": "increase(kubelet_certificate_manager_client_expiration_renew_errors[5m]) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Kubelet on node {{ $labels.node }} has failed to renew its client certificate ({{ $value | humanize }} errors in the last 5 minutes).",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletclientcertificaterenewalerrors",
+              "summary": "Kubelet has failed to renew its client certificate."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000101882,
+            "lastEvaluation": "2022-05-16T15:46:20.343037836Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletServerCertificateRenewalErrors",
+            "query": "increase(kubelet_server_expiration_renew_errors[5m]) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Kubelet on node {{ $labels.node }} has failed to renew its server certificate ({{ $value | humanize }} errors in the last 5 minutes).",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletservercertificaterenewalerrors",
+              "summary": "Kubelet has failed to renew its server certificate."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000053989,
+            "lastEvaluation": "2022-05-16T15:46:20.343140339Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "KubeletDown",
+            "query": "absent(up{job=\"kubelet\",metrics_path=\"/metrics\"} == 1)",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Kubelet has disappeared from Prometheus target discovery.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeletdown",
+              "summary": "Target disappeared from Prometheus target discovery."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000100687,
+            "lastEvaluation": "2022-05-16T15:46:20.343194884Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.004731933,
+        "lastEvaluation": "2022-05-16T15:46:20.338566258Z"
+      },
+      {
+        "name": "kubernetes-system-scheduler",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "state": "firing",
+            "name": "KubeSchedulerDown",
+            "query": "absent(up{job=\"kube-scheduler\"} == 1)",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "KubeScheduler has disappeared from Prometheus target discovery.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeschedulerdown",
+              "summary": "Target disappeared from Prometheus target discovery."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "KubeSchedulerDown",
+                  "severity": "critical"
+                },
+                "annotations": {
+                  "description": "KubeScheduler has disappeared from Prometheus target discovery.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/kubernetes/kubeschedulerdown",
+                  "summary": "Target disappeared from Prometheus target discovery."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-15T23:52:36.475635614Z",
+                "value": "1e+00"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.00059661,
+            "lastEvaluation": "2022-05-16T15:46:25.843808028Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000606231,
+        "lastEvaluation": "2022-05-16T15:46:25.843801962Z"
+      },
+      {
+        "name": "node.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-kubernetes-monitoring-rules-11c3f4fd-3c5b-44c8-9a0a-7e74423c2818.yaml",
+        "rules": [
+          {
+            "name": "node_namespace_pod:kube_pod_info:",
+            "query": "topk by(namespace, pod) (1, max by(node, namespace, pod) (label_replace(kube_pod_info{job=\"kube-state-metrics\",node!=\"\"}, \"pod\", \"$1\", \"pod\", \"(.*)\")))",
+            "health": "ok",
+            "evaluationTime": 0.000801572,
+            "lastEvaluation": "2022-05-16T15:46:39.05662923Z",
+            "type": "recording"
+          },
+          {
+            "name": "node:node_num_cpu:sum",
+            "query": "count by(cluster, node) (sum by(node, cpu) (node_cpu_seconds_total{job=\"node-exporter\"} * on(namespace, pod) group_left(node) topk by(namespace, pod) (1, node_namespace_pod:kube_pod_info:)))",
+            "health": "ok",
+            "evaluationTime": 0.002081638,
+            "lastEvaluation": "2022-05-16T15:46:39.057433411Z",
+            "type": "recording"
+          },
+          {
+            "name": ":node_memory_MemAvailable_bytes:sum",
+            "query": "sum by(cluster) (node_memory_MemAvailable_bytes{job=\"node-exporter\"} or (node_memory_Buffers_bytes{job=\"node-exporter\"} + node_memory_Cached_bytes{job=\"node-exporter\"} + node_memory_MemFree_bytes{job=\"node-exporter\"} + node_memory_Slab_bytes{job=\"node-exporter\"}))",
+            "health": "ok",
+            "evaluationTime": 0.000323634,
+            "lastEvaluation": "2022-05-16T15:46:39.059517504Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.003220209,
+        "lastEvaluation": "2022-05-16T15:46:39.05662325Z"
+      },
+      {
+        "name": "node-exporter",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-node-exporter-rules-00cb64fd-7d68-4b0f-a72b-4fd242469692.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemSpaceFillingUp",
+            "query": "(node_filesystem_avail_bytes{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_size_bytes{fstype!=\"\",job=\"node-exporter\"} * 100 < 20 and predict_linear(node_filesystem_avail_bytes{fstype!=\"\",job=\"node-exporter\"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available space left and is filling up.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemspacefillingup",
+              "summary": "Filesystem is predicted to run out of space within the next 24 hours."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.005422018,
+            "lastEvaluation": "2022-05-16T15:46:15.098525184Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemSpaceFillingUp",
+            "query": "(node_filesystem_avail_bytes{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_size_bytes{fstype!=\"\",job=\"node-exporter\"} * 100 < 15 and predict_linear(node_filesystem_avail_bytes{fstype!=\"\",job=\"node-exporter\"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 3600,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available space left and is filling up fast.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemspacefillingup",
+              "summary": "Filesystem is predicted to run out of space within the next 4 hours."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.004927177,
+            "lastEvaluation": "2022-05-16T15:46:15.103949319Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemAlmostOutOfSpace",
+            "query": "(node_filesystem_avail_bytes{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_size_bytes{fstype!=\"\",job=\"node-exporter\"} * 100 < 5 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 1800,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available space left.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemalmostoutofspace",
+              "summary": "Filesystem has less than 5% space left."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001395465,
+            "lastEvaluation": "2022-05-16T15:46:15.108878197Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemAlmostOutOfSpace",
+            "query": "(node_filesystem_avail_bytes{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_size_bytes{fstype!=\"\",job=\"node-exporter\"} * 100 < 3 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 1800,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available space left.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemalmostoutofspace",
+              "summary": "Filesystem has less than 3% space left."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001379448,
+            "lastEvaluation": "2022-05-16T15:46:15.110275386Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemFilesFillingUp",
+            "query": "(node_filesystem_files_free{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_files{fstype!=\"\",job=\"node-exporter\"} * 100 < 40 and predict_linear(node_filesystem_files_free{fstype!=\"\",job=\"node-exporter\"}[6h], 24 * 60 * 60) < 0 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available inodes left and is filling up.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemfilesfillingup",
+              "summary": "Filesystem is predicted to run out of inodes within the next 24 hours."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.005256246,
+            "lastEvaluation": "2022-05-16T15:46:15.111656263Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemFilesFillingUp",
+            "query": "(node_filesystem_files_free{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_files{fstype!=\"\",job=\"node-exporter\"} * 100 < 20 and predict_linear(node_filesystem_files_free{fstype!=\"\",job=\"node-exporter\"}[6h], 4 * 60 * 60) < 0 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 3600,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available inodes left and is filling up fast.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemfilesfillingup",
+              "summary": "Filesystem is predicted to run out of inodes within the next 4 hours."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.007694927,
+            "lastEvaluation": "2022-05-16T15:46:15.116916408Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemAlmostOutOfFiles",
+            "query": "(node_filesystem_files_free{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_files{fstype!=\"\",job=\"node-exporter\"} * 100 < 5 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available inodes left.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemalmostoutoffiles",
+              "summary": "Filesystem has less than 5% inodes left."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.001579093,
+            "lastEvaluation": "2022-05-16T15:46:15.124613252Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFilesystemAlmostOutOfFiles",
+            "query": "(node_filesystem_files_free{fstype!=\"\",job=\"node-exporter\"} / node_filesystem_files{fstype!=\"\",job=\"node-exporter\"} * 100 < 3 and node_filesystem_readonly{fstype!=\"\",job=\"node-exporter\"} == 0)",
+            "duration": 3600,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf \"%.2f\" $value }}% available inodes left.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefilesystemalmostoutoffiles",
+              "summary": "Filesystem has less than 3% inodes left."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.00184434,
+            "lastEvaluation": "2022-05-16T15:46:15.126193719Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeNetworkReceiveErrs",
+            "query": "rate(node_network_receive_errs_total[2m]) / rate(node_network_receive_packets_total[2m]) > 0.01",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} receive errors in the last two minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodenetworkreceiveerrs",
+              "summary": "Network interface is reporting many receive errors."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000568971,
+            "lastEvaluation": "2022-05-16T15:46:15.128039807Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeNetworkTransmitErrs",
+            "query": "rate(node_network_transmit_errs_total[2m]) / rate(node_network_transmit_packets_total[2m]) > 0.01",
+            "duration": 3600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf \"%.0f\" $value }} transmit errors in the last two minutes.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodenetworktransmiterrs",
+              "summary": "Network interface is reporting many transmit errors."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000663013,
+            "lastEvaluation": "2022-05-16T15:46:15.128611251Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeHighNumberConntrackEntriesUsed",
+            "query": "(node_nf_conntrack_entries / node_nf_conntrack_entries_limit) > 0.75",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $value | humanizePercentage }} of conntrack entries are used.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodehighnumberconntrackentriesused",
+              "summary": "Number of conntrack are getting close to the limit."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000302031,
+            "lastEvaluation": "2022-05-16T15:46:15.129275593Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeTextFileCollectorScrapeError",
+            "query": "node_textfile_scrape_error{job=\"node-exporter\"} == 1",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Node Exporter text file collector failed to scrape.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodetextfilecollectorscrapeerror",
+              "summary": "Node Exporter text file collector failed to scrape."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000256685,
+            "lastEvaluation": "2022-05-16T15:46:15.129579326Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeClockSkewDetected",
+            "query": "(node_timex_offset_seconds > 0.05 and deriv(node_timex_offset_seconds[5m]) >= 0) or (node_timex_offset_seconds < -0.05 and deriv(node_timex_offset_seconds[5m]) <= 0)",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Clock on {{ $labels.instance }} is out of sync by more than 300s. Ensure NTP is configured correctly on this host.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodeclockskewdetected",
+              "summary": "Clock skew detected."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000406716,
+            "lastEvaluation": "2022-05-16T15:46:15.129837646Z",
+            "type": "alerting"
+          },
+          {
+            "state": "firing",
+            "name": "NodeClockNotSynchronising",
+            "query": "min_over_time(node_timex_sync_status[5m]) == 0 and node_timex_maxerror_seconds >= 16",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Clock on {{ $labels.instance }} is not synchronising. Ensure NTP is configured on this host.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodeclocknotsynchronising",
+              "summary": "Clock not synchronising."
+            },
+            "alerts": [
+              {
+                "labels": {
+                  "alertname": "NodeClockNotSynchronising",
+                  "container": "kube-rbac-proxy",
+                  "endpoint": "https",
+                  "instance": "monitoring-worker2",
+                  "job": "node-exporter",
+                  "namespace": "monitoring",
+                  "pod": "node-exporter-7kkzt",
+                  "service": "node-exporter",
+                  "severity": "warning"
+                },
+                "annotations": {
+                  "description": "Clock on monitoring-worker2 is not synchronising. Ensure NTP is configured on this host.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodeclocknotsynchronising",
+                  "summary": "Clock not synchronising."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:38:55.728895521Z",
+                "value": "0e+00"
+              },
+              {
+                "labels": {
+                  "alertname": "NodeClockNotSynchronising",
+                  "container": "kube-rbac-proxy",
+                  "endpoint": "https",
+                  "instance": "monitoring-worker",
+                  "job": "node-exporter",
+                  "namespace": "monitoring",
+                  "pod": "node-exporter-9qttk",
+                  "service": "node-exporter",
+                  "severity": "warning"
+                },
+                "annotations": {
+                  "description": "Clock on monitoring-worker is not synchronising. Ensure NTP is configured on this host.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodeclocknotsynchronising",
+                  "summary": "Clock not synchronising."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:38:55.728895521Z",
+                "value": "0e+00"
+              },
+              {
+                "labels": {
+                  "alertname": "NodeClockNotSynchronising",
+                  "container": "kube-rbac-proxy",
+                  "endpoint": "https",
+                  "instance": "monitoring-worker3",
+                  "job": "node-exporter",
+                  "namespace": "monitoring",
+                  "pod": "node-exporter-nv2vp",
+                  "service": "node-exporter",
+                  "severity": "warning"
+                },
+                "annotations": {
+                  "description": "Clock on monitoring-worker3 is not synchronising. Ensure NTP is configured on this host.",
+                  "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodeclocknotsynchronising",
+                  "summary": "Clock not synchronising."
+                },
+                "state": "firing",
+                "activeAt": "2022-05-16T13:59:55.728895521Z",
+                "value": "0e+00"
+              }
+            ],
+            "health": "ok",
+            "evaluationTime": 0.00126175,
+            "lastEvaluation": "2022-05-16T15:46:15.130245533Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeRAIDDegraded",
+            "query": "node_md_disks_required - ignoring(state) (node_md_disks{state=\"active\"}) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "RAID array '{{ $labels.device }}' on {{ $labels.instance }} is in degraded state due to one or more disks failures. Number of spare drives is insufficient to fix issue automatically.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/noderaiddegraded",
+              "summary": "RAID Array is degraded"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000378133,
+            "lastEvaluation": "2022-05-16T15:46:15.131509966Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeRAIDDiskFailure",
+            "query": "node_md_disks{state=\"failed\"} > 0",
+            "duration": 0,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "At least one device in RAID array on {{ $labels.instance }} failed. Array '{{ $labels.device }}' needs attention and possibly a disk swap.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/noderaiddiskfailure",
+              "summary": "Failed device in RAID array"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000240228,
+            "lastEvaluation": "2022-05-16T15:46:15.131890069Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFileDescriptorLimit",
+            "query": "(node_filefd_allocated{job=\"node-exporter\"} * 100 / node_filefd_maximum{job=\"node-exporter\"} > 70)",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "File descriptors limit at {{ $labels.instance }} is currently at {{ printf \"%.2f\" $value }}%.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefiledescriptorlimit",
+              "summary": "Kernel is predicted to exhaust file descriptors limit soon."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000193511,
+            "lastEvaluation": "2022-05-16T15:46:15.132132684Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "NodeFileDescriptorLimit",
+            "query": "(node_filefd_allocated{job=\"node-exporter\"} * 100 / node_filefd_maximum{job=\"node-exporter\"} > 90)",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "File descriptors limit at {{ $labels.instance }} is currently at {{ printf \"%.2f\" $value }}%.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/node/nodefiledescriptorlimit",
+              "summary": "Kernel is predicted to exhaust file descriptors limit soon."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000286021,
+            "lastEvaluation": "2022-05-16T15:46:15.132326963Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.034099102,
+        "lastEvaluation": "2022-05-16T15:46:15.098517645Z"
+      },
+      {
+        "name": "node-exporter.rules",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-node-exporter-rules-00cb64fd-7d68-4b0f-a72b-4fd242469692.yaml",
+        "rules": [
+          {
+            "name": "instance:node_num_cpu:sum",
+            "query": "count without(cpu, mode) (node_cpu_seconds_total{job=\"node-exporter\",mode=\"idle\"})",
+            "health": "ok",
+            "evaluationTime": 0.000488212,
+            "lastEvaluation": "2022-05-16T15:46:14.666411249Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_cpu_utilisation:rate5m",
+            "query": "1 - avg without(cpu) (sum without(mode) (rate(node_cpu_seconds_total{job=\"node-exporter\",mode=~\"idle|iowait|steal\"}[5m])))",
+            "health": "ok",
+            "evaluationTime": 0.000769565,
+            "lastEvaluation": "2022-05-16T15:46:14.666901921Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_load1_per_cpu:ratio",
+            "query": "(node_load1{job=\"node-exporter\"} / instance:node_num_cpu:sum{job=\"node-exporter\"})",
+            "health": "ok",
+            "evaluationTime": 0.000767687,
+            "lastEvaluation": "2022-05-16T15:46:14.667672904Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_memory_utilisation:ratio",
+            "query": "1 - ((node_memory_MemAvailable_bytes{job=\"node-exporter\"} or (node_memory_Buffers_bytes{job=\"node-exporter\"} + node_memory_Cached_bytes{job=\"node-exporter\"} + node_memory_MemFree_bytes{job=\"node-exporter\"} + node_memory_Slab_bytes{job=\"node-exporter\"})) / node_memory_MemTotal_bytes{job=\"node-exporter\"})",
+            "health": "ok",
+            "evaluationTime": 0.000431606,
+            "lastEvaluation": "2022-05-16T15:46:14.668441719Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_vmstat_pgmajfault:rate5m",
+            "query": "rate(node_vmstat_pgmajfault{job=\"node-exporter\"}[5m])",
+            "health": "ok",
+            "evaluationTime": 0.000126059,
+            "lastEvaluation": "2022-05-16T15:46:14.668874744Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance_device:node_disk_io_time_seconds:rate5m",
+            "query": "rate(node_disk_io_time_seconds_total{device=~\"mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\",job=\"node-exporter\"}[5m])",
+            "health": "ok",
+            "evaluationTime": 0.000167335,
+            "lastEvaluation": "2022-05-16T15:46:14.669001749Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance_device:node_disk_io_time_weighted_seconds:rate5m",
+            "query": "rate(node_disk_io_time_weighted_seconds_total{device=~\"mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|dasd.+\",job=\"node-exporter\"}[5m])",
+            "health": "ok",
+            "evaluationTime": 0.000142111,
+            "lastEvaluation": "2022-05-16T15:46:14.669170026Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_network_receive_bytes_excluding_lo:rate5m",
+            "query": "sum without(device) (rate(node_network_receive_bytes_total{device!=\"lo\",job=\"node-exporter\"}[5m]))",
+            "health": "ok",
+            "evaluationTime": 0.00015425,
+            "lastEvaluation": "2022-05-16T15:46:14.669313031Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_network_transmit_bytes_excluding_lo:rate5m",
+            "query": "sum without(device) (rate(node_network_transmit_bytes_total{device!=\"lo\",job=\"node-exporter\"}[5m]))",
+            "health": "ok",
+            "evaluationTime": 0.000142073,
+            "lastEvaluation": "2022-05-16T15:46:14.669468108Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_network_receive_drop_excluding_lo:rate5m",
+            "query": "sum without(device) (rate(node_network_receive_drop_total{device!=\"lo\",job=\"node-exporter\"}[5m]))",
+            "health": "ok",
+            "evaluationTime": 0.000153698,
+            "lastEvaluation": "2022-05-16T15:46:14.669611098Z",
+            "type": "recording"
+          },
+          {
+            "name": "instance:node_network_transmit_drop_excluding_lo:rate5m",
+            "query": "sum without(device) (rate(node_network_transmit_drop_total{device!=\"lo\",job=\"node-exporter\"}[5m]))",
+            "health": "ok",
+            "evaluationTime": 0.001059088,
+            "lastEvaluation": "2022-05-16T15:46:14.66976577Z",
+            "type": "recording"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.004424372,
+        "lastEvaluation": "2022-05-16T15:46:14.666404868Z"
+      },
+      {
+        "name": "prometheus",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-prometheus-k8s-prometheus-rules-d98f4eec-bcc7-40ba-ae03-15a97c6d6c80.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "PrometheusBadConfig",
+            "query": "max_over_time(prometheus_config_last_reload_successful{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) == 0",
+            "duration": 600,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has failed to reload its configuration.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusbadconfig",
+              "summary": "Failed Prometheus configuration reload."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000228332,
+            "lastEvaluation": "2022-05-16T15:46:16.369976758Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusNotificationQueueRunningFull",
+            "query": "(predict_linear(prometheus_notifications_queue_length{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m], 60 * 30) > min_over_time(prometheus_notifications_queue_capacity{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]))",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Alert notification queue of Prometheus {{$labels.namespace}}/{{$labels.pod}} is running full.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusnotificationqueuerunningfull",
+              "summary": "Prometheus alert notification queue predicted to run full in less than 30m."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000198783,
+            "lastEvaluation": "2022-05-16T15:46:16.370206556Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusErrorSendingAlertsToSomeAlertmanagers",
+            "query": "(rate(prometheus_notifications_errors_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) / rate(prometheus_notifications_sent_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])) * 100 > 1",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ printf \"%.1f\" $value }}% errors while sending alerts from Prometheus {{$labels.namespace}}/{{$labels.pod}} to Alertmanager {{$labels.alertmanager}}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheuserrorsendingalertstosomealertmanagers",
+              "summary": "Prometheus has encountered more than 1% errors sending alerts to a specific Alertmanager."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000232983,
+            "lastEvaluation": "2022-05-16T15:46:16.370406466Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusNotConnectedToAlertmanagers",
+            "query": "max_over_time(prometheus_notifications_alertmanagers_discovered{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) < 1",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} is not connected to any Alertmanagers.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusnotconnectedtoalertmanagers",
+              "summary": "Prometheus is not connected to any Alertmanagers."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000098033,
+            "lastEvaluation": "2022-05-16T15:46:16.370640356Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusTSDBReloadsFailing",
+            "query": "increase(prometheus_tsdb_reloads_failures_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[3h]) > 0",
+            "duration": 14400,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has detected {{$value | humanize}} reload failures over the last 3h.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheustsdbreloadsfailing",
+              "summary": "Prometheus has issues reloading blocks from disk."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000154492,
+            "lastEvaluation": "2022-05-16T15:46:16.370739106Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusTSDBCompactionsFailing",
+            "query": "increase(prometheus_tsdb_compactions_failed_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[3h]) > 0",
+            "duration": 14400,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has detected {{$value | humanize}} compaction failures over the last 3h.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheustsdbcompactionsfailing",
+              "summary": "Prometheus has issues compacting blocks."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000142843,
+            "lastEvaluation": "2022-05-16T15:46:16.370894484Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusNotIngestingSamples",
+            "query": "(rate(prometheus_tsdb_head_samples_appended_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) <= 0 and (sum without(scrape_job) (prometheus_target_metadata_cache_entries{job=\"prometheus-k8s\",namespace=\"monitoring\"}) > 0 or sum without(rule_group) (prometheus_rule_group_rules{job=\"prometheus-k8s\",namespace=\"monitoring\"}) > 0))",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} is not ingesting samples.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusnotingestingsamples",
+              "summary": "Prometheus is not ingesting samples."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000229104,
+            "lastEvaluation": "2022-05-16T15:46:16.371038531Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusDuplicateTimestamps",
+            "query": "rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} is dropping {{ printf \"%.4g\" $value  }} samples/s with different values but duplicated timestamp.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusduplicatetimestamps",
+              "summary": "Prometheus is dropping samples with duplicate timestamps."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000094527,
+            "lastEvaluation": "2022-05-16T15:46:16.371268616Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOutOfOrderTimestamps",
+            "query": "rate(prometheus_target_scrapes_sample_out_of_order_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} is dropping {{ printf \"%.4g\" $value  }} samples/s with timestamps arriving out of order.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusoutofordertimestamps",
+              "summary": "Prometheus drops samples with out-of-order timestamps."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000100013,
+            "lastEvaluation": "2022-05-16T15:46:16.37136385Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusRemoteStorageFailures",
+            "query": "((rate(prometheus_remote_storage_failed_samples_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])) / ((rate(prometheus_remote_storage_failed_samples_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])) + (rate(prometheus_remote_storage_succeeded_samples_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) or rate(prometheus_remote_storage_samples_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])))) * 100 > 1",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} failed to send {{ printf \"%.1f\" $value }}% of the samples to {{ $labels.remote_name}}:{{ $labels.url }}",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusremotestoragefailures",
+              "summary": "Prometheus fails to send samples to remote storage."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000337833,
+            "lastEvaluation": "2022-05-16T15:46:16.37146457Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusRemoteWriteBehind",
+            "query": "(max_over_time(prometheus_remote_storage_highest_timestamp_in_seconds{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) - ignoring(remote_name, url) group_right() max_over_time(prometheus_remote_storage_queue_highest_sent_timestamp_seconds{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])) > 120",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} remote write is {{ printf \"%.1f\" $value }}s behind for {{ $labels.remote_name}}:{{ $labels.url }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusremotewritebehind",
+              "summary": "Prometheus remote write is behind."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000171206,
+            "lastEvaluation": "2022-05-16T15:46:16.371803287Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusRemoteWriteDesiredShards",
+            "query": "(max_over_time(prometheus_remote_storage_shards_desired{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > max_over_time(prometheus_remote_storage_shards_max{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]))",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} remote write desired shards calculation wants to run {{ $value }} shards for queue {{ $labels.remote_name}}:{{ $labels.url }}, which is more than the max of {{ printf `prometheus_remote_storage_shards_max{instance=\"%s\",job=\"prometheus-k8s\",namespace=\"monitoring\"}` $labels.instance | query | first | value }}.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusremotewritedesiredshards",
+              "summary": "Prometheus remote write desired shards calculation wants to run more than configured max shards."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000150993,
+            "lastEvaluation": "2022-05-16T15:46:16.371975453Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusRuleFailures",
+            "query": "increase(prometheus_rule_evaluation_failures_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has failed to evaluate {{ printf \"%.0f\" $value }} rules in the last 5m.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusrulefailures",
+              "summary": "Prometheus is failing rule evaluations."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000099854,
+            "lastEvaluation": "2022-05-16T15:46:16.372127302Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusMissingRuleEvaluations",
+            "query": "increase(prometheus_rule_group_iterations_missed_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has missed {{ printf \"%.0f\" $value }} rule group evaluations in the last 5m.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheusmissingruleevaluations",
+              "summary": "Prometheus is missing rule evaluations due to slow rule group evaluation."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000091179,
+            "lastEvaluation": "2022-05-16T15:46:16.372227961Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusTargetLimitHit",
+            "query": "increase(prometheus_target_scrape_pool_exceeded_target_limit_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has dropped {{ printf \"%.0f\" $value }} targets because the number of targets exceeded the configured target_limit.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheustargetlimithit",
+              "summary": "Prometheus has dropped targets because some scrape configs have exceeded the targets limit."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000082948,
+            "lastEvaluation": "2022-05-16T15:46:16.372319906Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusLabelLimitHit",
+            "query": "increase(prometheus_target_scrape_pool_exceeded_label_limits_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) > 0",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus {{$labels.namespace}}/{{$labels.pod}} has dropped {{ printf \"%.0f\" $value }} targets because some samples exceeded the configured label_limit, label_name_length_limit or label_value_length_limit.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheuslabellimithit",
+              "summary": "Prometheus has dropped targets because some scrape configs have exceeded the labels limit."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000104433,
+            "lastEvaluation": "2022-05-16T15:46:16.3724036Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusTargetSyncFailure",
+            "query": "increase(prometheus_target_sync_failed_total{job=\"prometheus-k8s\",namespace=\"monitoring\"}[30m]) > 0",
+            "duration": 300,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "{{ printf \"%.0f\" $value }} targets in Prometheus {{$labels.namespace}}/{{$labels.pod}} have failed to sync because invalid configuration was supplied.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheustargetsyncfailure",
+              "summary": "Prometheus has failed to sync targets."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000100037,
+            "lastEvaluation": "2022-05-16T15:46:16.372508744Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusErrorSendingAlertsToAnyAlertmanager",
+            "query": "min without(alertmanager) (rate(prometheus_notifications_errors_total{alertmanager!~\"\",job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m]) / rate(prometheus_notifications_sent_total{alertmanager!~\"\",job=\"prometheus-k8s\",namespace=\"monitoring\"}[5m])) * 100 > 3",
+            "duration": 900,
+            "labels": {
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "{{ printf \"%.1f\" $value }}% minimum errors while sending alerts from Prometheus {{$labels.namespace}}/{{$labels.pod}} to any Alertmanager.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus/prometheuserrorsendingalertstoanyalertmanager",
+              "summary": "Prometheus encounters more than 3% errors sending alerts to any Alertmanager."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000271723,
+            "lastEvaluation": "2022-05-16T15:46:16.372609465Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.002917233,
+        "lastEvaluation": "2022-05-16T15:46:16.369966668Z"
+      },
+      {
+        "name": "config-reloaders",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-prometheus-operator-rules-f34a5c30-6d10-47b8-9299-ad16730a0f72.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "ConfigReloaderSidecarErrors",
+            "query": "max_over_time(reloader_last_reload_successful{namespace=~\".+\"}[5m]) == 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Errors encountered while the {{$labels.pod}} config-reloader sidecar attempts to sync config in {{$labels.namespace}} namespace.\nAs a result, configuration for service running in {{$labels.pod}} may be stale and cannot be updated anymore.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/configreloadersidecarerrors",
+              "summary": "config-reloader sidecar has not had a successful reload for 10m"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000302514,
+            "lastEvaluation": "2022-05-16T15:46:33.298603186Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.000313231,
+        "lastEvaluation": "2022-05-16T15:46:33.298597486Z"
+      },
+      {
+        "name": "prometheus-operator",
+        "file": "/etc/prometheus/rules/prometheus-k8s-rulefiles-0/monitoring-prometheus-operator-rules-f34a5c30-6d10-47b8-9299-ad16730a0f72.yaml",
+        "rules": [
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorListErrors",
+            "query": "(sum by(controller, namespace) (rate(prometheus_operator_list_operations_failed_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[10m])) / sum by(controller, namespace) (rate(prometheus_operator_list_operations_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[10m]))) > 0.4",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Errors while performing List operations in controller {{$labels.controller}} in {{$labels.namespace}} namespace.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorlisterrors",
+              "summary": "Errors while performing list operations in controller."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000567785,
+            "lastEvaluation": "2022-05-16T15:46:16.635287535Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorWatchErrors",
+            "query": "(sum by(controller, namespace) (rate(prometheus_operator_watch_operations_failed_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[10m])) / sum by(controller, namespace) (rate(prometheus_operator_watch_operations_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[10m]))) > 0.4",
+            "duration": 900,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Errors while performing watch operations in controller {{$labels.controller}} in {{$labels.namespace}} namespace.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorwatcherrors",
+              "summary": "Errors while performing watch operations in controller."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.0002818,
+            "lastEvaluation": "2022-05-16T15:46:16.63585679Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorSyncFailed",
+            "query": "min_over_time(prometheus_operator_syncs{job=\"prometheus-operator\",namespace=\"monitoring\",status=\"failed\"}[5m]) > 0",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Controller {{ $labels.controller }} in {{ $labels.namespace }} namespace fails to reconcile {{ $value }} objects.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorsyncfailed",
+              "summary": "Last controller reconciliation failed"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000189878,
+            "lastEvaluation": "2022-05-16T15:46:16.636139575Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorReconcileErrors",
+            "query": "(sum by(controller, namespace) (rate(prometheus_operator_reconcile_errors_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[5m]))) / (sum by(controller, namespace) (rate(prometheus_operator_reconcile_operations_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[5m]))) > 0.1",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "{{ $value | humanizePercentage }} of reconciling operations failed for {{ $labels.controller }} controller in {{ $labels.namespace }} namespace.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorreconcileerrors",
+              "summary": "Errors while reconciling controller."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000521086,
+            "lastEvaluation": "2022-05-16T15:46:16.636330738Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorNodeLookupErrors",
+            "query": "rate(prometheus_operator_node_address_lookup_errors_total{job=\"prometheus-operator\",namespace=\"monitoring\"}[5m]) > 0.1",
+            "duration": 600,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Errors while reconciling Prometheus in {{ $labels.namespace }} Namespace.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatornodelookuperrors",
+              "summary": "Errors while reconciling Prometheus."
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000238917,
+            "lastEvaluation": "2022-05-16T15:46:16.636853368Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorNotReady",
+            "query": "min by(namespace, controller) (max_over_time(prometheus_operator_ready{job=\"prometheus-operator\",namespace=\"monitoring\"}[5m]) == 0)",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus operator in {{ $labels.namespace }} namespace isn't ready to reconcile {{ $labels.controller }} resources.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatornotready",
+              "summary": "Prometheus operator not ready"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000218575,
+            "lastEvaluation": "2022-05-16T15:46:16.637093226Z",
+            "type": "alerting"
+          },
+          {
+            "state": "inactive",
+            "name": "PrometheusOperatorRejectedResources",
+            "query": "min_over_time(prometheus_operator_managed_resources{job=\"prometheus-operator\",namespace=\"monitoring\",state=\"rejected\"}[5m]) > 0",
+            "duration": 300,
+            "labels": {
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "Prometheus operator in {{ $labels.namespace }} namespace rejected {{ printf \"%0.0f\" $value }} {{ $labels.controller }}/{{ $labels.resource }} resources.",
+              "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/prometheus-operator/prometheusoperatorrejectedresources",
+              "summary": "Resources rejected by Prometheus operator"
+            },
+            "alerts": [],
+            "health": "ok",
+            "evaluationTime": 0.000197645,
+            "lastEvaluation": "2022-05-16T15:46:16.637312835Z",
+            "type": "alerting"
+          }
+        ],
+        "interval": 30,
+        "evaluationTime": 0.002231659,
+        "lastEvaluation": "2022-05-16T15:46:16.635281783Z"
+      }
+    ]
+  }
+}

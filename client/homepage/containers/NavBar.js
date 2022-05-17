@@ -126,13 +126,9 @@ export default function PersistentDrawerLeft() {
           ].map((menu, index) => (
             <ListItem key={menu.text} disablePadding>
               <ListItemButton>
-                <ListItemText
-                  primary={
-                    <Link style={{ textDecoration: 'none' }} to={menu.path}>
-                      {menu.text}
-                    </Link>
-                  }
-                />
+                <Link style={{ textDecoration: 'none' }} to={menu.path}>
+                  <ListItemText primary={menu.text} />
+                </Link>
               </ListItemButton>
             </ListItem>
           ))}

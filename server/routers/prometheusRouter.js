@@ -37,11 +37,11 @@ prometheusRouter.get(
 prometheusRouter.get(
   '/metricspage',
   metricsDataController.getFreeMemoryPerNode,
-  metricsDataController.getCPUUsageByNamespace,
+  metricsDataController.getCPUUsageByNode,
   metricsDataController.bytesReceivedPerNode,
   (req, res) => {
     const chartData = {
-      getCPUUsageByNamespace: res.locals.getCPUUsageByNamespace,
+      getCPUUsageByNode: res.locals.getCPUUsageByNode,
       bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
       getFreeMemoryPerNode: res.locals.getFreeMemoryPerNode,
     };
