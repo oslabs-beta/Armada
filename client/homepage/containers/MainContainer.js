@@ -4,17 +4,28 @@ import CountsContainer from './CountsContainer';
 import StatusContainer from './StatusContainer';
 import CriticalPodsContainer from './CriticalPodsContainer';
 import CriticalNodesContainer from './CriticalNodesContainer';
+import Refresh from '../components/Refresh';
 import { Grid } from '@mui/material';
 import { fetchNodesList, fetchPodsList } from '../../actions/actions';
 import demoNodeList from '../../demoData/nodeList.json';
+import Select from 'react-select';
 
 const MainContainer = (props) => {
   const [mode, setMode] = useState('production');
   const [nodes, setNodes] = useState([]);
   const [deployments, setDeployments] = useState({});
+  const [selectedDeployments, setSelectedDeployments] = useState(deployments);
   const [pods, setPods] = useState([]);
+  const [selectedPods, setSelectedPods] = useState(pods);
   const [services, setServices] = useState({});
+  const [selectedServices, setSelectedServices] = useState(services);
   const [promMetrics, setPromMetrics] = useState({});
+  const [namespaces, setNamespaces] = useState([]);
+  const [selectedNamespace, setSelectedNamespace] = useState('All');
+
+  // const [selectedState, setSelectedState] = useState({
+  //   pods:
+  // })
 
   const getNodeList = () => {
     if (mode === 'demo') {
@@ -24,7 +35,7 @@ const MainContainer = (props) => {
       fetch('/api/nodesList')
         .then((data) => data.json())
         .then((data) => {
-          console.log(data);
+          console.log('nodes data', data);
           props.fetchNodesList(data);
         })
         .catch((error) => console.log(error));
@@ -62,6 +73,20 @@ const MainContainer = (props) => {
       .catch((error) => console.log(error));
   };
 
+  const getNamespaceList = () => {
+    fetch('/api/namespaceList')
+      .then((data) => data.json())
+      .then((data) => {
+        // setNamespaces(data);
+        let names = ['All'];
+        data.items.forEach((item) => {
+          names.push(item.metadata.name);
+        });
+        setNamespaces(names);
+      })
+      .catch((error) => console.log(error));
+  };
+
   const getPromMetrics = () => {
     let now = new Date();
     let nowCopy = new Date(now.getTime());
@@ -91,34 +116,43 @@ const MainContainer = (props) => {
     getPodsList();
     getServicesList();
     getPromMetrics();
+    getNamespaceList();
   }, []);
 
-  const Refresh = (props) => {
-    const [timestamp, setTimestamp] = useState(new Date().toString());
+  const namespaceOptions = [];
+  namespaces.forEach((el) => {
+    namespaceOptions.push({
+      value: el,
+      label: el,
+    });
+  });
 
-    function setTime() {
-      console.log('set time called');
-      let time = new Date();
-      time = time.toString();
-      getNodeList();
-      getDeploymentsList();
-      getPodsList();
-      getServicesList();
-      getPromMetrics();
-      setTimestamp(time);
+  function handleNamespaceChange(namespace) {
+    console.log('selected namespace', namespace.value);
+    setSelectedNamespace(namespace.value);
+    console.log('selectedNamespace', selectedNamespace);
+    if (namespace.value === 'All') {
+      setSelectedPods(pods);
+      setSelectedDeployments(deployments);
+      setSelectedServices(services);
+    } else {
+      const selectedPods = pods.filter(
+        (pod) => pod.metadata.namespace === namespace.value
+      );
+      setSelectedPods(selectedPods);
+      props.fetchPodsList(selectedPods);
+      setSelectedDeployments(
+        deployments.filter(
+          (deployment) => deployment.metadata.namespace === namespace.value
+        )
+      );
+      setSelectedServices(
+        services.filter(
+          (service) => service.metadata.namespace === namespace.value
+        )
+      );
     }
-
-    return (
-      <span>
-        <p className='timestamp'>
-          Last updated at {timestamp}{' '}
-          <button className='refreshButton' onClick={setTime}>
-            <span className='material-icons'>refresh</span>
-          </button>
-        </p>
-      </span>
-    );
-  };
+  }
 
   return (
     <Grid container spacing={1}>
@@ -132,6 +166,12 @@ const MainContainer = (props) => {
         <div>MainContainer</div>
         <Refresh></Refresh>
       </Grid>
+      <Select
+        className='namespaceSelect'
+        value={selectedNamespace}
+        options={namespaceOptions}
+        onChange={handleNamespaceChange}
+      />
       <Grid
         container
         item
@@ -141,9 +181,9 @@ const MainContainer = (props) => {
       >
         <CountsContainer
           nodes={nodes}
-          deployments={deployments}
-          pods={pods}
-          services={services}
+          deployments={selectedDeployments}
+          pods={selectedPods}
+          services={selectedServices}
         />
       </Grid>
       <Grid
@@ -153,7 +193,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <StatusContainer pods={pods} services={services} />
+        <StatusContainer pods={selectedPods} services={selectedServices} />
       </Grid>
 
       <Grid

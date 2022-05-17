@@ -17,23 +17,32 @@ const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
 const metricsDataController = {};
 
 // CPU usage time series data, by Namespace
-metricsDataController.getCPUUsageByNamespace = async (req, res, next) => {
+metricsDataController.getCPUUsageByNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
-  let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m])) by (namespace) &start=2022-05-13T17:52:43.841Z&end=2022-05-14T21:52:43.841Z&step=30m`;
-  //let query = `${prometheusURL}query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m])) by (namespace)`;
-  //query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+  //sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{cluster="$cluster", namespace="$namespace"}) by (node)
+  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m])) by (node) &start=2022-05-13T17:52:43.841Z&end=2022-05-14T21:52:43.841Z&step=30m`;
+  // let query = `${prometheusURL}query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",namespace!=""}[2m])) by (node)`;
+  // let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate) by (node)`;
+  // let query = `${prometheusURL}query?query=100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[10m]) * 100) * on(instance) group_left(nodename) (node_uname_info))`;
+
+  // from the article:
+  // for by node utilization:
+  // let query = `${prometheusURL}query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD",pod_name!=""}[5m])) by (node)`;
+  // for namespace CPU utilization:
+  let query = `${prometheusURL}query_range?query=sum(rate(container_cpu_usage_seconds_total{container_name!="POD", namespace!=""}[5m])) by (namespace)`;
+  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
 
   try {
     fetch(query)
       .then((resp) => resp.json())
       .then((resp) => {
         const formatted = formatChartData(resp.data.result);
-        res.locals.getCPUUsageByNamespace = formatted;
+        res.locals.getCPUUsageByNode = formatted;
       })
       .then(() => next());
   } catch (err) {
     return next({
-      log: 'Error with getting getCPUUsageByNamespace',
+      log: 'Error with getting getCPUUsageByNode',
       message: { err: err.message },
     });
   }
@@ -42,9 +51,9 @@ metricsDataController.getCPUUsageByNamespace = async (req, res, next) => {
 // Free Memory per Node (TBU change to Namespace)
 metricsDataController.getFreeMemoryPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
-  let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_memory_MemFree_bytes[2m])) by (instance) * on (instance) group_left(nodename) (node_uname_info) &start=2022-05-13T17:52:43.841Z&end=2022-05-14T21:52:43.841Z&step=30m`;
-  //let query = `${prometheusURL}query_range?query=sum(rate(node_memory_MemFree_bytes[2m])) by (instance) * on (instance) group_left(nodename) (node_uname_info)`;
-  //query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+  //let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_memory_MemFree_bytes[2m])) by (instance) * on (instance) group_left(nodename) (node_uname_info) &start=2022-05-13T17:52:43.841Z&end=2022-05-14T21:52:43.841Z&step=30m`;
+  let query = `${prometheusURL}query_range?query=sum(rate(node_memory_MemFree_bytes[2m])) by (instance) * on (instance) group_left(nodename) (node_uname_info)`;
+  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   try {
     fetch(query)
       .then((resp) => resp.json())
@@ -65,9 +74,9 @@ metricsDataController.getFreeMemoryPerNode = async (req, res, next) => {
 // Bytes Received Per Node (TBU change to Namespace)
 metricsDataController.bytesReceivedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
-  // let query = `${prometheusURL}query_range?query=sum(rate(node_network_receive_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)`;
-  // query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
-  let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-13T21:52:43.841Z&end=2022-05-14T21:52:43.841Z&step=5m`;
+  let query = `${prometheusURL}query_range?query=sum(rate(node_network_receive_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)`;
+  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
+  //let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-13T21:52:43.841Z&end=2022-05-14T21:52:43.841Z&step=5m`;
   try {
     fetch(query)
       .then((resp) => resp.json())
