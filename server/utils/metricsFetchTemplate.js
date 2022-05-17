@@ -1,21 +1,21 @@
 const metricsFetchTemplate = (queryString, title) => {
-    try {
-        fetch(query)
-          .then((resp) => resp.json())
-          .then((resp) => {
-            const formatted = formatChartData(resp.data.result);
-            res.locals[title] = formatted;
-          })
-          .then(() => next());
-      } catch (err) {
-        next({
-          log: `Error with ${title}`,
-          message: { err: err.message },
-        });
-      }
-}
+  try {
+    fetch(query)
+      .then((resp) => resp.json())
+      .then((resp) => {
+        const formatted = formatChartData(resp.data.result);
+        res.locals[title] = formatted;
+      })
+      .then(() => next());
+  } catch (err) {
+    next({
+      log: `Error with ${title}`,
+      message: { err: err.message },
+    });
+  }
+};
 
-module.exports = 
+module.exports = metricsFetchTemplate;
 
 /*
 

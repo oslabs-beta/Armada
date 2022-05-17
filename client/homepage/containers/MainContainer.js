@@ -87,37 +87,37 @@ const MainContainer = (props) => {
       .catch((error) => console.log(error));
   };
 
-  const getPromMetrics = () => {
-    let now = new Date();
-    let nowCopy = new Date(now.getTime());
-    nowCopy.setHours(nowCopy.getHours() - 24);
-    let endDateTime = now.toISOString();
-    console.log('endDateTime', endDateTime);
-    let startDateTime = nowCopy.toISOString();
-    console.log('startDateTime', startDateTime);
+  // const getPromMetrics = () => {
+  //   let now = new Date();
+  //   let nowCopy = new Date(now.getTime());
+  //   nowCopy.setHours(nowCopy.getHours() - 24);
+  //   let endDateTime = now.toISOString();
+  //   console.log('endDateTime', endDateTime);
+  //   let startDateTime = nowCopy.toISOString();
+  //   console.log('startDateTime', startDateTime);
 
-    console.log('prommetrics namespace', selectedState.namespace);
-    let step = '30m';
-    fetch(
-      `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
-        // console.log('data', data);
-        setPromMetrics(data);
-        console.log(data);
-        console.log('prom metrics refetched');
-      })
-      .catch((error) => console.log(error));
-  };
+  //   console.log('prommetrics namespace', selectedState.namespace);
+  //   let step = '30m';
+  //   fetch(
+  //     `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
+  //       // console.log('data', data);
+  //       setPromMetrics(data);
+  //       console.log(data);
+  //       console.log('prom metrics refetched');
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
 
   useEffect(() => {
     getNodeList();
     getDeploymentsList();
     getPodsList();
     getServicesList();
-    getPromMetrics();
+    // getPromMetrics();
     getNamespaceList();
   }, []);
 
