@@ -1,7 +1,7 @@
 import React from 'react';
-import LineChart from '../../homepage/components/Charts/LineChartTemplate';
+import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 
-const FreeMemoryByNode = ({ metrics }) => {
+const MemoryUsageByNode = ({ metrics }) => {
   return (
     <div>
       <LineChart
@@ -13,4 +13,4 @@ const FreeMemoryByNode = ({ metrics }) => {
   );
 };
 
-export default FreeMemoryByNode;
+export default MemoryUsageByNode;

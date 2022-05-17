@@ -1,5 +1,5 @@
 import React from 'react';
-import LineChart from '../../homepage/components/Charts/LineChartTemplate';
+import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 
 const CPUUsageByNode = ({ metrics }) => {
   return (

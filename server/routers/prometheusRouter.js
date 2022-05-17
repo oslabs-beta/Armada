@@ -36,14 +36,32 @@ prometheusRouter.get(
 
 prometheusRouter.get(
   '/metricspage',
-  metricsDataController.getFreeMemoryPerNode,
+  metricsDataController.getCPUUsageByNamespace,
+  metricsDataController.getCPUUsageByPod,
   metricsDataController.getCPUUsageByNode,
+  metricsDataController.getMemoryUsageByNamespace,
+  metricsDataController.getMemoryUsageByNode,
+  metricsDataController.getMemoryUsageByPod,
+  metricsDataController.bytesTransmittedPerNamespace,
+  metricsDataController.bytesTransmittedPerNode,
+  metricsDataController.bytesTransmittedPerPod,
+  metricsDataController.bytesReceivedPerNamespace,
   metricsDataController.bytesReceivedPerNode,
+  metricsDataController.bytesReceivedPerPod,
   (req, res) => {
     const chartData = {
+      getCPUUsageByNamespace: res.locals.getCPUUsageByNamespace,
+      getCPUUsageByPod: res.locals.getCPUUsageByPod,
       getCPUUsageByNode: res.locals.getCPUUsageByNode,
+      getMemoryUsageByNamespace: res.locals.getMemoryUsageByNamespace,
+      getMemoryUsageByNode: res.locals.getMemoryUsageByNode,
+      getMemoryUsageByPod: res.locals.getMemoryUsageByPod,
+      bytesTransmittedPerNamespace: res.locals.bytesTransmittedPerNamespace,
+      bytesTransmittedPerNode: res.locals.bytesTransmittedPerNode,
+      bytesTransmittedPerPod: res.locals.bytesTransmittedPerPod,
+      bytesReceivedPerNamespace: res.locals.bytesReceivedPerNamespace,
       bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
-      getFreeMemoryPerNode: res.locals.getFreeMemoryPerNode,
+      bytesReceivedPerPod: res.locals.bytesReceivedPerPod,
     };
     res.status(200).json(chartData);
   }
@@ -78,6 +96,14 @@ prometheusRouter.get(
   prometheusController.getMemoryUsageByPod,
   (req, res) => {
     res.status(200).json(res.locals.getMemoryUsageByPod);
+  }
+);
+
+prometheusRouter.get(
+  '/cpuUtilization',
+  prometheusController.getCpuUtilization,
+  (req, res) => {
+    res.status(200).json(res.locals.cpuUtilization);
   }
 );
 

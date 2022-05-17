@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
-import BytesReceivedByNode from '../components/BytesReceivedByNode';
-import CPUUsageByNode from '../components/CPUUsageByNode.js';
-import FreeMemoryByNode from '../components/FreeMemoryByNode.js';
+import BytesReceivedByNode from '../components/NodeMetrics/BytesReceivedByNode';
+import CPUUsageByNode from '../components/NodeMetrics/CPUUsageByNode.js';
+import MemoryUsageByNode from '../components/NodeMetrics/MemoryUsageByNode.js';
+import BytesReceivedByPod from '../components/PodMetrics/BytesReceivedByPod';
+import CPUUsageByPod from '../components/PodMetrics/CPUUsageByPod.js';
+import MemoryUsageByPod from '../components/PodMetrics/MemoryUsageByPod.js';
 
 const MetricsContainer = () => {
   const [timeSeriesMetrics, setTimeSeriesMetrics] = useState([]);
@@ -16,13 +19,12 @@ const MetricsContainer = () => {
     let startDateTime = nowCopy.toISOString();
     console.log('startDateTime', startDateTime);
 
-    let step = '1m';
+    let step = '30m';
     fetch(
       `/api/prometheus/metricspage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
     )
       .then((res) => res.json())
       .then((data) => {
-        // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
         console.log('data', data);
         setTimeSeriesMetrics(data);
         console.log('time series metrics refetched');
@@ -34,7 +36,8 @@ const MetricsContainer = () => {
     getTimeSeriesMetrics();
   }, []);
 
-  const renderBytesReceived = () => {
+  // Node Rendering:
+  const renderBytesReceivedPerNode = () => {
     if (timeSeriesMetrics.bytesReceivedPerNode) {
       return (
         <BytesReceivedByNode metrics={timeSeriesMetrics.bytesReceivedPerNode} />
@@ -42,25 +45,48 @@ const MetricsContainer = () => {
     }
   };
 
-  const renderCPUUsage = () => {
+  const renderCPUUsageByNode = () => {
     if (timeSeriesMetrics.getCPUUsageByNode) {
       return <CPUUsageByNode metrics={timeSeriesMetrics.getCPUUsageByNode} />;
     }
   };
 
-  const renderFreeMemory = () => {
-    if (timeSeriesMetrics.getFreeMemoryPerNode) {
+  const renderMemoryUsageByNode = () => {
+    if (timeSeriesMetrics.getMemoryUsageByNode) {
       return (
-        <FreeMemoryByNode metrics={timeSeriesMetrics.getFreeMemoryPerNode} />
+        <MemoryUsageByNode metrics={timeSeriesMetrics.getMemoryUsageByNode} />
       );
     }
   };
 
+  // Pod Rendering:
+  // const renderBytesReceivedPerPod = () => {
+  //   if (timeSeriesMetrics.bytesReceivedPerPod) {
+  //     return (
+  //       <BytesReceivedByPod metrics={timeSeriesMetrics.bytesReceivedPerPod} />
+  //     );
+  //   }
+  // };
+
+  // const renderCPUUsageByPod = () => {
+  //   if (timeSeriesMetrics.getCPUUsageByPod) {
+  //     return <CPUUsageByPod metrics={timeSeriesMetrics.getCPUUsageByPod} />;
+  //   }
+  // };
+
+  // const renderMemoryUsageByPod = () => {
+  //   if (timeSeriesMetrics.getMemoryUsageByPod) {
+  //     return (
+  //       <MemoryUsageByPod metrics={timeSeriesMetrics.getMemoryUsageByPod} />
+  //     );
+  //   }
+  // };
+
   return (
     <div>
-      {renderBytesReceived()}
-      {renderCPUUsage()}
-      {renderFreeMemory()}
+      {renderBytesReceivedPerNode()}
+      {renderCPUUsageByNode()}
+      {renderMemoryUsageByNode()}
     </div>
   );
 };

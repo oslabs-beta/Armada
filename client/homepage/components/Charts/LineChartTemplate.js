@@ -30,6 +30,7 @@ const LineChart = ({ chartData, title, label }) => {
       },
     },
     responsive: true,
+    pointRadius: 0,
     plugins: {
       legend: {
         display: true,
@@ -93,7 +94,7 @@ const LineChart = ({ chartData, title, label }) => {
   const objArr = [];
 
   const lineChartData = chartData.seriesLabels.forEach((el, index) => {
-    const colors = ['blue', 'yellow', 'pink', 'green'];
+    const colors = ['#33c9dc', '#ed4b82', '#cddc39', '#ffc107'];
     objArr.push({
       data: chartData.seriesValues[index],
       label: chartData.seriesLabels[index],
