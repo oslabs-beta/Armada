@@ -5,6 +5,8 @@ const path = require('path');
 
 const getLists = require('./controllers/getLists');
 const prometheusRouter = require('./routers/prometheusRouter');
+const alertsController = require('./controllers/alertsController');
+const logsController = require('./controllers/logsController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -47,8 +49,19 @@ app.get('/api/servicesList', getLists.getServicesList, (req, res) => {
   res.status(201).send(res.locals.servicesList.items);
 });
 
+app.get('/api/namespaceList', getLists.getNamespaceList, (req, res) => {
+  res.status(201).send(res.locals.namespaces);
+});
+
 app.use('/api/prometheus', prometheusRouter);
 
+app.get('/api/alerts', alertsController.fetchAlerts, (req, res) => {
+  res.status(201).json(res.locals.alerts);
+});
+
+app.get('/api/logs', logsController.getLogs, (req, res) => {
+  res.status(200).json(res.locals.logs);
+});
 // app.get('/ingressesList', getLists.getIngressesList, (req, res) => {
 //   res.status(201).send(res.locals.ingressesList);
 // });

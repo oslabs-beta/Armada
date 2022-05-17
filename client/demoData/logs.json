@@ -1,0 +1,50 @@
+[
+  [
+    "kube-system",
+    "112s",
+    "Warning",
+    "Unhealthy",
+    "pod/metrics-server-847dcc659d-brstf",
+    "Readiness probe failed: HTTP probe failed with statuscode: 500"
+  ],
+  [
+    "monitoring",
+    "116s",
+    "Warning",
+    "Unhealthy",
+    "pod/alertmanager-main-1",
+    "Readiness probe failed: Get \"http://10.244.2.10:9093/-/ready\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)"
+  ],
+  [
+    "monitoring",
+    "6m55s",
+    "Warning",
+    "Unhealthy",
+    "pod/alertmanager-main-1",
+    "Readiness probe failed: Get \"http://10.244.2.10:9093/-/ready\": dial tcp 10.244.2.10:9093: i/o timeout (Client.Timeout exceeded while awaiting headers)"
+  ],
+  [
+    "monitoring",
+    "3m31s",
+    "Warning",
+    "FailedKillPod",
+    "pod/node-exporter-h6nww",
+    "error killing pod: [failed to \"KillContainer\" for \"kube-rbac-proxy\" with KillContainerError: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\", failed to \"KillPodSandbox\" for \"27cde0ab-5a07-459d-b594-ea3b9bd4d78c\" with KillPodSandboxError: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"]"
+  ],
+  [
+    "monitoring",
+    "21m",
+    "Warning",
+    "FailedKillPod",
+    "pod/node-exporter-h6nww",
+    "error killing pod: [failed to \"KillContainer\" for \"kube-rbac-proxy\" with KillContainerError: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\", failed to \"KillPodSandbox\" for \"27cde0ab-5a07-459d-b594-ea3b9bd4d78c\" with KillPodSandboxError: \"rpc error: code = DeadlineExceeded desc = failed to stop container \"7cad4627df92d5c09ac630040ccfab6c76e4e0ca12bc55390faed4cec1e10935\": an error occurs during waiting for container \"7cad4627df92d5c09ac630040ccfab6c76e4e0ca12bc55390faed4cec1e10935\" to be killed: wait container \"7cad4627df92d5c09ac630040ccfab6c76e4e0ca12bc55390faed4cec1e10935\": context deadline exceeded\"]"
+  ],
+  [
+    "monitoring",
+    "12m",
+    "Warning",
+    "FailedKillPod",
+    "pod/node-exporter-h6nww",
+    "error killing pod: [failed to \"KillContainer\" for \"kube-rbac-proxy\" with KillContainerError: \"rpc error: code = DeadlineExceeded desc = an error occurs during waiting for container \"7cad4627df92d5c09ac630040ccfab6c76e4e0ca12bc55390faed4cec1e10935\" to be killed: wait container \"7cad4627df92d5c09ac630040ccfab6c76e4e0ca12bc55390faed4cec1e10935\": context deadline exceeded\", failed to \"KillPodSandbox\" for \"27cde0ab-5a07-459d-b594-ea3b9bd4d78c\" with KillPodSandboxError: \"rpc error: code = DeadlineExceeded desc = context deadline exceeded\"]"
+  ]
+]

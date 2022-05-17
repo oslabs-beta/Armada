@@ -32,9 +32,17 @@ const getLists = {
       });
   }),
 
+  getNamespaceList: (getNamespaceList = (req, res, next) => {
+    k8sApiCore.listNamespace().then((data) => {
+      // console.log(data);
+      res.locals.namespaces = data.body;
+      return next();
+    });
+  }),
+
   getDeploymentsList: (getDeploymentsList = (req, res, next) => {
     k8sApiApps
-      .listNamespacedDeployment('default')
+      .listDeploymentForAllNamespaces()
       .then((data) => {
         res.locals.deploymentsList = data.body;
         return next();
@@ -49,7 +57,7 @@ const getLists = {
 
   getServicesList: (getServicesList = (req, res, next) => {
     k8sApiCore
-      .listNamespacedService('default')
+      .listServiceForAllNamespaces()
       .then((data) => {
         res.locals.servicesList = data.body;
         return next();
@@ -64,7 +72,7 @@ const getLists = {
 
   getPodsList: (getPodsList = (req, res, next) => {
     k8sApiCore
-      .listNamespacedPod('default')
+      .listPodForAllNamespaces()
       .then((data) => {
         res.locals.podsList = data.body;
         return next();
