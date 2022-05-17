@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTable, useFilters, useExpanded } from 'react-table';
 import {
-  useTable,
-  useFilters,
-  useAsyncDebounce,
-  useExpanded,
-} from 'react-table';
-import {
-  CssBaseline,
   Table,
   TableBody,
   TableCell,
@@ -60,15 +54,6 @@ function Alerts() {
       {
         // Build our expander column
         id: 'expander', // Make sure it has an ID
-        Header: ({ getToggleAllRowsExpandedProps, isAllRowsExpanded }) => (
-          <span {...getToggleAllRowsExpandedProps()}>
-            {/* //   {isAllRowsExpanded ? (
-          //     <span className='material-symbols-outlined'>expand_less</span>
-          //   ) : (
-          //     <span className='material-symbols-outlined'>expand_more</span>
-          //   )} */}
-          </span>
-        ),
         Cell: ({ row }) => (
           // Use Cell to render an expander for each row.
           // We can use the getToggleRowExpandedProps prop-getter
@@ -113,12 +98,10 @@ function Alerts() {
   const renderExpandableRow = useCallback(({ row }) => {
     return (
       <ExpandableRow
-        // annotations={rows.annotations}
         key={row.original.name}
         alerts={row.original.alerts}
         description={row.original.description}
         summary={row.original.summary}
-        // open={expand[row.original.name]}
       />
     );
   });

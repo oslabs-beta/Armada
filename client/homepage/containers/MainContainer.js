@@ -14,18 +14,17 @@ const MainContainer = (props) => {
   const [mode, setMode] = useState('production');
   const [nodes, setNodes] = useState([]);
   const [deployments, setDeployments] = useState({});
-  const [selectedDeployments, setSelectedDeployments] = useState(deployments);
   const [pods, setPods] = useState([]);
-  const [selectedPods, setSelectedPods] = useState(pods);
   const [services, setServices] = useState({});
-  const [selectedServices, setSelectedServices] = useState(services);
   const [promMetrics, setPromMetrics] = useState({});
   const [namespaces, setNamespaces] = useState([]);
-  const [selectedNamespace, setSelectedNamespace] = useState('All');
-
-  // const [selectedState, setSelectedState] = useState({
-  //   pods:
-  // })
+  const [selectedState, setSelectedState] = useState({
+    pods: pods,
+    deployments: deployments,
+    services: services,
+    namespace: 'All',
+    didUpdate: false,
+  });
 
   const getNodeList = () => {
     if (mode === 'demo') {
@@ -57,6 +56,7 @@ const MainContainer = (props) => {
       .then((data) => data.json())
       .then((data) => {
         setPods(data);
+
         props.fetchPodsList(data);
         // console.log('pod list refetched');
       })
@@ -87,35 +87,37 @@ const MainContainer = (props) => {
       .catch((error) => console.log(error));
   };
 
-  const getPromMetrics = () => {
-    let now = new Date();
-    let nowCopy = new Date(now.getTime());
-    nowCopy.setHours(nowCopy.getHours() - 24);
-    let endDateTime = now.toISOString();
-    console.log('endDateTime', endDateTime);
-    let startDateTime = nowCopy.toISOString();
-    console.log('startDateTime', startDateTime);
+  // const getPromMetrics = () => {
+  //   let now = new Date();
+  //   let nowCopy = new Date(now.getTime());
+  //   nowCopy.setHours(nowCopy.getHours() - 24);
+  //   let endDateTime = now.toISOString();
+  //   console.log('endDateTime', endDateTime);
+  //   let startDateTime = nowCopy.toISOString();
+  //   console.log('startDateTime', startDateTime);
 
-    let step = '30m';
-    fetch(
-      `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
-        // console.log('data', data);
-        setPromMetrics(data);
-        console.log('prom metrics refetched');
-      })
-      .catch((error) => console.log(error));
-  };
+  //   console.log('prommetrics namespace', selectedState.namespace);
+  //   let step = '30m';
+  //   fetch(
+  //     `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
+  //       // console.log('data', data);
+  //       setPromMetrics(data);
+  //       console.log(data);
+  //       console.log('prom metrics refetched');
+  //     })
+  //     .catch((error) => console.log(error));
+  // };
 
   useEffect(() => {
     getNodeList();
     getDeploymentsList();
     getPodsList();
     getServicesList();
-    getPromMetrics();
+    // getPromMetrics();
     getNamespaceList();
   }, []);
 
@@ -128,29 +130,34 @@ const MainContainer = (props) => {
   });
 
   function handleNamespaceChange(namespace) {
-    console.log('selected namespace', namespace.value);
-    setSelectedNamespace(namespace.value);
-    console.log('selectedNamespace', selectedNamespace);
+    setSelectedState({ ...selectedState, namespace: namespace.value });
     if (namespace.value === 'All') {
-      setSelectedPods(pods);
-      setSelectedDeployments(deployments);
-      setSelectedServices(services);
+      setSelectedState({
+        ...selectedState,
+        namespace: 'All',
+        pods,
+        deployments,
+        services,
+        didUpdate: true,
+      });
+      props.fetchPodsList(pods);
     } else {
       const selectedPods = pods.filter(
         (pod) => pod.metadata.namespace === namespace.value
       );
-      setSelectedPods(selectedPods);
-      props.fetchPodsList(selectedPods);
-      setSelectedDeployments(
-        deployments.filter(
+      setSelectedState({
+        ...selectedState,
+        namespace: namespace.value,
+        pods: selectedPods,
+        deployments: deployments.filter(
           (deployment) => deployment.metadata.namespace === namespace.value
-        )
-      );
-      setSelectedServices(
-        services.filter(
+        ),
+        services: services.filter(
           (service) => service.metadata.namespace === namespace.value
-        )
-      );
+        ),
+        didUpdate: true,
+      });
+      props.fetchPodsList(selectedPods);
     }
   }
 
@@ -168,7 +175,7 @@ const MainContainer = (props) => {
       </Grid>
       <Select
         className='namespaceSelect'
-        value={selectedNamespace}
+        value={selectedState.namespace}
         options={namespaceOptions}
         onChange={handleNamespaceChange}
       />
@@ -181,9 +188,11 @@ const MainContainer = (props) => {
       >
         <CountsContainer
           nodes={nodes}
-          deployments={selectedDeployments}
-          pods={selectedPods}
-          services={selectedServices}
+          deployments={
+            selectedState.didUpdate ? selectedState.deployments : deployments
+          }
+          pods={selectedState.didUpdate ? selectedState.pods : pods}
+          services={selectedState.didUpdate ? selectedState.services : services}
         />
       </Grid>
       <Grid
@@ -193,7 +202,10 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <StatusContainer pods={selectedPods} services={selectedServices} />
+        <StatusContainer
+          pods={selectedState.didUpdate ? selectedState.pods : pods}
+          services={selectedState.didUpdate ? selectedState.services : services}
+        />
       </Grid>
 
       <Grid
@@ -203,7 +215,10 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <CriticalPodsContainer metrics={promMetrics} />
+        <CriticalPodsContainer
+          metrics={promMetrics}
+          namespace={selectedState.namespace}
+        />
       </Grid>
       <Grid
         container

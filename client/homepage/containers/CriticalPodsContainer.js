@@ -4,18 +4,20 @@ import CPUIntensivePods from '../components/CriticalPods/CPUIntensivePods';
 import MemoryIntensivePods from '../components/CriticalPods/MemoryIntensivePods';
 import ProblematicPods from '../components/CriticalPods/ProblematicPods';
 
-const CriticalPodsContainer = () => {
+const CriticalPodsContainer = (props) => {
+  const { namespace } = props;
+
   const [cpu, setCpu] = useState([]);
   const [memory, setMemory] = useState([]);
   const fetchCpuByPod = () => {
-    fetch('/api/prometheus/cpubypod')
+    fetch(`/api/prometheus/cpubypod?namespace=${namespace}`)
       .then((res) => res.json())
       .then((data) => setCpu(data))
       .catch((err) => console.log(err));
   };
 
   const fetchMemoryByPod = () => {
-    fetch('/api/prometheus/memorybypod')
+    fetch(`/api/prometheus/memorybypod?namespace=${namespace}`)
       .then((res) => res.json())
       .then((data) => {
         setMemory(data);
@@ -27,7 +29,7 @@ const CriticalPodsContainer = () => {
   useEffect(() => {
     fetchCpuByPod();
     fetchMemoryByPod();
-  }, []);
+  }, [namespace]);
 
   const renderCpuGraph = () => {
     if (cpu.length !== 0) {

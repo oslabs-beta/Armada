@@ -16,9 +16,9 @@ const StatusContainer = (props) => {
       <Grid item sm={4}>
         <PodsStatus pods={pods} />
       </Grid>
-      <Grid item sm={4}>
+      {/* <Grid item sm={4}>
         <ServicesStatus services={services} />
-      </Grid>
+      </Grid> */}
     </Grid>
     // </div>
   );
