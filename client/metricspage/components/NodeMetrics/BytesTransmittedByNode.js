@@ -1,5 +1,6 @@
 import React from 'react';
 import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
+import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 
 const BytesTransmittedByNode = ({ metrics }) => {
   return (

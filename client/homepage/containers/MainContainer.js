@@ -7,7 +7,11 @@ import CriticalNodesContainer from './CriticalNodesContainer';
 import UtilizationContainer from './UtilizationContainer';
 import Refresh from '../components/Refresh';
 import { Grid } from '@mui/material';
-import { fetchNodesList, fetchPodsList } from '../../actions/actions';
+import {
+  fetchNodesList,
+  fetchPodsList,
+  setNamespace,
+} from '../../actions/actions';
 import demoNodeList from '../../demoData/nodeList.json';
 import Select from 'react-select';
 
@@ -132,6 +136,7 @@ const MainContainer = (props) => {
 
   function handleNamespaceChange(namespace) {
     setSelectedState({ ...selectedState, namespace: namespace.value });
+    props.setNamespace(namespace.value);
     if (namespace.value === 'All') {
       setSelectedState({
         ...selectedState,
@@ -181,7 +186,14 @@ const MainContainer = (props) => {
             placeholder='Select a namespace'
           />
         </Grid>
-        <Refresh />
+        <Refresh
+          getNodeList={getNodeList}
+          getDeploymentsList={getDeploymentsList}
+          getPodsList={getPodsList}
+          getServicesList={getServicesList}
+          getPromMetrics={getPromMetrics}
+          getNamespaceList={getNamespaceList}
+        />
       </Grid>
 
       <Grid
@@ -249,4 +261,6 @@ const MainContainer = (props) => {
   );
 };
 
-export default connect(null, { fetchNodesList, fetchPodsList })(MainContainer);
+export default connect(null, { fetchNodesList, fetchPodsList, setNamespace })(
+  MainContainer
+);

@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 
 const Refresh = (props) => {
+  const {
+    getNodeList,
+    getDeploymentsList,
+    getPodsList,
+    getServicesList,
+    getPromMetrics,
+    getNamespaceList,
+  } = props;
+
   const [timestamp, setTimestamp] = useState(new Date().toString());
 
   function setTime() {

@@ -58,7 +58,7 @@ const config = {
       publicPath: '/',
     },
     compress: true,
-    port: 3030,
+    port: 8080,
     hot: true,
     historyApiFallback: true,
     proxy: {
