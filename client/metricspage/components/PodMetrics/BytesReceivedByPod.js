@@ -7,9 +7,9 @@ const BytesReceivedByPod = ({ metrics }) => {
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='Bytes Received By Pod'
+          title='Network IO Received by Pod'
           label='Bytes Received By Pod'
-          chartData={metrics}
+          chartData={metrics.data}
         />
       </MetricsComponentWrapper>
     </div>

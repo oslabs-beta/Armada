@@ -28,7 +28,7 @@ const MetricsContainer = ({ namespace }) => {
 
     let step = '30m';
     fetch(
-      `/api/prometheus/metricspage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
+      `/api/prometheus/metricspage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}&namespace=${namespace}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -42,17 +42,6 @@ const MetricsContainer = ({ namespace }) => {
   useEffect(() => {
     getTimeSeriesMetrics();
   }, []);
-
-  // Select dropdown rendering
-  // const renderDropDown = () => {
-  //   if (namespaceOptions.length > 0) {
-  //     return (
-  //       <NamespaceDropdown
-  //       options={namespaceOptions}
-  //       />
-  //     )
-  //   }
-  // }
 
   // Namespace Rendering:
   const renderBytesReceivedPerNamespace = () => {
@@ -163,26 +152,27 @@ const MetricsContainer = ({ namespace }) => {
 
   return (
     <div>
-      {/* {renderDropDown()} */}
-      {renderBytesReceivedPerNamespace()}
       {renderCPUUsageByNamespace()}
       {renderMemoryUsageByNamespace()}
+      {renderBytesReceivedPerNamespace()}
       {renderBytesTransmittedPerNamespace()}
-      {renderBytesReceivedPerNode()}
       {renderCPUUsageByNode()}
       {renderMemoryUsageByNode()}
+      {renderBytesReceivedPerNode()}
       {renderBytesTransmittedPerNode()}
-      {renderBytesReceivedPerPod()}
-      {renderBytesTransmittedPerPod()}
       {renderCPUUsageByPod()}
       {renderMemoryUsageByPod()}
+      {renderBytesReceivedPerPod()}
+      {renderBytesTransmittedPerPod()}
     </div>
   );
 };
 
 const mapStateToProps = ({ namespace }) => {
   console.log(`this is namespace: ${namespace}`);
-  return namespace;
+  console.log(Object.keys(namespace));
+  console.log(Object.values(namespace));
+  return { namespace: namespace.selectedNamespace };
 };
 
 export default connect(mapStateToProps)(MetricsContainer);

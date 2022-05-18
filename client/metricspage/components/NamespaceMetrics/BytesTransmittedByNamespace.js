@@ -5,10 +5,10 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 const BytesTransmittedByNamespace = ({ metrics }) => {
   return (
     <div>
-      <MetricsComponentWrapper title='Bytes Transmitted By Namespace'>
+      <MetricsComponentWrapper title=''>
         <LineChart
-          title='Bytes Transmitted Per Namespace'
-          chartData={metrics}
+          title='Network IO Transmitted by Namespace'
+          chartData={metrics.data}
           label='Bytes Transmitted Per Namespace'
         />
       </MetricsComponentWrapper>

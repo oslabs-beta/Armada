@@ -63,6 +63,7 @@ prometheusRouter.get(
       bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
       bytesReceivedPerPod: res.locals.bytesReceivedPerPod,
     };
+    console.log(res.locals.getCPUUsageByNamespace);
     res.status(200).json(chartData);
   }
 );

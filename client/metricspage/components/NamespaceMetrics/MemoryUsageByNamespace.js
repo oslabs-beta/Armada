@@ -5,11 +5,11 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 const MemoryUsageByNamespace = ({ metrics }) => {
   return (
     <div>
-      <MetricsComponentWrapper title='Memory Usage By Namespace'>
+      <MetricsComponentWrapper title=''>
         <LineChart
-          title='Memory Usage Per Namespace'
-          chartData={metrics}
-          label='Memory Usage Per Namespace'
+          title='Memory Usage by Namespace'
+          chartData={metrics.data}
+          label='Memory Usage by Namespace'
         />
       </MetricsComponentWrapper>
     </div>

@@ -5,11 +5,11 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 const MemoryUsageByNode = ({ metrics }) => {
   return (
     <div>
-      <MetricsComponentWrapper title='Memory Usage By Node'>
+      <MetricsComponentWrapper title=''>
         <LineChart
           title='Memory Usage By Node'
           label='Memory Usage Node'
-          chartData={metrics}
+          chartData={metrics.data}
         />
       </MetricsComponentWrapper>
     </div>

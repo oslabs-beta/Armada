@@ -4,6 +4,7 @@ import LogsTable from '../components/LogsTable';
 
 function LogsContainer({ namespace }) {
   const [logs, setLogs] = useState([]);
+  // const { selectedNamespace } = namespace;
   const getLogs = () => {
     fetch('/api/logs')
       .then((res) => res.json())
@@ -15,16 +16,28 @@ function LogsContainer({ namespace }) {
   }, []);
 
   const filterByNamespace = () => {
-    if (namespace !== 'All' && namespace !== '') {
-      return logs.filter((log) => log.namespace === namespace);
+    if (
+      namespace &&
+      namespace?.selectedNamespace !== 'All' &&
+      namespace?.selectedNamespace !== ''
+    ) {
+      return logs.filter(
+        (log) => log.namespace === namespace.selectedNamespace
+      );
     }
     return logs;
   };
   // console.log('logs filtered', filterByNamespace());
-  return <LogsTable data={filterByNamespace()} namespace={namespace} />;
+  return (
+    <LogsTable
+      data={filterByNamespace()}
+      namespace={namespace?.selectedNamespace}
+    />
+  );
 }
 
 const mapStateToProps = ({ namespace }) => {
+  console.log('namespace', namespace);
   return namespace;
 };
 

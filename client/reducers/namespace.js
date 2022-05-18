@@ -1,13 +1,20 @@
-import { SET_NAMESPACE } from '../actions/constants/actionTypes';
+import {
+  FETCH_NAMESPACES_LIST,
+  SET_NAMESPACE,
+} from '../actions/constants/actionTypes';
 
 const initialState = {
-  namespace: '',
+  selectedNamespace: '',
+  namespacesList: [],
 };
 
 const namespaceReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_NAMESPACE: {
-      return { namespace: action.payload };
+      return { ...state, selectedNamespace: action.payload };
+    }
+    case FETCH_NAMESPACES_LIST: {
+      return { ...state, namespacesList: action.payload };
     }
     default: {
       return state;

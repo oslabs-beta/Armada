@@ -10,12 +10,17 @@ import { Grid } from '@mui/material';
 import {
   fetchNodesList,
   fetchPodsList,
+  fetchServicesList,
+  fetchNamespacesList,
+  fetchDeploymentsList,
+  fetchPromMetrics,
   setNamespace,
 } from '../../actions/actions';
 import demoNodeList from '../../demoData/nodeList.json';
 import Select from 'react-select';
 
 const MainContainer = (props) => {
+  const { namespace } = props;
   const [mode, setMode] = useState('production');
   const [nodes, setNodes] = useState([]);
   const [deployments, setDeployments] = useState({});
@@ -33,13 +38,13 @@ const MainContainer = (props) => {
 
   const getNodeList = () => {
     if (mode === 'demo') {
-      console.log(demoNodeList.response.body.items);
+      // console.log(demoNodeList.response.body.items);
       props.fetchNodesList(demoNodeList.response.body.items);
     } else {
       fetch('/api/nodesList')
         .then((data) => data.json())
         .then((data) => {
-          console.log('nodes data', data);
+          // console.log('nodes data', data);
           props.fetchNodesList(data);
         })
         .catch((error) => console.log(error));
@@ -48,10 +53,10 @@ const MainContainer = (props) => {
 
   const getDeploymentsList = () => {
     fetch('/api/deploymentsList')
-      .then((data) => data.json())
+      .then((res) => res.json())
       .then((data) => {
         setDeployments(data);
-        // console.log('deployment list refetched');
+        props.fetchDeploymentsList(data);
       })
       .catch((error) => console.log(error));
   };
@@ -61,7 +66,6 @@ const MainContainer = (props) => {
       .then((data) => data.json())
       .then((data) => {
         setPods(data);
-
         props.fetchPodsList(data);
         // console.log('pod list refetched');
       })
@@ -73,7 +77,7 @@ const MainContainer = (props) => {
       .then((data) => data.json())
       .then((data) => {
         setServices(data);
-        console.log('services list refetched');
+        props.fetchServicesList(data);
       })
       .catch((error) => console.log(error));
   };
@@ -88,6 +92,7 @@ const MainContainer = (props) => {
           names.push(item.metadata.name);
         });
         setNamespaces(names);
+        props.fetchNamespacesList(names);
       })
       .catch((error) => console.log(error));
   };
@@ -97,11 +102,11 @@ const MainContainer = (props) => {
     let nowCopy = new Date(now.getTime());
     nowCopy.setHours(nowCopy.getHours() - 24);
     let endDateTime = now.toISOString();
-    console.log('endDateTime', endDateTime);
+    // console.log('endDateTime', endDateTime);
     let startDateTime = nowCopy.toISOString();
-    console.log('startDateTime', startDateTime);
+    // console.log('startDateTime', startDateTime);
 
-    console.log('prommetrics namespace', selectedState.namespace);
+    // console.log('prommetrics namespace', selectedState.namespace);
     let step = '30m';
     fetch(
       `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
@@ -111,6 +116,7 @@ const MainContainer = (props) => {
         // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
         // console.log('data', data);
         setPromMetrics(data);
+        props.fetchPromMetrics(data);
         // console.log(data);
         // console.log('prom metrics refetched');
       })
@@ -124,7 +130,8 @@ const MainContainer = (props) => {
     getServicesList();
     getPromMetrics();
     getNamespaceList();
-  }, []);
+    filterByNamespace();
+  }, [namespace]);
 
   const namespaceOptions = [];
   namespaces.forEach((el) => {
@@ -164,6 +171,37 @@ const MainContainer = (props) => {
         didUpdate: true,
       });
       props.fetchPodsList(selectedPods);
+    }
+  }
+
+  function filterByNamespace() {
+    if (props.namespace === 'All' || props.namespace === '') {
+      setSelectedState({
+        ...selectedState,
+        namespace: 'All',
+        pods,
+        deployments,
+        services,
+        didUpdate: true,
+      });
+      console.log('filterByNamespace, all', selectedState);
+    } else {
+      const selectedPods = pods.filter(
+        (pod) => pod.metadata.namespace === namespace.value
+      );
+      setSelectedState({
+        ...selectedState,
+        namespace: namespace.value,
+        pods: selectedPods,
+        deployments: deployments.filter(
+          (deployment) => deployment.metadata.namespace === namespace.value
+        ),
+        services: services.filter(
+          (service) => service.metadata.namespace === namespace.value
+        ),
+        didUpdate: true,
+      });
+      console.log('filterByNamespace other', selectedState);
     }
   }
 
@@ -260,7 +298,22 @@ const MainContainer = (props) => {
     </Grid>
   );
 };
+const mapStateToProps = ({ namespace, nodes, pods, services, deployments }) => {
+  return {
+    namespace: namespace.selectedNamespace,
+    nodes: nodes.items,
+    pods: pods.items,
+    services: services.items,
+    deployments: deployments.items,
+  };
+};
 
-export default connect(null, { fetchNodesList, fetchPodsList, setNamespace })(
-  MainContainer
-);
+export default connect(mapStateToProps, {
+  fetchNodesList,
+  fetchPodsList,
+  fetchDeploymentsList,
+  fetchServicesList,
+  fetchNamespacesList,
+  fetchPromMetrics,
+  setNamespace,
+})(MainContainer);
