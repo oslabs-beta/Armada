@@ -13,12 +13,7 @@ function LogsContainer() {
     getLogs();
   }, []);
 
-  return (
-    <div>
-      LogsContainer
-      <LogsTable data={logs} />
-    </div>
-  );
+  return <LogsTable data={logs} />;
 }
 
 export default LogsContainer;

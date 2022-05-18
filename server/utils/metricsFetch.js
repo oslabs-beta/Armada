@@ -1,4 +1,8 @@
-const metricsFetch = (queryString, title) => {
+const formatChartData = require('./formatChartData');
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
+const metricsFetch = (query, title, req, res, next) => {
   try {
     fetch(query)
       .then((resp) => resp.json())

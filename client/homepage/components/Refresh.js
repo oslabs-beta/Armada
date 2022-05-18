@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button } from '@mui/material';
 
 const Refresh = (props) => {
   const [timestamp, setTimestamp] = useState(new Date().toString());
@@ -16,14 +17,25 @@ const Refresh = (props) => {
   }
 
   return (
-    <span>
-      <p className='timestamp'>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}
+    >
+      <Typography
+        className='timestamp'
+        color='text.secondary'
+        variant='caption'
+      >
         Last updated at {timestamp}{' '}
-        <button className='refreshButton' onClick={setTime}>
-          <span className='material-icons'>refresh</span>
-        </button>
-      </p>
-    </span>
+      </Typography>
+      <Button
+        variant='outlined'
+        endIcon={<span className='material-icons'>refresh</span>}
+        onClick={setTime}
+        sx={{ marginTop: 1 }}
+      >
+        Refresh
+      </Button>
+    </Box>
   );
 };
 

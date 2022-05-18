@@ -41,11 +41,11 @@ const PodsStatus = (props) => {
 
   return (
     <ComponentWrapper title='Pod Status'>
-      <div className='card'>
+      <Box className='card' mt={1}>
         {/* <h4 className='card-label'>Pod Status</h4> */}
         <div className='break'></div>
         <div className='card-content'>{PodsBoxes}</div>
-      </div>
+      </Box>
     </ComponentWrapper>
   );
 };
