@@ -1,4 +1,8 @@
-import { FETCH_NODES_LIST, FETCH_PODS_LIST } from './constants/actionTypes';
+import {
+  FETCH_NODES_LIST,
+  FETCH_PODS_LIST,
+  SET_NAMESPACE,
+} from './constants/actionTypes';
 
 export const first = (payload) => ({
   type: second,
@@ -12,5 +16,10 @@ export const fetchNodesList = (payload) => ({
 
 export const fetchPodsList = (payload) => ({
   type: FETCH_PODS_LIST,
+  payload,
+});
+
+export const setNamespace = (payload) => ({
+  type: SET_NAMESPACE,
   payload,
 });

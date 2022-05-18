@@ -54,11 +54,11 @@ const NodesStatus = ({ items }) => {
 
   return (
     <ComponentWrapper title='Node Status'>
-      <div className='card'>
+      <Box className='card' mt={1}>
         {/* <h4 className='card-label'>Node Status</h4> */}
         <div className='break'></div>
         <div className='card-content'>{NodeBoxes}</div>
-      </div>
+      </Box>
     </ComponentWrapper>
   );
 };

@@ -2,18 +2,18 @@ import React from 'react';
 import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 
-const BytesReceivedByPod = ({ metrics }) => {
+const MemoryUsageByNamespace = ({ metrics }) => {
   return (
     <div>
-      <MetricsComponentWrapper title=''>
+      <MetricsComponentWrapper title='Memory Usage By Namespace'>
         <LineChart
-          title='Bytes Received By Pod'
-          label='Bytes Received By Pod'
+          title='Memory Usage Per Namespace'
           chartData={metrics}
+          label='Memory Usage Per Namespace'
         />
       </MetricsComponentWrapper>
     </div>
   );
 };
 
-export default BytesReceivedByPod;
+export default MemoryUsageByNamespace;

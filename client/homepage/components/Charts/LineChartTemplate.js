@@ -10,6 +10,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import mdColors from './MaterialColors';
 // import faker from 'faker';
 
 ChartJS.register(
@@ -38,6 +39,9 @@ const LineChart = ({ chartData, title, label }) => {
       title: {
         display: true,
         text: title,
+        font: {
+          size: 25,
+        },
       },
     },
   };

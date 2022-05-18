@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import LogsTable from '../components/LogsTable';
 
-function LogsContainer() {
+function LogsContainer({ namespace }) {
   const [logs, setLogs] = useState([]);
   const getLogs = () => {
     fetch('/api/logs')
@@ -13,12 +14,18 @@ function LogsContainer() {
     getLogs();
   }, []);
 
-  return (
-    <div>
-      LogsContainer
-      <LogsTable data={logs} />
-    </div>
-  );
+  const filterByNamespace = () => {
+    if (namespace !== 'All' && namespace !== '') {
+      return logs.filter((log) => log.namespace === namespace);
+    }
+    return logs;
+  };
+  // console.log('logs filtered', filterByNamespace());
+  return <LogsTable data={filterByNamespace()} namespace={namespace} />;
 }
 
-export default LogsContainer;
+const mapStateToProps = ({ namespace }) => {
+  return namespace;
+};
+
+export default connect(mapStateToProps)(LogsContainer);

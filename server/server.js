@@ -10,6 +10,7 @@ const logsController = require('./controllers/logsController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+const expressWs = require('express-ws')(app);
 
 // Collect default metrics using Prom API
 client.collectDefaultMetrics();

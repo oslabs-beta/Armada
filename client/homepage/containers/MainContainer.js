@@ -4,9 +4,14 @@ import CountsContainer from './CountsContainer';
 import StatusContainer from './StatusContainer';
 import CriticalPodsContainer from './CriticalPodsContainer';
 import CriticalNodesContainer from './CriticalNodesContainer';
+import UtilizationContainer from './UtilizationContainer';
 import Refresh from '../components/Refresh';
 import { Grid } from '@mui/material';
-import { fetchNodesList, fetchPodsList } from '../../actions/actions';
+import {
+  fetchNodesList,
+  fetchPodsList,
+  setNamespace,
+} from '../../actions/actions';
 import demoNodeList from '../../demoData/nodeList.json';
 import Select from 'react-select';
 
@@ -87,37 +92,37 @@ const MainContainer = (props) => {
       .catch((error) => console.log(error));
   };
 
-  // const getPromMetrics = () => {
-  //   let now = new Date();
-  //   let nowCopy = new Date(now.getTime());
-  //   nowCopy.setHours(nowCopy.getHours() - 24);
-  //   let endDateTime = now.toISOString();
-  //   console.log('endDateTime', endDateTime);
-  //   let startDateTime = nowCopy.toISOString();
-  //   console.log('startDateTime', startDateTime);
+  const getPromMetrics = () => {
+    let now = new Date();
+    let nowCopy = new Date(now.getTime());
+    nowCopy.setHours(nowCopy.getHours() - 24);
+    let endDateTime = now.toISOString();
+    console.log('endDateTime', endDateTime);
+    let startDateTime = nowCopy.toISOString();
+    console.log('startDateTime', startDateTime);
 
-  //   console.log('prommetrics namespace', selectedState.namespace);
-  //   let step = '30m';
-  //   fetch(
-  //     `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
-  //   )
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
-  //       // console.log('data', data);
-  //       setPromMetrics(data);
-  //       console.log(data);
-  //       console.log('prom metrics refetched');
-  //     })
-  //     .catch((error) => console.log(error));
-  // };
+    console.log('prommetrics namespace', selectedState.namespace);
+    let step = '30m';
+    fetch(
+      `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
+        // console.log('data', data);
+        setPromMetrics(data);
+        // console.log(data);
+        // console.log('prom metrics refetched');
+      })
+      .catch((error) => console.log(error));
+  };
 
   useEffect(() => {
     getNodeList();
     getDeploymentsList();
     getPodsList();
     getServicesList();
-    // getPromMetrics();
+    getPromMetrics();
     getNamespaceList();
   }, []);
 
@@ -131,6 +136,7 @@ const MainContainer = (props) => {
 
   function handleNamespaceChange(namespace) {
     setSelectedState({ ...selectedState, namespace: namespace.value });
+    props.setNamespace(namespace.value);
     if (namespace.value === 'All') {
       setSelectedState({
         ...selectedState,
@@ -167,18 +173,29 @@ const MainContainer = (props) => {
         container
         item
         xs={12}
-        direction='row'
-        justifyContent='space-evenly'
+        justifyContent='space-between'
+        alignItems='flex-end'
+        mb={4}
       >
-        <div>MainContainer</div>
-        <Refresh></Refresh>
+        <Grid item xs={3}>
+          <Select
+            name='namespace'
+            defaultValue={selectedState.namespace}
+            options={namespaceOptions}
+            onChange={handleNamespaceChange}
+            placeholder='Select a namespace'
+          />
+        </Grid>
+        <Refresh
+          getNodeList={getNodeList}
+          getDeploymentsList={getDeploymentsList}
+          getPodsList={getPodsList}
+          getServicesList={getServicesList}
+          getPromMetrics={getPromMetrics}
+          getNamespaceList={getNamespaceList}
+        />
       </Grid>
-      <Select
-        className='namespaceSelect'
-        value={selectedState.namespace}
-        options={namespaceOptions}
-        onChange={handleNamespaceChange}
-      />
+
       <Grid
         container
         item
@@ -231,8 +248,19 @@ const MainContainer = (props) => {
         <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
         {/* )} */}
       </Grid>
+      <Grid
+        container
+        item
+        xs={12}
+        direction='row'
+        justifyContent='space-evenly'
+      >
+        <UtilizationContainer />
+      </Grid>
     </Grid>
   );
 };
 
-export default connect(null, { fetchNodesList, fetchPodsList })(MainContainer);
+export default connect(null, { fetchNodesList, fetchPodsList, setNamespace })(
+  MainContainer
+);
