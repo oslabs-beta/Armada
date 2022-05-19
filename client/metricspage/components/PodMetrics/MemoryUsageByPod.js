@@ -9,7 +9,7 @@ const MemoryUsageByPod = ({ metrics }) => {
         <LineChart
           title='Memory Usage By Pod'
           label='Memory Usage By Pod'
-          chartData={metrics}
+          chartData={metrics.data}
         />
       </MetricsComponentWrapper>
     </div>

@@ -6,9 +6,11 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Paper,
 } from '@mui/material';
 import { matchSorter } from 'match-sorter';
 import ExpandableRow from './ExpandableRow';
+import renderAlert from '../utils/renderAlert';
 
 function Alerts() {
   const [data, setData] = useState([]);
@@ -182,7 +184,6 @@ function Alerts() {
       headerGroups,
       rows,
       prepareRow,
-      visibleColumns,
       state: { expanded },
     } = useTable(
       {
@@ -194,13 +195,6 @@ function Alerts() {
       useFilters,
       useExpanded
     );
-
-    // text: (rows, id, filterValue) => {
-    //   return rows.filter(row => {
-    //     const rowValue = row.values[id];
-    //     return rowValue !== undefined ? String(rowValue).toLowerCase().startswith(String(filterValue).toLowerCase()) : true
-    //   })
-    // }
 
     return (
       <div>
@@ -246,13 +240,13 @@ function Alerts() {
   }
 
   return (
-    <div>
+    <Paper>
       <TableInstance
         columns={columns}
         data={data}
         renderRowSubComponent={renderExpandableRow}
       />
-    </div>
+    </Paper>
   );
 }
 

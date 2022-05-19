@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MaUTable from '@mui/material/Table';
-import { TableBody, AlertTitle, Grid } from '@mui/material';
+import { TableBody, AlertTitle, Grid, Paper } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -113,7 +113,9 @@ function LogsTable({ data, namespace }) {
   return (
     <div>
       {Alert(data.length, message(), 'info')}
-      <Table columns={columns} data={data} />
+      <Paper sx={{ marginTop: 2 }}>
+        <Table columns={columns} data={data} />
+      </Paper>
     </div>
   );
 }

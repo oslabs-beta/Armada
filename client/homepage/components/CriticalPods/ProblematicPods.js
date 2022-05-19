@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import ComponentWrapper from '../../../utils/ComponentWrapper';
 import ProblematicItem from '../CriticalNodes/ProblematicItem';
@@ -12,7 +12,8 @@ import {
   Tooltip,
 } from '@mui/material';
 
-const ProblematicPods = ({ items, lastUpdated }) => {
+const ProblematicPods = ({ items, namespace }) => {
+  const [filteredItems, setFilteredItems] = useState([]);
   const [openState, setOpenState] = useState({
     pending: false,
     running: false,
@@ -25,13 +26,21 @@ const ProblematicPods = ({ items, lastUpdated }) => {
     setOpenState({ ...openState, [key]: !openState[key] });
   };
 
-  //name: el.metadata.name
-  // status: el.status.phase
-  // conditions: status.conditions
+  useEffect(() => {
+    if (namespace !== '' && namespace !== 'All') {
+      setFilteredItems(
+        items.filter((item) => item.metadata.namespace === namespace)
+      );
+    } else {
+      setFilteredItems(items);
+    }
+  }, [namespace, items]);
+
   const phases = Object.keys(POD_STATUS);
+
   const parseItems = () => {
     return phases.map((p) => {
-      let pods = items.filter((i) => i.status.phase === p);
+      let pods = filteredItems.filter((i) => i.status.phase === p);
       return {
         phase: p,
         pods: pods.map((pod) => {
@@ -41,9 +50,17 @@ const ProblematicPods = ({ items, lastUpdated }) => {
       };
     });
   };
-  console.log('Pods', parseItems());
+  // console.log('Pods', parseItems());
+
+  const icons = [
+    { icon: 'pending' },
+    { icon: 'task_alt' },
+    { icon: 'published_with_changes' },
+    { icon: 'dangerous' },
+    { icon: 'question_mark' },
+  ];
   const renderList = () => {
-    return parseItems().map((item) => {
+    return parseItems().map((item, index) => {
       const phase = item.phase;
       const open = openState[phase.toLowerCase()];
       const length = item.pods.length;
@@ -52,7 +69,7 @@ const ProblematicPods = ({ items, lastUpdated }) => {
           <Tooltip title={item.description} arrow>
             <ListItemButton onClick={() => handleClick(phase.toLowerCase())}>
               <ListItemIcon>
-                <span className='material-icons'>dangerous</span>
+                <span className='material-icons'>{icons[index].icon}</span>
               </ListItemIcon>
               <ListItemText primary={`${phase} (${length})`} />
               {open ? (
@@ -83,7 +100,7 @@ const ProblematicPods = ({ items, lastUpdated }) => {
   );
 };
 
-const mapStateToProps = ({ pods }) => {
-  return pods;
+const mapStateToProps = ({ pods, namespace }) => {
+  return { ...pods, namespace: namespace.selectedNamespace };
 };
 export default connect(mapStateToProps)(ProblematicPods);

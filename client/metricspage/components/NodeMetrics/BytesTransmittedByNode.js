@@ -5,11 +5,13 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 const BytesTransmittedByNode = ({ metrics }) => {
   return (
     <div>
-      <LineChart
-        title='Bytes Transmitted Per Node'
-        label='Bytes Transmitted Per Node'
-        chartData={metrics}
-      />
+      <MetricsComponentWrapper title=''>
+        <LineChart
+          title='Network IO Transmitted by Node'
+          label='Bytes Transmitted Per Node'
+          chartData={metrics.data}
+        />
+      </MetricsComponentWrapper>
     </div>
   );
 };

@@ -5,11 +5,11 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 const BytesReceivedByNamespace = ({ metrics }) => {
   return (
     <div>
-      <MetricsComponentWrapper>
+      <MetricsComponentWrapper title=''>
         <LineChart
-          title='Bytes Received Per Namespace'
-          chartData={metrics}
-          label='Bytes Received Per Namespace'
+          title='Network IO Received by Namespace'
+          chartData={metrics.data}
+          label='Network IO Received by Namespace'
         />
       </MetricsComponentWrapper>
     </div>

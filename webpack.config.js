@@ -67,6 +67,10 @@ const config = {
         secure: false,
         changeOrigin: true,
       },
+      '/websocket': {
+        target: 'ws://localhost:3001',
+        ws: true, // important
+      },
     },
   },
 };

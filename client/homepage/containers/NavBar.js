@@ -15,6 +15,8 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
+import SelectNamespace from '../../namespaceSelection/SelectNamespace';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -98,27 +100,40 @@ export default function MiniDrawer({ children }) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position='fixed' open={open}>
-        <Toolbar sx={{ backgroundColor: blueGrey['400'] }}>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            onClick={handleDrawerOpen}
-            edge='start'
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-          >
-            <span className='material-icons'>menu</span>
-          </IconButton>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            <Box mr={1}>
-              <span className='material-symbols-outlined'>sailing</span>{' '}
-            </Box>
-            Armada
-          </Typography>
+        <Toolbar
+          sx={{
+            backgroundColor: blueGrey['300'],
+            color: 'white',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              color='inherit'
+              aria-label='open drawer'
+              onClick={handleDrawerOpen}
+              edge='start'
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            >
+              <span className='material-icons'>menu</span>
+            </IconButton>
+            <Link to='/' style={{ textDecoration: 'none', color: 'white' }}>
+              <Typography
+                variant='h6'
+                noWrap
+                component='div'
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <Box mr={1}>
+                  <span className='material-symbols-outlined'>sailing</span>{' '}
+                </Box>
+                Armada
+              </Typography>
+            </Link>
+          </Box>
+          <Box sx={{ color: 'black', width: '250px' }}>
+            <SelectNamespace />
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant='permanent' open={open}>

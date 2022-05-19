@@ -12,7 +12,7 @@ function LogsContainer({ namespace }) {
   };
   useEffect(() => {
     getLogs();
-  }, []);
+  }, [namespace]);
 
   const filterByNamespace = () => {
     if (namespace !== 'All' && namespace !== '') {
@@ -25,7 +25,8 @@ function LogsContainer({ namespace }) {
 }
 
 const mapStateToProps = ({ namespace }) => {
-  return namespace;
+  console.log('namespace', namespace);
+  return { namespace: namespace.selectedNamespace };
 };
 
 export default connect(mapStateToProps)(LogsContainer);

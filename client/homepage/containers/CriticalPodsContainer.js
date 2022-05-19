@@ -32,7 +32,7 @@ const CriticalPodsContainer = (props) => {
   }, [namespace]);
 
   const renderCpuGraph = () => {
-    if (cpu.length !== 0) {
+    if (cpu) {
       return <CPUIntensivePods pods={cpu} />;
     }
   };

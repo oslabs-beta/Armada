@@ -5,11 +5,11 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 const CPUUsageByNamespace = ({ metrics }) => {
   return (
     <div>
-      <MetricsComponentWrapper>
+      <MetricsComponentWrapper title=''>
         <LineChart
-          title='CPU Usage Per Namespace'
-          chartData={metrics}
-          label='CPU Usage Per Namespace'
+          title='CPU Usage % by Namespace'
+          chartData={metrics.data}
+          label='CPU Usage % by Namespace'
         />
       </MetricsComponentWrapper>
     </div>

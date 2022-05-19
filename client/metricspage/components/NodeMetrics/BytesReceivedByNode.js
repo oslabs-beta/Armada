@@ -7,8 +7,8 @@ const BytesReceivedByNode = ({ metrics }) => {
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='Bytes Received Per Node'
-          chartData={metrics}
+          title='Network IO Received by Node'
+          chartData={metrics.data}
           label='Bytes Received Per Node'
         />
       </MetricsComponentWrapper>

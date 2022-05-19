@@ -45,14 +45,14 @@ const ProblematicNodes = ({ items, lastUpdated }) => {
     return renderByCondition(nodeConditions, 'PIDPressure', 'True');
   };
 
-  const renderList = (key, conditionType, renderComponent) => {
+  const renderList = (key, conditionType, renderComponent, icon) => {
     const open = openState[key];
     const length = renderComponent().length;
     return (
       <>
         <ListItemButton onClick={() => handleClick(key)}>
           <ListItemIcon>
-            <span className='material-icons'>dangerous</span>
+            <span className='material-icons'>{icon}</span>
           </ListItemIcon>
           <ListItemText primary={`${conditionType} (${length})`} />
           {open ? (
@@ -79,10 +79,15 @@ const ProblematicNodes = ({ items, lastUpdated }) => {
           //   </ListSubheader>
           // }
           >
-            {renderList('down', 'Down', down)}
-            {renderList('pidPressure', 'PIDPressure', pidPressure)}
-            {renderList('memoryPressure', 'MemoryPressure', memoryPressure)}
-            {renderList('diskPressure', 'DiskPressure', diskPressure)}
+            {renderList('down', 'Down', down, 'dangerous')}
+            {renderList('pidPressure', 'PID Pressure', pidPressure, 'speed')}
+            {renderList(
+              'memoryPressure',
+              'Memory Pressure',
+              memoryPressure,
+              'memory'
+            )}
+            {renderList('diskPressure', 'Disk Pressure', diskPressure, 'save')}
           </List>
         </ComponentWrapper>
       )
