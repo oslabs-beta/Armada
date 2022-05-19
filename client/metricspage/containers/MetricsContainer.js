@@ -41,7 +41,7 @@ const MetricsContainer = ({ namespace }) => {
 
   useEffect(() => {
     getTimeSeriesMetrics();
-  }, []);
+  }, [namespace]);
 
   // Namespace Rendering:
   const renderBytesReceivedPerNamespace = () => {
@@ -169,9 +169,9 @@ const MetricsContainer = ({ namespace }) => {
 };
 
 const mapStateToProps = ({ namespace }) => {
-  console.log(`this is namespace: ${namespace}`);
-  console.log(Object.keys(namespace));
-  console.log(Object.values(namespace));
+  // console.log(`this is namespace: ${namespace}`);
+  // console.log('namespace keys' + Object.keys(namespace));
+  // console.log(Object.values(namespace));
   return { namespace: namespace.selectedNamespace };
 };
 

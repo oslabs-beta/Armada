@@ -184,7 +184,6 @@ function Alerts() {
       headerGroups,
       rows,
       prepareRow,
-      visibleColumns,
       state: { expanded },
     } = useTable(
       {
@@ -196,13 +195,6 @@ function Alerts() {
       useFilters,
       useExpanded
     );
-
-    // text: (rows, id, filterValue) => {
-    //   return rows.filter(row => {
-    //     const rowValue = row.values[id];
-    //     return rowValue !== undefined ? String(rowValue).toLowerCase().startswith(String(filterValue).toLowerCase()) : true
-    //   })
-    // }
 
     return (
       <div>

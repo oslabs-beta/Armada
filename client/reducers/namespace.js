@@ -4,7 +4,7 @@ import {
 } from '../actions/constants/actionTypes';
 
 const initialState = {
-  selectedNamespace: '',
+  selectedNamespace: 'All',
   namespacesList: [],
 };
 

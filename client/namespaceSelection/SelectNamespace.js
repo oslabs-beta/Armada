@@ -3,39 +3,6 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { setNamespace, fetchNamespacesList } from '../actions/actions';
 
-//   function handleNamespaceChange(namespace) {
-// setSelectedState({ ...selectedState, namespace: namespace.value });
-// props.setNamespace(namespace.value);
-// if (namespace.value === 'All') {
-//   setSelectedState({
-//     ...selectedState,
-//     namespace: 'All',
-//     pods,
-//     deployments,
-//     services,
-//     didUpdate: true,
-//   });
-//   props.fetchPodsList(pods);
-// } else {
-//   const selectedPods = pods.filter(
-//     (pod) => pod.metadata.namespace === namespace.value
-//   );
-//   setSelectedState({
-//     ...selectedState,
-//     namespace: namespace.value,
-//     pods: selectedPods,
-//     deployments: deployments.filter(
-//       (deployment) => deployment.metadata.namespace === namespace.value
-//     ),
-//     services: services.filter(
-//       (service) => service.metadata.namespace === namespace.value
-//     ),
-//     didUpdate: true,
-//   });
-//   props.fetchPodsList(selectedPods);
-// }
-//   }
-
 function SelectNamespace({
   selectedNamespace,
   setNamespace,
@@ -64,7 +31,6 @@ function SelectNamespace({
   };
   useEffect(() => {
     getNamespaceList();
-    console.log(namespaceOptions);
   }, []);
 
   function handleNamespaceChange(namespace) {

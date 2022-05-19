@@ -102,11 +102,12 @@ export default function MiniDrawer({ children }) {
       <AppBar position='fixed' open={open}>
         <Toolbar
           sx={{
-            backgroundColor: blueGrey['400'],
+            backgroundColor: blueGrey['300'],
+            color: 'white',
             justifyContent: 'space-between',
           }}
         >
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
               color='inherit'
               aria-label='open drawer'
@@ -116,19 +117,21 @@ export default function MiniDrawer({ children }) {
             >
               <span className='material-icons'>menu</span>
             </IconButton>
-            <Typography
-              variant='h6'
-              noWrap
-              component='div'
-              sx={{ display: 'flex', alignItems: 'center' }}
-            >
-              <Box mr={1}>
-                <span className='material-symbols-outlined'>sailing</span>{' '}
-              </Box>
-              Armada
-            </Typography>
+            <Link to='/' style={{ textDecoration: 'none', color: 'white' }}>
+              <Typography
+                variant='h6'
+                noWrap
+                component='div'
+                sx={{ display: 'flex', alignItems: 'center' }}
+              >
+                <Box mr={1}>
+                  <span className='material-symbols-outlined'>sailing</span>{' '}
+                </Box>
+                Armada
+              </Typography>
+            </Link>
           </Box>
-          <Box sx={{ color: 'black' }}>
+          <Box sx={{ color: 'black', width: '250px' }}>
             <SelectNamespace />
           </Box>
         </Toolbar>

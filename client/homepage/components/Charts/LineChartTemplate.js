@@ -45,6 +45,9 @@ const LineChart = ({ chartData, title, label }) => {
   };
 
   const objArr = [];
+
+  if (!chartData) return <div>No data available in {title}</div>;
+
   if (!chartData.seriesLabels) console.log('title', title);
   const lineChartData = chartData.seriesLabels.forEach((el, index) => {
     const colors = mdColors;

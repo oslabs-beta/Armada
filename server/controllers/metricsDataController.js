@@ -14,7 +14,8 @@ const metricsDataController = {};
 metricsDataController.getCPUUsageByNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (node)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getCPUUsageByNode', req, res, next);
@@ -23,7 +24,8 @@ metricsDataController.getCPUUsageByNode = async (req, res, next) => {
 metricsDataController.getCPUUsageByPod = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (pod)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getCPUUsageByPod', req, res, next);
@@ -32,7 +34,8 @@ metricsDataController.getCPUUsageByPod = async (req, res, next) => {
 metricsDataController.getCPUUsageByNamespace = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (namespace)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getCPUUsageByNamespace', req, res, next);
@@ -42,7 +45,8 @@ metricsDataController.getCPUUsageByNamespace = async (req, res, next) => {
 metricsDataController.getMemoryUsageByNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(container_memory_working_set_bytes${namespaceString}) by (node)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getMemoryUsageByNode', req, res, next);
@@ -51,7 +55,8 @@ metricsDataController.getMemoryUsageByNode = async (req, res, next) => {
 metricsDataController.getMemoryUsageByPod = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(container_memory_working_set_bytes${namespaceString}) by (pod)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getMemoryUsageByPod', req, res, next);
@@ -60,7 +65,8 @@ metricsDataController.getMemoryUsageByPod = async (req, res, next) => {
 metricsDataController.getMemoryUsageByNamespace = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   //let query = `${prometheusURL}query_range?query=sum(container_memory_working_set_bytes{job="kubelet", metrics_path="/metrics/cadvisor", namespace="${namespace}", container!="", image!=""})`;
   let query = `${prometheusURL}query_range?query=sum(container_memory_working_set_bytes${namespaceString}) by (namespace)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
@@ -71,7 +77,8 @@ metricsDataController.getMemoryUsageByNamespace = async (req, res, next) => {
 metricsDataController.bytesReceivedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(irate(container_network_transmit_bytes_total${namespaceString}[${TIMESTEP}])) by (node)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'bytesReceivedPerNode', req, res, next);
@@ -80,7 +87,8 @@ metricsDataController.bytesReceivedPerNode = async (req, res, next) => {
 metricsDataController.bytesReceivedPerPod = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(irate(container_network_transmit_bytes_total${namespaceString}[${TIMESTEP}])) by (pod)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'bytesReceivedPerPod', req, res, next);
@@ -89,7 +97,8 @@ metricsDataController.bytesReceivedPerPod = async (req, res, next) => {
 metricsDataController.bytesReceivedPerNamespace = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(irate(container_network_receive_bytes_total${namespaceString}[${TIMESTEP}])) by (namespace)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'bytesReceivedPerNamespace', req, res, next);
@@ -98,7 +107,8 @@ metricsDataController.bytesReceivedPerNamespace = async (req, res, next) => {
 metricsDataController.bytesTransmittedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(irate(container_network_transmit_bytes_total${namespaceString}[${TIMESTEP}])) by (node)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'bytesTransmittedPerNode', req, res, next);
@@ -107,7 +117,8 @@ metricsDataController.bytesTransmittedPerNode = async (req, res, next) => {
 metricsDataController.bytesTransmittedPerPod = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(irate(container_network_transmit_bytes_total${namespaceString}[${TIMESTEP}])) by (pod)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'bytesTransmittedPerPod', req, res, next);
@@ -116,7 +127,8 @@ metricsDataController.bytesTransmittedPerPod = async (req, res, next) => {
 metricsDataController.bytesTransmittedPerNamespace = async (req, res, next) => {
   const { startDateTime, endDateTime, step, namespace } = req.query;
   let namespaceString = '';
-  if (namespace) namespaceString = `{namespace="${namespace}"}`;
+  if (namespace && namespace !== 'All')
+    namespaceString = `{namespace="${namespace}"}`;
   let query = `${prometheusURL}query_range?query=sum(irate(container_network_transmit_bytes_total${namespaceString}[${TIMESTEP}])) by (namespace)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'bytesTransmittedPerNamespace', req, res, next);

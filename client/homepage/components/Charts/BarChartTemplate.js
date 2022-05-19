@@ -43,8 +43,8 @@ const BarChart = ({ chartData, title, label }) => {
       {
         // label,
         data: chartData.map((el) => el.data),
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'transparent',
+        backgroundColor: 'rgb(140, 92, 142)',
       },
     ],
   };

@@ -15,7 +15,5 @@ const MemoryUsageByNode = ({ metrics }) => {
     </div>
   );
 };
-// //    <ComponentWrapper title='Deployments'>
-// <Typography variant='h1'>{deploymentsCount}</Typography>
-// </ComponentWrapper>
+
 export default MemoryUsageByNode;

@@ -10,7 +10,11 @@ const logsController = require('./controllers/logsController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-const expressWs = require('express-ws')(app);
+
+// const http = require('http');
+// const server = http.createServer(app);
+// const { Server } = require('socket.io');
+// const io = new Server(server);
 
 // Collect default metrics using Prom API
 client.collectDefaultMetrics();
@@ -18,6 +22,13 @@ client.collectDefaultMetrics();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../build')));
+
+// app.use(cors());
+// io.on('connection', (socket) => {
+//   console.log('a user connected');
+//   socket.emit('hello from server');
+//   socket.on('hello from client');
+// });
 
 app.get('/api/fetchMetrics', async (req, res) => {
   // console.log(client.collectDefaultMetrics.metricsList);
