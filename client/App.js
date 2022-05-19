@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MainContainer from './homepage/containers/MainContainer';
 import NavBar from './homepage/containers/NavBar';
 import MetricsContainer from './metricspage/containers/MetricsContainer';
@@ -10,16 +10,23 @@ import { Container, Box } from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
 import LogsContainer from './logspage/containers/LogsContainer';
 
-// import { io } from 'socket.io-client';
-
-// const socket = io('ws://localhost:3001', 'echo-protocol');
-
-// socket.emit('hello from client');
-// socket.on('hello from client');
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#121212',
+      paper: 'rgba(255, 255, 255, 0.08)',
+    },
+    text: {
+      primary: '#fff',
+    },
+  },
+});
 
 function App() {
   return (
-    <Box sx={{ backgroundColor: blueGrey['50'], minHeight: '100vh' }}>
+    <ThemeProvider theme={darkTheme}>
+      {/* <Box sx={{ backgroundColor: blueGrey['50'], minHeight: '100vh' }}> */}
       <BrowserRouter>
         <NavBar>
           <Container maxWidth='xl'>
@@ -32,7 +39,8 @@ function App() {
           </Container>
         </NavBar>
       </BrowserRouter>
-    </Box>
+      {/* </Box> */}
+    </ThemeProvider>
   );
 }
 

@@ -7,9 +7,10 @@ const BytesTransmittedbyPod = ({ metrics }) => {
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='Network IO Transmitted by Pod'
+          title='Network IO (Bps) Transmitted by Pod'
           label='Bytes Transmitted By Pod'
           chartData={metrics.data}
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>

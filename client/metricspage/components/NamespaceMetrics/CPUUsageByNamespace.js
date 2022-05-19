@@ -10,6 +10,7 @@ const CPUUsageByNamespace = ({ metrics }) => {
           title='CPU Usage % by Namespace'
           chartData={metrics.data}
           label='CPU Usage % by Namespace'
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>

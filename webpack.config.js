@@ -67,9 +67,10 @@ const config = {
         secure: false,
         changeOrigin: true,
       },
-      '/websocket': {
-        target: 'ws://localhost:3001',
-        ws: true, // important
+      '/socket.io': {
+        target: 'http://localhost:4000',
+        ws: true,
+        headers: { Connection: 'keep-alive' },
       },
     },
   },

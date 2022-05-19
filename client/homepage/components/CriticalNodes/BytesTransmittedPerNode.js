@@ -5,11 +5,11 @@ import BarChart from '../Charts/BarChartTemplate';
 // [{label: '', data: },{}]
 const BytesTransmittedPerNode = ({ promMetrics }) => {
   return (
-    <ComponentWrapper title='Bytes Transmitted Per Node'>
+    <ComponentWrapper title='Network IO Transmitted by Nodes'>
       <BarChart
         chartData={promMetrics.bytesTransmittedPerNode}
-        title='Network Transmitted Bytes by Nodes'
-        label='Network Transmitted Bytes By Nodes'
+        title='Network IO (Bps) Transmitted by Nodes'
+        label='Network IO (Bps) Transmitted by Nodes'
       />
     </ComponentWrapper>
   );

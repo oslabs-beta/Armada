@@ -7,9 +7,10 @@ const BytesTransmittedByNamespace = ({ metrics }) => {
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='Network IO Transmitted by Namespace'
+          title='Network IO (Bps) Transmitted by Namespace'
           chartData={metrics.data}
           label='Bytes Transmitted Per Namespace'
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>

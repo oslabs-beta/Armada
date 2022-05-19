@@ -7,9 +7,10 @@ const CPUUsageByPod = ({ metrics }) => {
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='CPU Usage % By Pod'
+          title='CPU Usage % by Pod'
           label='CPU Usage % By Pod'
           chartData={metrics.data}
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>

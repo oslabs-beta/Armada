@@ -9,6 +9,7 @@ const FreeMemoryByPod = ({ metrics }) => {
           title='Free Memory Per Node'
           label='Free Memory Per Node'
           chartData={metrics.data}
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>
