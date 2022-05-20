@@ -4,11 +4,11 @@ import BarChart from '../Charts/BarChartTemplate';
 
 const BytesReceivedPerNode = ({ promMetrics }) => {
   return (
-    <ComponentWrapper title='Bytes Received Per Node'>
+    <ComponentWrapper title='Network IO Received by Node'>
       <BarChart
         chartData={promMetrics.bytesReceivedPerNode}
-        title='Network Received Bytes by Nodes'
-        label='Network Received Bytes By Nodes'
+        title='Network IO (Bps) Received by Node'
+        label='Network IO (Bps) Received by Node'
       />
     </ComponentWrapper>
   );

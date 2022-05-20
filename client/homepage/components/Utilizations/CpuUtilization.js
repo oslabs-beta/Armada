@@ -7,9 +7,9 @@ function CpuUtilization(props) {
   const percentage = Math.floor();
   return (
     <ComponentWrapper title='Deployments'>
-      <Typography variant='h1'>{deploymentsCount}</Typography>
+      {/* <Typography variant='h1'>{deploymentsCount}</Typography> */}
     </ComponentWrapper>
   );
 }
 
-export default DeploymentsCount;
+export default CpuUtilization;

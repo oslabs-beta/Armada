@@ -7,14 +7,10 @@ const getLists = require('./controllers/getLists');
 const prometheusRouter = require('./routers/prometheusRouter');
 const alertsController = require('./controllers/alertsController');
 const logsController = require('./controllers/logsController');
+// const clusterController = require('./controller/clusterController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
-
-// const http = require('http');
-// const server = http.createServer(app);
-// const { Server } = require('socket.io');
-// const io = new Server(server);
 
 // Collect default metrics using Prom API
 client.collectDefaultMetrics();
@@ -23,11 +19,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../build')));
 
-// app.use(cors());
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-//   socket.emit('hello from server');
-//   socket.on('hello from client');
+// app.get('/api/connect', clusterController.kubeConnect, (req, res) => {
+//   res.status(200).send('cluster connected');
 // });
 
 app.get('/api/fetchMetrics', async (req, res) => {

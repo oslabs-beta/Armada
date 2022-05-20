@@ -40,6 +40,10 @@ const MainContainer = (props) => {
     namespace: 'All',
   });
 
+  const getClusterConfig = () => {
+    fetch('/api/connect').then((data) => console.log(data.body));
+  };
+
   const getNodeList = () => {
     if (mode === 'demo') {
       fetchNodesList(demoNodeList.response.body.items);
@@ -131,6 +135,7 @@ const MainContainer = (props) => {
   }
 
   function handleLoad() {
+    getClusterConfig();
     getNodeList();
     getDeploymentsList();
     getPodsList();

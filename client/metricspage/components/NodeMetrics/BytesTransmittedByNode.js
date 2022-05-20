@@ -7,9 +7,10 @@ const BytesTransmittedByNode = ({ metrics }) => {
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='Network IO Transmitted by Node'
+          title='Network IO (Bps) Transmitted by Node'
           label='Bytes Transmitted Per Node'
           chartData={metrics.data}
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>

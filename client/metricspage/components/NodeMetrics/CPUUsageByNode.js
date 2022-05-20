@@ -10,6 +10,7 @@ const CPUUsageByNode = ({ metrics }) => {
           title='CPU Usage % Per Node'
           label='CPU Usage % Per Node'
           chartData={metrics.data}
+          query={metrics.queryString}
         />
       </MetricsComponentWrapper>
     </div>

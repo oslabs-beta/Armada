@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
-import { blueGrey } from '@mui/material/colors';
+import { blueGrey, grey } from '@mui/material/colors';
 import { Box, ListItemIcon } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
@@ -102,7 +102,7 @@ export default function MiniDrawer({ children }) {
       <AppBar position='fixed' open={open}>
         <Toolbar
           sx={{
-            backgroundColor: blueGrey['300'],
+            backgroundColor: grey['900'],
             color: 'white',
             justifyContent: 'space-between',
           }}

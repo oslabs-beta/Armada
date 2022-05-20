@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
+import CpuUtilization from '../components/Utilizations/CpuUtilization.js';
 
 const UtilizationContainer = (props) => {
   const [cpu, setCpu] = useState(0);
@@ -17,6 +18,14 @@ const UtilizationContainer = (props) => {
   useEffect(() => {
     getCpuUtilization();
   }, []);
+
+  return (
+    <Grid container spacing={2}>
+      <Grid item sm={3}>
+        <CpuUtilization cpu={cpu} />
+      </Grid>
+    </Grid>
+  );
 };
 
 export default UtilizationContainer;
