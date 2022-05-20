@@ -41,7 +41,11 @@ const MainContainer = (props) => {
   });
 
   const getClusterConfig = () => {
-    fetch('/api/connect').then((data) => console.log(data.body));
+    console.log('get cluster config called');
+    fetch('/api/connect')
+      .then((data) => data.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
   };
 
   const getNodeList = () => {
