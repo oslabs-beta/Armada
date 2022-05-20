@@ -2,14 +2,14 @@ import React from 'react';
 import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 
-const CPUUsageByNode = ({ metrics }) => {
+const CPUUsageByNamespace = ({ metrics }) => {
   return (
     <div>
       <MetricsComponentWrapper title=''>
         <LineChart
-          title='CPU Usage % Per Node'
-          label='CPU Usage % Per Node'
+          title='CPU Usage % by Namespace'
           chartData={metrics.data}
+          label='CPU Usage % by Namespace'
           query={metrics.queryString}
         />
       </MetricsComponentWrapper>
@@ -17,4 +17,4 @@ const CPUUsageByNode = ({ metrics }) => {
   );
 };
 
-export default CPUUsageByNode;
+export default CPUUsageByNamespace;

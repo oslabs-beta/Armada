@@ -1,10 +1,18 @@
-const metricsFetch = (queryString, title) => {
+const formatChartData = require('./formatChartData');
+const fetch = (...args) =>
+  import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
+const metricsFetch = (query, title, req, res, next) => {
   try {
     fetch(query)
       .then((resp) => resp.json())
       .then((resp) => {
-        const formatted = formatChartData(resp.data.result);
-        res.locals[title] = formatted;
+        res.locals[title] = {};
+        if (resp.data.result.length !== 0) {
+          const formatted = formatChartData(resp.data.result);
+          res.locals[title].data = formatted;
+        } else res.locals[title].data = null;
+        res.locals[title].queryString = query;
       })
       .then(() => next());
   } catch (err) {
@@ -16,26 +24,3 @@ const metricsFetch = (queryString, title) => {
 };
 
 module.exports = metricsFetch;
-
-/*
-
-metricsDataController.bytesReceivedPerNode = async (req, res, next) => {
-  const { startDateTime, endDateTime, step } = req.query;
-  let query = `${prometheusURL}query_range?query=sum(irate(container_network_transmit_bytes_total[2m])) by (node)`;
-  query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
-  try {
-    fetch(query)
-      .then((resp) => resp.json())
-      .then((resp) => {
-        const formatted = formatChartData(resp.data.result);
-        res.locals.bytesReceivedPerNode = formatted;
-      })
-      .then(() => next());
-  } catch (err) {
-    next({
-      log: `Error with bytes received per node`,
-      message: { err: err.message },
-    });
-  }
-};
-*/

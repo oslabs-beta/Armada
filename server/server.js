@@ -7,6 +7,7 @@ const getLists = require('./controllers/getLists');
 const prometheusRouter = require('./routers/prometheusRouter');
 const alertsController = require('./controllers/alertsController');
 const logsController = require('./controllers/logsController');
+// const clusterController = require('./controller/clusterController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -17,6 +18,10 @@ client.collectDefaultMetrics();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../build')));
+
+// app.get('/api/connect', clusterController.kubeConnect, (req, res) => {
+//   res.status(200).send('cluster connected');
+// });
 
 app.get('/api/fetchMetrics', async (req, res) => {
   // console.log(client.collectDefaultMetrics.metricsList);

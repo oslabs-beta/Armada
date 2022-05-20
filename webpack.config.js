@@ -67,6 +67,11 @@ const config = {
         secure: false,
         changeOrigin: true,
       },
+      '/socket.io': {
+        target: 'http://localhost:4000',
+        ws: true,
+        headers: { Connection: 'keep-alive' },
+      },
     },
   },
 };

@@ -3,7 +3,6 @@
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-// query_range?query=sum(rate(node_network_transmit_bytes_total[2m]))&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m
 //npm install node-fetch@2
 
 const { spawn } = require('child_process');
@@ -196,7 +195,6 @@ prometheusController.getCpuUsageByPod = async (req, res, next) => {
 };
 
 prometheusController.getCpuUtilization = async (req, res, next) => {
-  console.log('in getCpuUtilization');
   let query = `${prometheusURL}query?query=1 - sum(avg by (mode) (rate(node_cpu_seconds_total{job="node-exporter", mode=~"idle|iowait|steal"}[10m])))`;
   try {
     const response = await fetch(query);

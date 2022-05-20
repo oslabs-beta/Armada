@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MaUTable from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+import { TableBody, AlertTitle, Grid, Paper } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -10,6 +10,7 @@ import {
   SelectColumnFilter,
   DefaultColumnFilter,
 } from '../../utils/table/helpers';
+import Alert from '../../utils/renderAlert';
 
 const HEADERS = [
   'NAMESPACE',
@@ -75,7 +76,7 @@ function Table({ columns, data }) {
 }
 
 const formatColumns = () => {
-  const columnsWithFilters = ['NAMESPACE', 'TYPE', 'REASON'];
+  const columnsWithFilters = ['TYPE', 'REASON'];
   return HEADERS.map((el) => {
     const obj = {};
     if (columnsWithFilters.includes(el)) {
@@ -91,23 +92,30 @@ const formatColumns = () => {
   });
 };
 
-function LogsTable({ data }) {
+function LogsTable({ data, namespace }) {
   const columns = React.useMemo(
-    () =>
-      //   HEADERS.map((el) => {
-      //     return {
-      //       Header: el.charAt(0).toUpperCase() + el.slice(1),
-      //       accessor: el.toLowerCase().replace(' ', '_'),
-      //     };
-      //   }),
-      formatColumns(),
+    () => formatColumns(),
 
     []
   );
 
+  const message = () => {
+    return (
+      <>
+        No logs found
+        {namespace !== '' &&
+          namespace !== 'All' &&
+          ` in the ${namespace} namespace`}
+      </>
+    );
+  };
+
   return (
     <div>
-      <Table columns={columns} data={data} />
+      {Alert(data.length, message(), 'info')}
+      <Paper sx={{ marginTop: 2 }}>
+        <Table columns={columns} data={data} />
+      </Paper>
     </div>
   );
 }

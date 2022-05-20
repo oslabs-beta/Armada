@@ -1,9 +1,19 @@
-import React from 'react'
+import React from 'react';
+import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 
-const FreeMemoryByPod = () => {
+const FreeMemoryByPod = ({ metrics }) => {
   return (
-    <div>FreeMemoryByPod</div>
-  )
-}
+    <div>
+      <MetricsComponentWrapper title=''>
+        <LineChart
+          title='Free Memory Per Node'
+          label='Free Memory Per Node'
+          chartData={metrics.data}
+          query={metrics.queryString}
+        />
+      </MetricsComponentWrapper>
+    </div>
+  );
+};
 
-export default FreeMemoryByPod
+export default FreeMemoryByPod;

@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { Box, Typography, Button } from '@mui/material';
 
-const Refresh = (props) => {
-  const [timestamp, setTimestamp] = useState(new Date().toString());
-
-  function setTime() {
-    console.log('set time called');
-    let time = new Date();
-    time = time.toString();
-    getNodeList();
-    getDeploymentsList();
-    getPodsList();
-    getServicesList();
-    getPromMetrics();
-    setTimestamp(time);
-  }
-
+const Refresh = ({ handleRefresh, lastUpdated }) => {
+  useEffect(() => {}, [handleRefresh, lastUpdated]);
   return (
-    <span>
-      <p className='timestamp'>
-        Last updated at {timestamp}{' '}
-        <button className='refreshButton' onClick={setTime}>
-          <span className='material-icons'>refresh</span>
-        </button>
-      </p>
-    </span>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}
+    >
+      <Typography
+        className='timestamp'
+        color='text.secondary'
+        variant='caption'
+      >
+        Last updated at {Date(lastUpdated).toString()}
+      </Typography>
+      <Button
+        variant='outlined'
+        endIcon={<span className='material-icons'>refresh</span>}
+        onClick={handleRefresh}
+        sx={{
+          marginTop: 1,
+          border: '1px solid rgb(140, 92, 142)',
+          color: 'rgb(140, 92, 142)',
+        }}
+      >
+        Refresh
+      </Button>
+    </Box>
   );
 };
 
