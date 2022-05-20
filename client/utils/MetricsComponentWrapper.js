@@ -6,7 +6,10 @@ function MetricsComponentWrapper({ title, children }) {
     <Paper
       variant='outlined'
       sx={{
-        p: 3,
+        pt: 3,
+        pl: 3,
+        pr: 3,
+        pb: 7,
         width: '100%',
         height: '100%',
       }}

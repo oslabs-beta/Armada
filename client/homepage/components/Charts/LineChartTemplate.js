@@ -72,12 +72,13 @@ const LineChart = ({ chartData, title, label, query }) => {
   };
   let id = 1;
 
-  console.log('query string', query);
   return (
     <div style={{ height: 500 }}>
       <Line options={options} data={data} />
       <CopyToClipboard text={query} onCopy={() => setCopiedText({ query })}>
-        <Button size='small'>Copy query to clipboard</Button>
+        <Button size='small' sx={{ marginTop: 1, marginBottom: 3 }}>
+          Copy query to clipboard
+        </Button>
       </CopyToClipboard>
     </div>
   );

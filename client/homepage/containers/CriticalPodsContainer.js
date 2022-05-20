@@ -3,7 +3,6 @@ import { Grid } from '@mui/material';
 import CPUIntensivePods from '../components/CriticalPods/CPUIntensivePods';
 import MemoryIntensivePods from '../components/CriticalPods/MemoryIntensivePods';
 import ProblematicPods from '../components/CriticalPods/ProblematicPods';
-import WebsocketCpuIntensivePod from '../components/CriticalPods/WebsocketCPUIntensivePod';
 
 const CriticalPodsContainer = (props) => {
   const { namespace } = props;
@@ -55,7 +54,6 @@ const CriticalPodsContainer = (props) => {
       <Grid item sm={6} lg={4}>
         {renderMemory()}
       </Grid>
-      <WebsocketCpuIntensivePod />
     </Grid>
   );
 };
