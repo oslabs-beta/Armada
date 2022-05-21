@@ -19,6 +19,7 @@ import {
 import demoNodeList from '../../demoData/nodeList.json';
 
 const MainContainer = (props) => {
+
 	const {
 		namespace,
 		pods,
@@ -224,7 +225,7 @@ const MainContainer = (props) => {
 			</Grid>
 		</Grid>
 	);
-};
+
 const mapStateToProps = ({
 	namespace,
 	nodes,
