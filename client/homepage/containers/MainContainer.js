@@ -7,6 +7,7 @@ import CriticalNodesContainer from './CriticalNodesContainer';
 import UtilizationContainer from './UtilizationContainer';
 import Refresh from '../components/Refresh';
 import { Grid } from '@mui/material';
+import { Alert } from '@mui/material';
 import {
   fetchNodesList,
   fetchPodsList,
@@ -33,6 +34,7 @@ const MainContainer = (props) => {
     lastUpdated,
   } = props;
   const [mode, setMode] = useState('production');
+  const [promConnect, setPromConnect] = useState(false)
   const [selectedState, setSelectedState] = useState({
     pods: pods,
     deployments: deployments,
@@ -97,39 +99,17 @@ const MainContainer = (props) => {
     )
       .then((res) => res.json())
       .then((data) => {
-        fetchPromMetrics(data);
+        console.log("get prom metrics", data)
+        if (!data.hasOwnProperty(err)) {
+          fetchPromMetrics(data);
+        }
+        else {
+          setPromConnect(false)
+        }
       })
       .catch((error) => console.log(error));
   };
 
-<<<<<<< HEAD
-  const getPromMetrics = () => {
-    let now = new Date();
-    let nowCopy = new Date(now.getTime());
-    nowCopy.setHours(nowCopy.getHours() - 24);
-    let endDateTime = now.toISOString();
-    console.log('endDateTime', endDateTime);
-    let startDateTime = nowCopy.toISOString();
-    console.log('startDateTime', startDateTime);
-
-    console.log('prommetrics namespace', selectedState.namespace);
-    let step = '30m';
-    fetch(
-      `/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log('data in getPromMetrics', data.bytesTransmittedPerNode);
-        // console.log('data', data);
-        setPromMetrics(data);
-        console.log(data);
-        console.log('prom metrics refetched');
-      })
-      .catch((error) => console.log(error));
-  };
-
-=======
->>>>>>> 9da3a04a3dc83386f42613a923f8efe2bcdebe28
   useEffect(() => {
     handleLoad();
   }, []);
@@ -169,55 +149,12 @@ const MainContainer = (props) => {
     getPodsList();
     getServicesList();
     getPromMetrics();
-<<<<<<< HEAD
-    getNamespaceList();
-  }, []);
-
-  const namespaceOptions = [];
-  namespaces.forEach((el) => {
-    namespaceOptions.push({
-      value: el,
-      label: el,
-    });
-  });
-
-  function handleNamespaceChange(namespace) {
-    setSelectedState({ ...selectedState, namespace: namespace.value });
-    if (namespace.value === 'All') {
-      setSelectedState({
-        ...selectedState,
-        namespace: 'All',
-        pods,
-        deployments,
-        services,
-        didUpdate: true,
-      });
-      props.fetchPodsList(pods);
-    } else {
-      const selectedPods = pods.filter(
-        (pod) => pod.metadata.namespace === namespace.value
-      );
-      setSelectedState({
-        ...selectedState,
-        namespace: namespace.value,
-        pods: selectedPods,
-        deployments: deployments.filter(
-          (deployment) => deployment.metadata.namespace === namespace.value
-        ),
-        services: services.filter(
-          (service) => service.metadata.namespace === namespace.value
-        ),
-        didUpdate: true,
-      });
-      props.fetchPodsList(selectedPods);
-    }
-=======
     filterByNamespace();
->>>>>>> 9da3a04a3dc83386f42613a923f8efe2bcdebe28
   }
 
   return (
     <Grid container spacing={1}>
+      {!promConnect && <Alert severity="error">Unable to connect to Prometheus</Alert>}
       <Grid
         container
         item
@@ -263,7 +200,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <CriticalPodsContainer namespace={namespace} />
+        {promConnect && <CriticalPodsContainer namespace={namespace}/>}
       </Grid>
       <Grid
         container
