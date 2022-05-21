@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import CountsContainer from './CountsContainer';
-import StatusContainer from './StatusContainer';
-import ProblematicContainer from './ProblematicContainer';
-import CriticalPodsContainer from './CriticalPodsContainer';
-import CriticalNodesContainer from './CriticalNodesContainer';
-import UtilizationContainer from './UtilizationContainer';
-import Refresh from '../components/Refresh';
-import { Grid } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import CountsContainer from "./CountsContainer";
+import StatusContainer from "./StatusContainer";
+import ProblematicContainer from "./ProblematicContainer";
+import CriticalPodsContainer from "./CriticalPodsContainer";
+import CriticalNodesContainer from "./CriticalNodesContainer";
+import UtilizationContainer from "./UtilizationContainer";
+import Refresh from "../components/Refresh";
+import { Grid } from "@mui/material";
+import { Alert, AlertTitle } from "@mui/material";
 import {
 	fetchNodesList,
 	fetchPodsList,
@@ -15,8 +16,8 @@ import {
 	fetchDeploymentsList,
 	fetchPromMetrics,
 	setNamespace,
-} from '../../actions/actions';
-import demoNodeList from '../../demoData/nodeList.json';
+} from "../../actions/actions";
+import demoNodeList from "../../demoData/nodeList.json";
 
 const MainContainer = (props) => {
 	const {
@@ -33,23 +34,24 @@ const MainContainer = (props) => {
 		fetchPromMetrics,
 		lastUpdated,
 	} = props;
-	const [mode, setMode] = useState('production');
+	const [promConnect, setPromConnect] = useState(false);
+	const [mode, setMode] = useState("production");
 	const [selectedState, setSelectedState] = useState({
 		pods: pods,
 		deployments: deployments,
 		services: services,
-		namespace: 'All',
+		namespace: "All",
 	});
 
 	const getClusterConfig = () => {
-		fetch('/api/connect').then((data) => console.log(data.body));
+		fetch("/api/connect").then((data) => console.log(data.body));
 	};
 
 	const getNodeList = () => {
-		if (mode === 'demo') {
+		if (mode === "demo") {
 			fetchNodesList(demoNodeList.response.body.items);
 		} else {
-			fetch('/api/nodesList')
+			fetch("/api/nodesList")
 				.then((data) => data.json())
 				.then((data) => {
 					fetchNodesList(data);
@@ -59,7 +61,7 @@ const MainContainer = (props) => {
 	};
 
 	const getDeploymentsList = () => {
-		fetch('/api/deploymentsList')
+		fetch("/api/deploymentsList")
 			.then((res) => res.json())
 			.then((data) => {
 				fetchDeploymentsList(data);
@@ -68,7 +70,7 @@ const MainContainer = (props) => {
 	};
 
 	const getPodsList = () => {
-		fetch('/api/podsList')
+		fetch("/api/podsList")
 			.then((data) => data.json())
 			.then((data) => {
 				fetchPodsList(data);
@@ -77,7 +79,7 @@ const MainContainer = (props) => {
 	};
 
 	const getServicesList = () => {
-		fetch('/api/servicesList')
+		fetch("/api/servicesList")
 			.then((data) => data.json())
 			.then((data) => {
 				fetchServicesList(data);
@@ -92,13 +94,16 @@ const MainContainer = (props) => {
 		let endDateTime = now.toISOString();
 		let startDateTime = nowCopy.toISOString();
 
-		let step = '30m';
+		let step = "30m";
 		fetch(
 			`/api/prometheus/homepage?startDateTime=${startDateTime}&endDateTime=${endDateTime}&step=${step}`
 		)
 			.then((res) => res.json())
 			.then((data) => {
-				fetchPromMetrics(data);
+				if (!data.hasOwnProperty(err)) {
+					setPromConnect(true);
+					fetchPromMetrics(data);
+				}
 			})
 			.catch((error) => console.log(error));
 	};
@@ -112,10 +117,10 @@ const MainContainer = (props) => {
 	}, [namespace, pods, nodes, services, deployments, promMetrics]);
 
 	function filterByNamespace() {
-		if (namespace === 'All' || namespace === '') {
+		if (namespace === "All" || namespace === "") {
 			setSelectedState({
 				...selectedState,
-				namespace: 'All',
+				namespace: "All",
 				pods: pods,
 				deployments: deployments,
 				services: services,
@@ -147,12 +152,18 @@ const MainContainer = (props) => {
 
 	return (
 		<Grid container spacing={1}>
+			{!promConnect && (
+				<Alert severity="error">
+					<AlertTitle>Error</AlertTitle>
+					Prometheus connection failed.
+				</Alert>
+			)}
 			<Grid
 				container
 				item
 				xs={12}
-				justifyContent='flex-end'
-				alignItems='flex-end'
+				justifyContent="flex-end"
+				alignItems="flex-end"
 				mb={4}
 			>
 				<Refresh handleRefresh={handleLoad} lastUpdated={lastUpdated} />
@@ -162,8 +173,8 @@ const MainContainer = (props) => {
 				container
 				item
 				xs={12}
-				direction='row'
-				justifyContent='space-evenly'
+				direction="row"
+				justifyContent="space-evenly"
 			>
 				<CountsContainer
 					nodes={nodes}
@@ -176,8 +187,8 @@ const MainContainer = (props) => {
 				container
 				item
 				xs={12}
-				direction='row'
-				justifyContent='space-evenly'
+				direction="row"
+				justifyContent="space-evenly"
 			>
 				<StatusContainer
 					pods={selectedState.pods}
@@ -189,8 +200,8 @@ const MainContainer = (props) => {
 				container
 				item
 				xs={12}
-				direction='row'
-				justifyContent='space-evenly'
+				direction="row"
+				justifyContent="space-evenly"
 			>
 				<ProblematicContainer />
 			</Grid>
@@ -199,17 +210,17 @@ const MainContainer = (props) => {
 				container
 				item
 				xs={12}
-				direction='row'
-				justifyContent='space-evenly'
+				direction="row"
+				justifyContent="space-evenly"
 			>
-				<CriticalPodsContainer namespace={namespace} />
+				{promConnect && <CriticalPodsContainer namespace={namespace} />}
 			</Grid>
 			<Grid
 				container
 				item
 				xs={12}
-				direction='row'
-				justifyContent='space-evenly'
+				direction="row"
+				justifyContent="space-evenly"
 			>
 				<CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
 			</Grid>
@@ -217,8 +228,8 @@ const MainContainer = (props) => {
 				container
 				item
 				xs={12}
-				direction='row'
-				justifyContent='space-evenly'
+				direction="row"
+				justifyContent="space-evenly"
 			>
 				<UtilizationContainer />
 			</Grid>
