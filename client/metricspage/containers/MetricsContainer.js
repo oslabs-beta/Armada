@@ -153,42 +153,42 @@ const MetricsContainer = ({ namespace }) => {
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderCPUUsageByNamespace()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderMemoryUsageByNamespace()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderBytesReceivedPerNamespace()}
         </Grid>
 
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderBytesTransmittedPerNamespace()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderCPUUsageByNode()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderMemoryUsageByNode()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderBytesReceivedPerNode()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderBytesTransmittedPerNode()}
         </Grid>
 
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderCPUUsageByPod()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderMemoryUsageByPod()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderBytesReceivedPerPod()}
         </Grid>
-        <Grid item sm={6}>
+        <Grid item xs={12} sm={6}>
           {renderBytesTransmittedPerPod()}
         </Grid>
       </Grid>

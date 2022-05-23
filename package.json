@@ -2,11 +2,11 @@
   "name": "armada",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "start": "NODE_ENV=production nodemon server/server.js",
+    "start": "NODE_ENV=production nodemon server/server.js & electron .",
     "build": "NODE_ENV=production webpack",
-    "dev": "NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack serve --open ",
+    "dev": "NODE_ENV=development nodemon server/server.js & NODE_ENV=development webpack serve & electron .",
     "test": "jest"
   },
   "repository": {
@@ -27,6 +27,7 @@
     "@mui/x-data-grid": "^5.11.0",
     "@reduxjs/toolkit": "^1.8.1",
     "chart.js": "^3.7.1",
+    "electron": "^18.3.0",
     "express": "^4.18.1",
     "express-ws": "^5.0.2",
     "fs": "0.0.1-security",

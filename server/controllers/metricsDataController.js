@@ -1,7 +1,7 @@
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-const { spawn } = require('child_process');
+// const { spawn } = require('child_process');
 const metricsFetch = require('../utils/metricsFetch');
 const { TIMESTEP } = require('../utils/constants');
 // can use to run specified commands that you'd otherwise need to write in terminal
@@ -26,7 +26,9 @@ metricsDataController.getCPUUsageByPod = async (req, res, next) => {
   let namespaceString = '';
   if (namespace && namespace !== 'All')
     namespaceString = `{namespace="${namespace}"}`;
-  let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (pod)`;
+  let query = `${prometheusURL}query_range?query=sum(container_cpu_usage_seconds_total${namespaceString}) by (pod)`;
+
+  //let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (pod)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getCPUUsageByPod', req, res, next);
 };

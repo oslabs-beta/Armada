@@ -6,76 +6,76 @@ import BytesReceivedPerNode from '../components/CriticalNodes/BytesReceivedPerNo
 import { Grid } from '@mui/material';
 
 const CriticalNodesContainer = ({ promMetrics }) => {
-	const [cpu, setCpu] = useState([]);
-	const [memory, setMemory] = useState([]);
-	const getCpuByNode = () => {
-		fetch('api/prometheus/cpubynode')
-			.then((res) => {
-				return res.json();
-			})
-			.then((data) => {
-				setCpu(data);
-			})
-			.catch((err) => console.log('error with nodebycpu', err));
-	};
+  const [cpu, setCpu] = useState([]);
+  const [memory, setMemory] = useState([]);
+  const getCpuByNode = () => {
+    fetch('api/prometheus/cpubynode')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setCpu(data);
+      })
+      .catch((err) => console.log('error with nodebycpu', err));
+  };
 
-	const getMemoryByNode = () => {
-		fetch('/api/prometheus/memorybynode')
-			.then((res) => res.json())
-			.then((data) => setMemory(data))
-			.catch((err) => console.log(err));
-	};
+  const getMemoryByNode = () => {
+    fetch('/api/prometheus/memorybynode')
+      .then((res) => res.json())
+      .then((data) => setMemory(data))
+      .catch((err) => console.log(err));
+  };
 
-	useEffect(() => {
-		getCpuByNode();
-		getMemoryByNode();
-	}, []);
+  useEffect(() => {
+    getCpuByNode();
+    getMemoryByNode();
+  }, []);
 
-	const renderCpuGraph = () => {
-		if (cpu.length > 0) {
-			return <CPUIntensiveNodes nodes={cpu} />;
-		}
-	};
-	const renderMemoryGraph = () => {
-		if (memory.length > 0) {
-			return <MemoryIntensiveNodes nodes={memory} />;
-		}
-	};
+  const renderCpuGraph = () => {
+    if (cpu.length > 0) {
+      return <CPUIntensiveNodes nodes={cpu} />;
+    }
+  };
+  const renderMemoryGraph = () => {
+    if (memory.length > 0) {
+      return <MemoryIntensiveNodes nodes={memory} />;
+    }
+  };
 
-	const renderNetworkTransmitGraph = () => {
-		// console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
-		if (promMetrics.bytesTransmittedPerNode) {
-			return <BytesTransmittedPerNode promMetrics={promMetrics} />;
-		}
-	};
+  const renderNetworkTransmitGraph = () => {
+    // console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
+    if (promMetrics.bytesTransmittedPerNode) {
+      return <BytesTransmittedPerNode promMetrics={promMetrics} />;
+    }
+  };
 
-	const renderNetworkReceivedGraph = () => {
-		// console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
-		if (promMetrics.bytesReceivedPerNode) {
-			return <BytesReceivedPerNode promMetrics={promMetrics} />;
-		}
-	};
+  const renderNetworkReceivedGraph = () => {
+    // console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
+    if (promMetrics.bytesReceivedPerNode) {
+      return <BytesReceivedPerNode promMetrics={promMetrics} />;
+    }
+  };
 
-	return (
-		<Grid container spacing={1}>
-			{/* <Grid item sm={4}>
+  return (
+    <Grid container spacing={2}>
+      {/* <Grid item sm={4}>
         <ProblematicNodes />
       </Grid> */}
-			<Grid item sm={4}>
-				{renderCpuGraph()}
-			</Grid>
-			<Grid item sm={4}>
-				{renderMemoryGraph()}
-			</Grid>
+      <Grid item xs={12} sm={6}>
+        {renderCpuGraph()}
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        {renderMemoryGraph()}
+      </Grid>
 
-			<Grid item sm={4}>
-				{renderNetworkTransmitGraph()}
-			</Grid>
-			<Grid item sm={4}>
-				{renderNetworkReceivedGraph()}
-			</Grid>
-		</Grid>
-	);
+      <Grid item xs={12} sm={6}>
+        {renderNetworkTransmitGraph()}
+      </Grid>
+      <Grid item xs={12} sm={6}>
+        {renderNetworkReceivedGraph()}
+      </Grid>
+    </Grid>
+  );
 };
 
 export default CriticalNodesContainer;
