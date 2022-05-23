@@ -34,6 +34,22 @@ const BarChart = ({ chartData, title, label }) => {
       title: {
         display: true,
         text: title,
+        color: 'white',
+        font: { weight: 'bold' },
+      },
+    },
+    scales: {
+      xAxes: {
+        display: true,
+        ticks: {
+          color: 'white',
+        },
+      },
+      yAxes: {
+        display: true,
+        ticks: {
+          color: 'white',
+        },
       },
     },
   };

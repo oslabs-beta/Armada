@@ -5,7 +5,7 @@ const fetch = (...args) =>
 
 //npm install node-fetch@2
 
-const { spawn } = require('child_process');
+// const { spawn } = require('child_process');
 const formatChartData = require('../utils/formatChartData');
 const formatTimeToAvg = require('../utils/formatTimeToAvg');
 const formatVectorData = require('../utils/formatVectorData');
@@ -27,33 +27,33 @@ prometheusController.isUp = async (req, res, next) => {
   }
 };
 
-prometheusController.portPrometheus = (req, res, next) => {
-  try {
-    const process = spawn('kubectl', [
-      '--namespace=default',
-      'port-forward',
-      'deploy/prometheus-server',
-      '9090',
-    ]);
+// prometheusController.portPrometheus = (req, res, next) => {
+//   try {
+//     const process = spawn('kubectl', [
+//       '--namespace=default',
+//       'port-forward',
+//       'deploy/prometheus-server',
+//       '9090',
+//     ]);
 
-    process.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-    });
+//     process.stdout.on('data', (data) => {
+//       console.log(`stdout: ${data}`);
+//     });
 
-    process.stderr.on('data', (data) => {
-      console.log(`stderr: ${data}`);
-    });
+//     process.stderr.on('data', (data) => {
+//       console.log(`stderr: ${data}`);
+//     });
 
-    process.on('close', (code) => {
-      if (code === 1) console.log('PROMETHEUS ALREADY IN USE NUM NUM');
-      console.log(`child process exited with code ${code}`);
-    });
+//     process.on('close', (code) => {
+//       if (code === 1) console.log('PROMETHEUS ALREADY IN USE NUM NUM');
+//       console.log(`child process exited with code ${code}`);
+//     });
 
-    return next();
-  } catch (err) {
-    return next(err);
-  }
-};
+//     return next();
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
 prometheusController.bytesTransmittedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
@@ -199,12 +199,64 @@ prometheusController.getCpuUtilization = async (req, res, next) => {
   try {
     const response = await fetch(query);
     const data = await response.json();
-    const result = data.data.result;
-    res.locals.cpuUtilization = data;
+    const result = data.data.result[0].value;
+    res.locals.cpuUtilization = result[1];
+    console.log(`this is CPU util: ${res.locals.cpuUtilization}`);
     return next();
   } catch (err) {
     return next({
       log: 'Error with getting cpu utilization',
+      message: { err: err.message },
+    });
+  }
+};
+
+prometheusController.getCpuTotal = async (req, res, next) => {
+  let query = `${prometheusURL}query?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate)`;
+  try {
+    const response = await fetch(query);
+    const data = await response.json();
+    const result = data.data.result[0].value;
+    res.locals.getCpuTotal = result[1];
+    console.log(`this is CPU total: ${res.locals.getCpuTotal}`);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'Error with getting CPU total',
+      message: { err: err.message },
+    });
+  }
+};
+
+prometheusController.getMemoryUtilization = async (req, res, next) => {
+  let query = `${prometheusURL}query?query=node_memory_Active_bytes/node_memory_MemTotal_bytes`;
+  try {
+    const response = await fetch(query);
+    const data = await response.json();
+    const result = data.data.result[0].value;
+    res.locals.memoryUtilization = result[1];
+    console.log(`this is memory util: ${res.locals.memoryUtilization}`);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'Error with getting memory utilization',
+      message: { err: err.message },
+    });
+  }
+};
+
+prometheusController.getMemoryTotal = async (req, res, next) => {
+  let query = `${prometheusURL}query?query=sum(container_memory_working_set_bytes)`;
+  try {
+    const response = await fetch(query);
+    const data = await response.json();
+    const result = data.data.result[0].value;
+    res.locals.getMemoryTotal = result[1];
+    console.log(`this is memory total: ${res.locals.getMemoryTotal}`);
+    return next();
+  } catch (err) {
+    return next({
+      log: 'Error with getting memory total',
       message: { err: err.message },
     });
   }

@@ -13,13 +13,13 @@ prometheusRouter.get('/up', prometheusController.isUp, (req, res) => {
   res.status(200).json(res.locals.query);
 });
 
-prometheusRouter.get(
-  '/port',
-  prometheusController.portPrometheus,
-  (req, res) => {
-    res.status(200).send('port on');
-  }
-);
+// prometheusRouter.get(
+//   '/port',
+//   prometheusController.portPrometheus,
+//   (req, res) => {
+//     res.status(200).send('port on');
+//   }
+// );
 
 prometheusRouter.get(
   '/homepage',
@@ -101,10 +101,19 @@ prometheusRouter.get(
 );
 
 prometheusRouter.get(
-  '/cpuUtilization',
+  '/clustermetrics',
   prometheusController.getCpuUtilization,
+  prometheusController.getCpuTotal,
+  prometheusController.getMemoryUtilization,
+  prometheusController.getMemoryTotal,
   (req, res) => {
-    res.status(200).json(res.locals.cpuUtilization);
+    const chartData = {
+      cpuUtilization: res.locals.cpuUtilization,
+      cpuTotal: res.locals.getCpuTotal,
+      memoryUtilization: res.locals.memoryUtilization,
+      memoryTotal: res.locals.getMemoryTotal,
+    };
+    res.status(200).json(chartData);
   }
 );
 

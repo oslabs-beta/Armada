@@ -6,7 +6,7 @@ clusterController.kubeConnect = (req, res, next) => {
   console.log('in kubeConnect');
   try {
     const clusterConfig = cmd.runSync('kubectl config view').data.split('\n');
-    console.log(clusterConfig);
+    // console.log(clusterConfig);
     res.locals.clusterConfig = clusterConfig;
     return next();
   } catch (error) {

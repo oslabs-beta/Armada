@@ -1,7 +1,7 @@
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-const { spawn } = require('child_process');
+// const { spawn } = require('child_process');
 const metricsFetch = require('../utils/metricsFetch');
 const { TIMESTEP } = require('../utils/constants');
 // can use to run specified commands that you'd otherwise need to write in terminal

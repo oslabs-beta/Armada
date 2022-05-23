@@ -9,16 +9,16 @@ const CountsContainer = (props) => {
   const { nodes, deployments, pods, services } = props;
   return (
     <Grid container spacing={2}>
-      <Grid item sm={3}>
+      <Grid item xs={6} sm={3}>
         <NodesCount nodes={nodes} />
       </Grid>
-      <Grid item sm={3}>
+      <Grid item xs={6} sm={3}>
         <DeploymentsCount deployments={deployments} />
       </Grid>
-      <Grid item sm={3}>
+      <Grid item xs={6} sm={3}>
         <PodsCount pods={pods} />
       </Grid>
-      <Grid item sm={3}>
+      <Grid item xs={6} sm={3}>
         <ServicesCount services={services} />
       </Grid>
     </Grid>

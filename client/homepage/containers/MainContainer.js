@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import CountsContainer from './CountsContainer';
 import StatusContainer from './StatusContainer';
+import ProblematicContainer from './ProblematicContainer';
 import CriticalPodsContainer from './CriticalPodsContainer';
 import CriticalNodesContainer from './CriticalNodesContainer';
 import UtilizationContainer from './UtilizationContainer';
@@ -41,11 +42,7 @@ const MainContainer = (props) => {
   });
 
   const getClusterConfig = () => {
-    console.log('get cluster config called');
-    fetch('/api/connect')
-      .then((data) => data.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.log(error));
+    fetch('/api/connect').then((data) => console.log(data.body));
   };
 
   const getNodeList = () => {
@@ -149,7 +146,7 @@ const MainContainer = (props) => {
   }
 
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={2}>
       <Grid
         container
         item
@@ -160,7 +157,15 @@ const MainContainer = (props) => {
       >
         <Refresh handleRefresh={handleLoad} lastUpdated={lastUpdated} />
       </Grid>
-
+      {/* <Grid
+        container
+        item
+        xs={12}
+        direction='row'
+        justifyContent='space-evenly'
+      >
+        <UtilizationContainer />
+      </Grid> */}
       <Grid
         container
         item
@@ -195,6 +200,16 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
+        <ProblematicContainer />
+      </Grid>
+
+      <Grid
+        container
+        item
+        xs={12}
+        direction='row'
+        justifyContent='space-evenly'
+      >
         <CriticalPodsContainer namespace={namespace} />
       </Grid>
       <Grid
@@ -206,18 +221,10 @@ const MainContainer = (props) => {
       >
         <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
       </Grid>
-      <Grid
-        container
-        item
-        xs={12}
-        direction='row'
-        justifyContent='space-evenly'
-      >
-        <UtilizationContainer />
-      </Grid>
     </Grid>
   );
 };
+
 const mapStateToProps = ({
   namespace,
   nodes,

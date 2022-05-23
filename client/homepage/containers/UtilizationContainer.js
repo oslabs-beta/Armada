@@ -1,28 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import CpuUtilization from '../components/Utilizations/CpuUtilization.js';
+import MemoryUtilization from '../components/Utilizations/MemoryUtilization.js';
 
 const UtilizationContainer = (props) => {
-  const [cpu, setCpu] = useState(0);
+  const [clusterData, setClusterData] = useState([]);
 
-  const getCpuUtilization = () => {
-    fetch('/api/prometheus/cpuUtilization')
+  const getUtilization = () => {
+    fetch('/api/prometheus/clustermetrics')
       .then((data) => data.json())
       .then((data) => {
-        let value = (Number(data.data.result[0].value[1]) * 100).toFixed(2);
-        setCpu(value);
+        const obj = {};
+        for (const key in data) {
+          if (key == 'cpuUtilization' || key == 'memoryUtilization') {
+            obj[key] = Number(data[key] * 100).toFixed(2);
+          }
+        }
+        setClusterData(obj);
       })
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
-    getCpuUtilization();
+    getUtilization();
   }, []);
 
   return (
     <Grid container spacing={2}>
       <Grid item sm={3}>
-        <CpuUtilization cpu={cpu} />
+        <CpuUtilization cpu={clusterData.cpuUtilization} />
+      </Grid>
+      <Grid item sm={3}>
+        <MemoryUtilization memory={clusterData.memoryUtilization} />
       </Grid>
     </Grid>
   );
