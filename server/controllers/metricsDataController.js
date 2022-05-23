@@ -26,7 +26,9 @@ metricsDataController.getCPUUsageByPod = async (req, res, next) => {
   let namespaceString = '';
   if (namespace && namespace !== 'All')
     namespaceString = `{namespace="${namespace}"}`;
-  let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (pod)`;
+  let query = `${prometheusURL}query_range?query=sum(container_cpu_usage_seconds_total${namespaceString}) by (pod)`;
+
+  //let query = `${prometheusURL}query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate${namespaceString}) by (pod)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
   metricsFetch(query, 'getCPUUsageByPod', req, res, next);
 };

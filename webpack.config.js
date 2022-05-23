@@ -18,6 +18,9 @@ const config = {
     }),
     new MiniCssExtractPlugin(),
   ],
+  resolve: {
+    extensions: ['.jsx', '.js', '.tsx', '.ts'],
+  },
   module: {
     rules: [
       {

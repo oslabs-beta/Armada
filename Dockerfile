@@ -8,7 +8,7 @@ RUN npm install -g nodemon
 WORKDIR /app
 COPY package.json ./
 RUN npm install
-RUN npx electron-rebuild
 COPY ./ ./
 EXPOSE 3001
-CMD ["npm", "start"]
+EXPOSE 8080
+CMD ["npm", "run", "dev"]
