@@ -1,14 +1,17 @@
-FROM node:16-alpine
-# stuff needed to get Electron to run
-# RUN apt-get update && apt-get install \
-#     git libx11-xcb1 libxcb-dri3-0 libxtst6 libnss3 libatk-bridge2.0-0 libgtk-3-0 libxss1 libasound2 \
-#     -yq --no-install-suggests --no-install-recommends \
-#     && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN npm install -g nodemon
-WORKDIR /app
-COPY package.json ./
+FROM node:16
+
+WORKDIR /usr/src/app
+
+RUN npm install -g webpack nodemon
+
+COPY . /usr/src/app/
+
 RUN npm install
-COPY ./ ./
+
+RUN npm run build
+
 EXPOSE 3001
+
 EXPOSE 8080
-CMD ["npm", "run", "dev"]
+
+CMD [ "npm", "run", "start" ]

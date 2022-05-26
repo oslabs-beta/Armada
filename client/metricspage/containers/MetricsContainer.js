@@ -10,9 +10,9 @@ import BytesTransmittedByNode from '../components/NodeMetrics/BytesTransmittedBy
 import CPUUsageByNode from '../components/NodeMetrics/CPUUsageByNode.js';
 import MemoryUsageByNode from '../components/NodeMetrics/MemoryUsageByNode.js';
 import BytesReceivedByPod from '../components/PodMetrics/BytesReceivedByPod';
-import BytesTransmittedByPod from '../components/PodMetrics/BytesTransmittedByPod';
 import CPUUsageByPod from '../components/PodMetrics/CPUUsageByPod.js';
 import MemoryUsageByPod from '../components/PodMetrics/MemoryUsageByPod.js';
+import BytesTransmittedbyPod from '../components/PodMetrics/BytesTransmittedbyPod.js';
 
 const MetricsContainer = ({ namespace }) => {
   const [timeSeriesMetrics, setTimeSeriesMetrics] = useState([]);
@@ -129,7 +129,7 @@ const MetricsContainer = ({ namespace }) => {
   const renderBytesTransmittedPerPod = () => {
     if (timeSeriesMetrics.bytesTransmittedPerPod) {
       return (
-        <BytesTransmittedByPod
+        <BytesTransmittedbyPod
           metrics={timeSeriesMetrics.bytesTransmittedPerPod}
         />
       );
