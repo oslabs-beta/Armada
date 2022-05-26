@@ -35,6 +35,7 @@ const MainContainer = (props) => {
     lastUpdated,
   } = props;
   const [mode, setMode] = useState('production');
+  const [promConnect, setPromConnect] = useState(false)
   const [selectedState, setSelectedState] = useState({
     pods: pods,
     deployments: deployments,
@@ -99,7 +100,13 @@ const MainContainer = (props) => {
     )
       .then((res) => res.json())
       .then((data) => {
-        fetchPromMetrics(data);
+        console.log("get prom metrics", data)
+        if (!data.hasOwnProperty(err)) {
+          fetchPromMetrics(data);
+        }
+        else {
+          setPromConnect(false)
+        }
       })
       .catch((error) => console.log(error));
   };
@@ -147,7 +154,8 @@ const MainContainer = (props) => {
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
+      {!promConnect && <Alert severity="error">Unable to connect to Prometheus</Alert>}
       <Grid
         container
         item
@@ -201,7 +209,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <ProblematicContainer />
+        {promConnect && <CriticalPodsContainer namespace={namespace}/>}
       </Grid>
 
       <Grid
