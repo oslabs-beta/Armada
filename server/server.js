@@ -7,7 +7,7 @@ const getLists = require('./controllers/getLists');
 const prometheusRouter = require('./routers/prometheusRouter');
 const alertsController = require('./controllers/alertsController');
 const logsController = require('./controllers/logsController');
-// const clusterController = require('./controller/clusterController');
+const clusterController = require('./controllers/clusterController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -19,9 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../build')));
 
-// app.get('/api/connect', clusterController.kubeConnect, (req, res) => {
-//   res.status(200).send('cluster connected');
-// });
+app.get('/api/connect', clusterController.kubeConnect, (req, res) => {
+  res.status(200).json(res.locals.clusterConfig);
+});
 
 app.get('/api/fetchMetrics', async (req, res) => {
   // console.log(client.collectDefaultMetrics.metricsList);
@@ -30,15 +30,6 @@ app.get('/api/fetchMetrics', async (req, res) => {
 });
 
 app.get('/api/nodesList', getLists.getNodesList, (req, res) => {
-  // console.log('Num Nodes', res.locals.nodeList.response.body.items.length);
-  // console.log(res.locals.nodeList.response.body);
-  // console.log(
-  //   'Nodes names',
-  //   res.locals.nodeList.response.body.items
-  //     .map((el) => el.metadata.name)
-  //     .join(', ')
-  // );
-
   res.status(201).send(res.locals.nodeList.response.body.items);
 });
 
@@ -67,13 +58,6 @@ app.get('/api/alerts', alertsController.fetchAlerts, (req, res) => {
 app.get('/api/logs', logsController.getLogs, (req, res) => {
   res.status(200).json(res.locals.logs);
 });
-// app.get('/ingressesList', getLists.getIngressesList, (req, res) => {
-//   res.status(201).send(res.locals.ingressesList);
-// });
-
-// app.get(['/', '/metrics', '/custom', '/alerts'], (req, res) => {
-//   res.status(201).sendFile(path.join(__dirname, '../index.html'));
-// });
 
 //For all routes access the index.html file
 app.get('*', (req, res) => {

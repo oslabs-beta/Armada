@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Grid } from '@mui/material';
 import CPUIntensivePods from '../components/CriticalPods/CPUIntensivePods';
 import MemoryIntensivePods from '../components/CriticalPods/MemoryIntensivePods';
-import ProblematicPods from '../components/CriticalPods/ProblematicPods';
 
 const CriticalPodsContainer = (props) => {
   const { namespace } = props;
@@ -44,14 +43,14 @@ const CriticalPodsContainer = (props) => {
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item sm={6} lg={4}>
+    <Grid container spacing={2}>
+      {/* <Grid item sm={6} lg={4}>
         <ProblematicPods />
-      </Grid>
-      <Grid item sm={6} lg={4}>
+      </Grid> */}
+      <Grid item xs={12} sm={6}>
         {renderCpuGraph()}
       </Grid>
-      <Grid item sm={6} lg={4}>
+      <Grid item xs={12} sm={6}>
         {renderMemory()}
       </Grid>
     </Grid>

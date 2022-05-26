@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CPUIntensiveNodes from '../components/CriticalNodes/CPUIntensiveNodes';
 import MemoryIntensiveNodes from '../components/CriticalNodes/MemoryIntensiveNodes';
-import ProblematicNodes from '../components/CriticalNodes/ProblematicNodes';
 import BytesTransmittedPerNode from '../components/CriticalNodes/BytesTransmittedPerNode';
 import BytesReceivedPerNode from '../components/CriticalNodes/BytesReceivedPerNode';
 import { Grid } from '@mui/material';
@@ -58,21 +57,21 @@ const CriticalNodesContainer = ({ promMetrics }) => {
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item sm={4}>
+    <Grid container spacing={2}>
+      {/* <Grid item sm={4}>
         <ProblematicNodes />
-      </Grid>
-      <Grid item sm={4}>
+      </Grid> */}
+      <Grid item xs={12} sm={6}>
         {renderCpuGraph()}
       </Grid>
-      <Grid item sm={4}>
+      <Grid item xs={12} sm={6}>
         {renderMemoryGraph()}
       </Grid>
 
-      <Grid item sm={4}>
+      <Grid item xs={12} sm={6}>
         {renderNetworkTransmitGraph()}
       </Grid>
-      <Grid item sm={4}>
+      <Grid item xs={12} sm={6}>
         {renderNetworkReceivedGraph()}
       </Grid>
     </Grid>

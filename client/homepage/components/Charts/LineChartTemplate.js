@@ -24,6 +24,7 @@ ChartJS.register(
 );
 const LineChart = ({ chartData, title, label, query }) => {
   const [copiedText, setCopiedText] = useState();
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const options = {
     indexAxis: 'x',
@@ -32,7 +33,14 @@ const LineChart = ({ chartData, title, label, query }) => {
     pointRadius: 0,
     plugins: {
       legend: {
-        display: true,
+        display: buttonClicked,
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'rect',
+          boxWidth: 6,
+          boxHeight: 6,
+          color: 'white',
+        },
       },
       title: {
         display: true,
@@ -40,8 +48,26 @@ const LineChart = ({ chartData, title, label, query }) => {
         font: {
           size: 25,
         },
+        color: 'white',
         padding: {
-          bottom: 5,
+          bottom: 15,
+        },
+      },
+    },
+    scales: {
+      xAxes: {
+        display: true,
+        ticks: {
+          color: 'white',
+          font: {
+            size: 12,
+          },
+        },
+      },
+      yAxes: {
+        display: true,
+        ticks: {
+          color: 'white',
         },
       },
     },
@@ -72,14 +98,30 @@ const LineChart = ({ chartData, title, label, query }) => {
   };
   let id = 1;
 
+  const handleLegendClick = () => {
+    setButtonClicked((prevCheck) => !prevCheck);
+  };
+
   return (
     <div style={{ height: 500 }}>
       <Line options={options} data={data} />
       <CopyToClipboard text={query} onCopy={() => setCopiedText({ query })}>
-        <Button size='small' sx={{ marginTop: 1, marginBottom: 3 }}>
+        <Button
+          variant='outlined'
+          size='small'
+          sx={{ marginTop: 1, marginBottom: 3, marginRight: 2 }}
+        >
           Copy query to clipboard
         </Button>
       </CopyToClipboard>
+      <Button
+        onClick={handleLegendClick}
+        variant='outlined'
+        size='small'
+        sx={{ marginTop: 1, marginBottom: 3 }}
+      >
+        Show/Hide Legend
+      </Button>
     </div>
   );
 };
