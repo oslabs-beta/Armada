@@ -222,7 +222,9 @@ const MainContainer = (props) => {
 				direction="row"
 				justifyContent="space-evenly"
 			>
-				<CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+				{promConnect && (
+					<CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+				)}
 			</Grid>
 			<Grid
 				container
@@ -231,7 +233,7 @@ const MainContainer = (props) => {
 				direction="row"
 				justifyContent="space-evenly"
 			>
-				<UtilizationContainer />
+				{promConnect && <UtilizationContainer />}
 			</Grid>
 		</Grid>
 	);
