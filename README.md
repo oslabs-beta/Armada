@@ -1,11 +1,8 @@
-<div align="center>
 ![Armada Logo](./assets/Logo.png?raw=true)
 
 # Armada
 
 A light-weight Kubernetes health monitoring tool.
-
----
 
 # Summary
 
@@ -43,5 +40,3 @@ The alerts page displays all Prometheus rules, filterable by group, name, status
 - Jessica Lee [Github](https://github.com/frandis) [LinkedIn]
 - Natalie Heller [Github](https://github.com/natwheller) [LinkedIn]
 - Tori Wu [Github](https://github.com/tortortor0) [LinkedIn]
-
-</div>
