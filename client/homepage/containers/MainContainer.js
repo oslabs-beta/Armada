@@ -10,14 +10,14 @@ import Refresh from "../components/Refresh";
 import { Grid } from "@mui/material";
 import { Alert, AlertTitle } from "@mui/material";
 import {
-  fetchNodesList,
-  fetchPodsList,
-  fetchServicesList,
-  fetchDeploymentsList,
-  fetchPromMetrics,
-  setNamespace,
-} from '../../actions/actions';
-import demoNodeList from '../../demoData/nodeList.json';
+	fetchNodesList,
+	fetchPodsList,
+	fetchServicesList,
+	fetchDeploymentsList,
+	fetchPromMetrics,
+	setNamespace,
+} from "../../actions/actions";
+import demoNodeList from "../../demoData/nodeList.json";
 
 const MainContainer = (props) => {
 	const {
@@ -222,7 +222,9 @@ const MainContainer = (props) => {
 				direction="row"
 				justifyContent="space-evenly"
 			>
-				{promConnect && <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />}
+				{promConnect && (
+					<CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+				)}
 			</Grid>
 			<Grid
 				container
@@ -235,33 +237,32 @@ const MainContainer = (props) => {
 			</Grid>
 		</Grid>
 	);
-
 };
 
 const mapStateToProps = ({
-  namespace,
-  nodes,
-  pods,
-  services,
-  deployments,
-  promMetrics,
+	namespace,
+	nodes,
+	pods,
+	services,
+	deployments,
+	promMetrics,
 }) => {
-  return {
-    namespace: namespace.selectedNamespace,
-    nodes: nodes.items,
-    pods: pods.items,
-    services: services.items,
-    deployments: deployments.items,
-    promMetrics: promMetrics.items,
-    lastUpdated: pods.lastUpdated,
-  };
+	return {
+		namespace: namespace.selectedNamespace,
+		nodes: nodes.items,
+		pods: pods.items,
+		services: services.items,
+		deployments: deployments.items,
+		promMetrics: promMetrics.items,
+		lastUpdated: pods.lastUpdated,
+	};
 };
 
 export default connect(mapStateToProps, {
-  fetchNodesList,
-  fetchPodsList,
-  fetchDeploymentsList,
-  fetchServicesList,
-  fetchPromMetrics,
-  setNamespace,
+	fetchNodesList,
+	fetchPodsList,
+	fetchDeploymentsList,
+	fetchServicesList,
+	fetchPromMetrics,
+	setNamespace,
 })(MainContainer);
