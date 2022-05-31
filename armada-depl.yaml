@@ -30,8 +30,8 @@ spec:
   ports:
     - name: armada
       protocol: TCP
-      port: 3030
-      targetPort: 3001
+      port: 80
+      targetPort: 80
 # NOTE: The service account `default:default` already exists in k8s cluster.
 # You can create a new account following like this:
 #---

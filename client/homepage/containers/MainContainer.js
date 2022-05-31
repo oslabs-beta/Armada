@@ -8,6 +8,7 @@ import CriticalNodesContainer from './CriticalNodesContainer';
 import UtilizationContainer from './UtilizationContainer';
 import Refresh from '../components/Refresh';
 import { Grid } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/material';
 import {
   fetchNodesList,
   fetchPodsList,
@@ -33,6 +34,7 @@ const MainContainer = (props) => {
     fetchPromMetrics,
     lastUpdated,
   } = props;
+  const [promConnect, setPromConnect] = useState(false);
   const [mode, setMode] = useState('production');
   const [selectedState, setSelectedState] = useState({
     pods: pods,
@@ -94,7 +96,10 @@ const MainContainer = (props) => {
     )
       .then((res) => res.json())
       .then((data) => {
-        fetchPromMetrics(data);
+        if (!data.hasOwnProperty(err)) {
+          setPromConnect(true);
+          fetchPromMetrics(data);
+        }
       })
       .catch((error) => console.log(error));
   };
