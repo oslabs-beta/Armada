@@ -4,15 +4,12 @@ import ComponentWrapper from '../../../utils/ComponentWrapper';
 import GaugeChartTemplate from '../Charts/GaugeChartTemplate';
 
 function MemoryUtilization({ memory }) {
-  const percentage = Math.floor();
   return (
-    <ComponentWrapper title='Total Cluster Memory Utilization'>
-      <GaugeChartTemplate
-        chartData={memory}
-        title='Total Cluster Memory Utilization'
-        label='Total Cluster Memory Utilization'
-      />
-    </ComponentWrapper>
+    <GaugeChartTemplate
+      chartData={memory}
+      title='Cluster Memory Usage'
+      label='Cluster Memory Usage'
+    />
   );
 }
 

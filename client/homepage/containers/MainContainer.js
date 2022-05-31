@@ -41,10 +41,6 @@ const MainContainer = (props) => {
     namespace: 'All',
   });
 
-  const getClusterConfig = () => {
-    fetch('/api/connect').then((data) => console.log(data.body));
-  };
-
   const getNodeList = () => {
     if (mode === 'demo') {
       fetchNodesList(demoNodeList.response.body.items);
@@ -111,6 +107,7 @@ const MainContainer = (props) => {
     filterByNamespace();
   }, [namespace, pods, nodes, services, deployments, promMetrics]);
 
+  // Filters homepage by namesapce
   function filterByNamespace() {
     if (namespace === 'All' || namespace === '') {
       setSelectedState({
@@ -135,8 +132,8 @@ const MainContainer = (props) => {
     }
   }
 
+  // Separated to pass down to Refresh component
   function handleLoad() {
-    getClusterConfig();
     getNodeList();
     getDeploymentsList();
     getPodsList();
@@ -151,25 +148,31 @@ const MainContainer = (props) => {
         container
         item
         xs={12}
+        sm={12}
+        md={12}
         justifyContent='flex-end'
         alignItems='flex-end'
         mb={4}
       >
         <Refresh handleRefresh={handleLoad} lastUpdated={lastUpdated} />
       </Grid>
-      {/* <Grid
-        container
-        item
-        xs={12}
-        direction='row'
-        justifyContent='space-evenly'
-      >
-        <UtilizationContainer />
-      </Grid> */}
       <Grid
         container
         item
         xs={12}
+        sm={12}
+        md={12}
+        direction='row'
+        justifyContent='center'
+      >
+        <UtilizationContainer />
+      </Grid>
+      <Grid
+        container
+        item
+        xs={12}
+        sm={12}
+        md={12}
         direction='row'
         justifyContent='space-evenly'
       >
@@ -184,6 +187,8 @@ const MainContainer = (props) => {
         container
         item
         xs={12}
+        sm={12}
+        md={12}
         direction='row'
         justifyContent='space-evenly'
       >
@@ -197,6 +202,8 @@ const MainContainer = (props) => {
         container
         item
         xs={12}
+        sm={12}
+        md={12}
         direction='row'
         justifyContent='space-evenly'
       >
@@ -207,6 +214,8 @@ const MainContainer = (props) => {
         container
         item
         xs={12}
+        sm={12}
+        md={12}
         direction='row'
         justifyContent='space-evenly'
       >
@@ -216,6 +225,8 @@ const MainContainer = (props) => {
         container
         item
         xs={12}
+        sm={12}
+        md={12}
         direction='row'
         justifyContent='space-evenly'
       >

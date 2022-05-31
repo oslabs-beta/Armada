@@ -7,7 +7,6 @@ const getLists = require('./controllers/getLists');
 const prometheusRouter = require('./routers/prometheusRouter');
 const alertsController = require('./controllers/alertsController');
 const logsController = require('./controllers/logsController');
-const clusterController = require('./controllers/clusterController');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -19,12 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '../build')));
 
-app.get('/api/connect', clusterController.kubeConnect, (req, res) => {
-  res.status(200).json(res.locals.clusterConfig);
-});
-
 app.get('/api/fetchMetrics', async (req, res) => {
-  // console.log(client.collectDefaultMetrics.metricsList);
   const metrics = await client.register.getMetricsAsJSON();
   res.status(200).json(metrics);
 });
@@ -65,6 +59,7 @@ app.get('*', (req, res) => {
     .status(200)
     .sendFile('index.html', { root: path.join(__dirname, '../build') });
 });
+
 // Global route handler
 app.use('*', (req, res) => {
   console.log('Page not found.');

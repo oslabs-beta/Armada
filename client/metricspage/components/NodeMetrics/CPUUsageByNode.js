@@ -3,6 +3,9 @@ import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 
 const CPUUsageByNode = ({ metrics }) => {
+  /* 
+Renders the CPU Usage % Per Node line chart on the Metrics Page
+*/
   return (
     <div>
       <MetricsComponentWrapper title=''>

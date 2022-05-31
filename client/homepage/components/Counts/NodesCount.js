@@ -7,6 +7,7 @@ const mapStateToProps = ({ nodes }) => {
   return nodes;
 };
 
+// Displays count of nodes in cluster
 function NodesCount({ items }) {
   const nodesCount = items.length ? items.length : '-';
   return (

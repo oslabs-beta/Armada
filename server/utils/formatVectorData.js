@@ -1,3 +1,4 @@
+// Format vector data for bar charts
 const formatVectorData = (arr, metricName) => {
   return arr
     .sort((a, b) => parseFloat(b.value[1]) - parseFloat(a.value[1]))

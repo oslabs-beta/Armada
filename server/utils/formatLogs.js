@@ -1,3 +1,4 @@
+// Format log data for presentation
 const formatLogs = (arr) => {
   arr.pop();
   const trimmed = arr.map((el) => el.split(/[ ]{2,}/));

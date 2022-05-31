@@ -8,7 +8,5 @@ services:
     volumes:
       - .:/usr/src/app
       - node_modules:/usr/src/app/node_modules
-      - build:/usr/src/app/build
 volumes:
   node_modules:
-  build:

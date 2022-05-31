@@ -5,6 +5,7 @@ const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
 
 const alertsController = {};
 
+// fetch alerts from Prometheus for Alerts page
 alertsController.fetchAlerts = async (req, res, next) => {
   try {
     const data = await fetch(`${prometheusURL}/rules`);
