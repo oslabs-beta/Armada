@@ -43,14 +43,12 @@ const CriticalNodesContainer = ({ promMetrics }) => {
   };
 
   const renderNetworkTransmitGraph = () => {
-    // console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
     if (promMetrics.bytesTransmittedPerNode) {
       return <BytesTransmittedPerNode promMetrics={promMetrics} />;
     }
   };
 
   const renderNetworkReceivedGraph = () => {
-    // console.log(`renderNetworkTransmitGraph: ${promMetrics}`);
     if (promMetrics.bytesReceivedPerNode) {
       return <BytesReceivedPerNode promMetrics={promMetrics} />;
     }
@@ -58,9 +56,6 @@ const CriticalNodesContainer = ({ promMetrics }) => {
 
   return (
     <Grid container spacing={2}>
-      {/* <Grid item sm={4}>
-        <ProblematicNodes />
-      </Grid> */}
       <Grid item xs={12} sm={6}>
         {renderCpuGraph()}
       </Grid>

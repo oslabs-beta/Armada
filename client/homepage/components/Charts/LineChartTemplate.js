@@ -22,7 +22,9 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 const LineChart = ({ chartData, title, label, query }) => {
+  // React hooks for "Copy Query to Clipboard" button and collapsing/expanding legend
   const [copiedText, setCopiedText] = useState();
   const [buttonClicked, setButtonClicked] = useState(false);
 
@@ -53,6 +55,10 @@ const LineChart = ({ chartData, title, label, query }) => {
           bottom: 15,
         },
       },
+      datalabels: {
+        // hide datalabels for all datasets
+        display: false,
+      },
     },
     scales: {
       xAxes: {
@@ -73,10 +79,11 @@ const LineChart = ({ chartData, title, label, query }) => {
     },
   };
 
-  const objArr = [];
-
+  // if chart data is empty render "No data available"
   if (!chartData) return <div>No data available in {title}</div>;
 
+  // Format chart data for line chart with varying colors
+  const objArr = [];
   if (!chartData.seriesLabels) console.log('title', title);
   const lineChartData = chartData.seriesLabels.forEach((el, index) => {
     const colors = mdColors;
@@ -93,11 +100,11 @@ const LineChart = ({ chartData, title, label, query }) => {
 
   const data = {
     labels: chartData.timestamps,
-    //for each element of seriesLabels, make a new object { data: seriesValues[i], label: seriesLabels[i] }
     datasets: objArr,
   };
   let id = 1;
 
+  // Collapse or expand legend
   const handleLegendClick = () => {
     setButtonClicked((prevCheck) => !prevCheck);
   };
@@ -125,10 +132,5 @@ const LineChart = ({ chartData, title, label, query }) => {
     </div>
   );
 };
-/*
-          query={metrics.queryString}
-          http://127.0.0.1:9090/api/v1/query_range?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate) by (namespace)&start=2022-05-18T17:28:20.751Z&end=2022-05-19T17:28:20.751Z&step=30m
-          http://127.0.0.1:9090/api/v1/query_range?query=sum(container_memory_working_set_bytes) by (namespace)&start=2022-05-18T17:28:20.751Z&end=2022-05-19T17:28:20.751Z&step=30m
-*/
 
 export default LineChart;

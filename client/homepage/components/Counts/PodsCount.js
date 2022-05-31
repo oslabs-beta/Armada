@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Typography } from '@mui/material';
 import ComponentWrapper from '../../../utils/ComponentWrapper';
 
+// Displays count of pods in cluster
 function PodsCount(props) {
   const { pods } = props;
   const podsCount = pods.length ? pods.length : '-';
@@ -10,7 +11,6 @@ function PodsCount(props) {
       <Typography variant='h1'> {podsCount}</Typography>
     </ComponentWrapper>
   );
-  // <Card>PodsCount </Card>;
 }
 
 export default PodsCount;

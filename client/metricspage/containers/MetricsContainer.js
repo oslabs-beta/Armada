@@ -10,14 +10,15 @@ import BytesTransmittedByNode from '../components/NodeMetrics/BytesTransmittedBy
 import CPUUsageByNode from '../components/NodeMetrics/CPUUsageByNode.js';
 import MemoryUsageByNode from '../components/NodeMetrics/MemoryUsageByNode.js';
 import BytesReceivedByPod from '../components/PodMetrics/BytesReceivedByPod';
-import BytesTransmittedByPod from '../components/PodMetrics/BytesTransmittedByPod';
 import CPUUsageByPod from '../components/PodMetrics/CPUUsageByPod.js';
 import MemoryUsageByPod from '../components/PodMetrics/MemoryUsageByPod.js';
+import BytesTransmittedbyPod from '../components/PodMetrics/BytesTransmittedbyPod.js';
 
 const MetricsContainer = ({ namespace }) => {
   const [timeSeriesMetrics, setTimeSeriesMetrics] = useState([]);
 
   const getTimeSeriesMetrics = () => {
+    /* Fetch Request to backend endpoint which returns all time series prometheus data for Metrics page */
     let now = new Date();
     let nowCopy = new Date(now.getTime());
     nowCopy.setHours(nowCopy.getHours() - 24);
@@ -32,18 +33,17 @@ const MetricsContainer = ({ namespace }) => {
     )
       .then((res) => res.json())
       .then((data) => {
-        // console.log('namespace data', data.bytesReceivedPerNamespace);
         setTimeSeriesMetrics(data);
-        console.log('time series metrics refetched');
       })
       .catch((error) => console.log(error));
   };
 
+  /* Time series metrics are only re-fetched when namespace toggle changes */
   useEffect(() => {
     getTimeSeriesMetrics();
   }, [namespace]);
 
-  // Namespace Rendering:
+  // Conditional Rendering to handle async requests
   const renderBytesReceivedPerNamespace = () => {
     if (timeSeriesMetrics.bytesReceivedPerNamespace) {
       return (
@@ -84,7 +84,6 @@ const MetricsContainer = ({ namespace }) => {
     }
   };
 
-  // Node Rendering:
   const renderBytesReceivedPerNode = () => {
     if (timeSeriesMetrics.bytesReceivedPerNode) {
       return (
@@ -117,7 +116,6 @@ const MetricsContainer = ({ namespace }) => {
     }
   };
 
-  // Pod Rendering:
   const renderBytesReceivedPerPod = () => {
     if (timeSeriesMetrics.bytesReceivedPerPod) {
       return (
@@ -129,7 +127,7 @@ const MetricsContainer = ({ namespace }) => {
   const renderBytesTransmittedPerPod = () => {
     if (timeSeriesMetrics.bytesTransmittedPerPod) {
       return (
-        <BytesTransmittedByPod
+        <BytesTransmittedbyPod
           metrics={timeSeriesMetrics.bytesTransmittedPerPod}
         />
       );
@@ -150,45 +148,46 @@ const MetricsContainer = ({ namespace }) => {
     }
   };
 
+  /* Responsive Grid layout using MUI library */
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderCPUUsageByNamespace()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderMemoryUsageByNamespace()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderBytesReceivedPerNamespace()}
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderBytesTransmittedPerNamespace()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderCPUUsageByNode()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderMemoryUsageByNode()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderBytesReceivedPerNode()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderBytesTransmittedPerNode()}
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderCPUUsageByPod()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderMemoryUsageByPod()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderBytesReceivedPerPod()}
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={12} md={12} lg={6}>
           {renderBytesTransmittedPerPod()}
         </Grid>
       </Grid>
@@ -196,10 +195,8 @@ const MetricsContainer = ({ namespace }) => {
   );
 };
 
+/* Map state to props utilized to access Global namespace variable */
 const mapStateToProps = ({ namespace }) => {
-  // console.log(`this is namespace: ${namespace}`);
-  // console.log('namespace keys' + Object.keys(namespace));
-  // console.log(Object.values(namespace));
   return { namespace: namespace.selectedNamespace };
 };
 

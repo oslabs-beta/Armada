@@ -152,6 +152,7 @@ export default function MiniDrawer({ children }) {
           {[
             { text: 'Home', path: '/', icon: 'home' },
             { text: 'Metrics', path: '/metrics', icon: 'bar_chart' },
+            { text: 'Custom Metrics', path: '/custom', icon: 'timeline' },
             { text: 'Alerts', path: '/alerts', icon: 'notification_important' },
             { text: 'Logs', path: '/logs', icon: 'bug_report' },
           ].map((menu, index) => (

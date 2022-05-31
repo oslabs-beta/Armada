@@ -44,9 +44,6 @@ const CriticalPodsContainer = (props) => {
 
   return (
     <Grid container spacing={2}>
-      {/* <Grid item sm={6} lg={4}>
-        <ProblematicPods />
-      </Grid> */}
       <Grid item xs={12} sm={6}>
         {renderCpuGraph()}
       </Grid>
@@ -58,5 +55,3 @@ const CriticalPodsContainer = (props) => {
 };
 
 export default CriticalPodsContainer;
-
-// localhost:9090/api/v1/query_range?query=avg((sum (rate (container_cpu_usage_seconds_total[5m])) by (namespace , pod, container ) / on (container , pod , namespace) ((kube_pod_container_resource_limits_cpu_cores >0)*300))*100)&start=2022-05-11T12:37:55.435Z&end=2022-05-11T16:37:55.435Z&step=5m

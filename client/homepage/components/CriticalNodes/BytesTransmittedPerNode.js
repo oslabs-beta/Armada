@@ -2,7 +2,7 @@ import React from 'react';
 import ComponentWrapper from '../../../utils/ComponentWrapper';
 import BarChart from '../Charts/BarChartTemplate';
 
-// [{label: '', data: },{}]
+// Horizontal bar chart of bytes transmitted per node
 const BytesTransmittedPerNode = ({ promMetrics }) => {
   return (
     <ComponentWrapper title='Network IO Transmitted by Nodes'>
@@ -16,5 +16,3 @@ const BytesTransmittedPerNode = ({ promMetrics }) => {
 };
 
 export default BytesTransmittedPerNode;
-
-// horizontal bar charts

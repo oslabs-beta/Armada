@@ -1,18 +1,13 @@
-//from shipshape
-//const fetch = require('node-fetch');
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-//npm install node-fetch@2
-
-// const { spawn } = require('child_process');
 const formatChartData = require('../utils/formatChartData');
 const formatTimeToAvg = require('../utils/formatTimeToAvg');
 const formatVectorData = require('../utils/formatVectorData');
-// can use to run specified commands that you'd otherwise need to write in terminal
 
 const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
 
+// prometheusController handles fetch requests to Prometheus for the homepage
 const prometheusController = {};
 
 prometheusController.isUp = async (req, res, next) => {
@@ -27,42 +22,12 @@ prometheusController.isUp = async (req, res, next) => {
   }
 };
 
-// prometheusController.portPrometheus = (req, res, next) => {
-//   try {
-//     const process = spawn('kubectl', [
-//       '--namespace=default',
-//       'port-forward',
-//       'deploy/prometheus-server',
-//       '9090',
-//     ]);
-
-//     process.stdout.on('data', (data) => {
-//       console.log(`stdout: ${data}`);
-//     });
-
-//     process.stderr.on('data', (data) => {
-//       console.log(`stderr: ${data}`);
-//     });
-
-//     process.on('close', (code) => {
-//       if (code === 1) console.log('PROMETHEUS ALREADY IN USE NUM NUM');
-//       console.log(`child process exited with code ${code}`);
-//     });
-
-//     return next();
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
-
+// Network IO transmitted by node as average over time
 prometheusController.bytesTransmittedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
-  // added bytes received per node
   let query = `${prometheusURL}query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
-  //let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[2m])) by (node)&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-11T21:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-  //console.log('query before fetch', query);
+
   try {
     fetch(query)
       .then((resp) => resp.json())
@@ -85,12 +50,12 @@ prometheusController.bytesTransmittedPerNode = async (req, res, next) => {
   }
 };
 
+// Network IO received by node as average over time
 prometheusController.bytesReceivedPerNode = async (req, res, next) => {
   const { startDateTime, endDateTime, step } = req.query;
   let query = `${prometheusURL}query_range?query=sum(rate(node_network_receive_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)`;
   query += `&start=${startDateTime}&end=${endDateTime}&step=${step}`;
-  //let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[2m])) by (node)&start=2022-05-11T17:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
-  // let query = `http://127.0.0.1:9090/api/v1/query_range?query=sum(rate(node_network_transmit_bytes_total[1m])) by (instance) * on(instance) group_left(nodename) (node_uname_info)&start=2022-05-11T21:52:43.841Z&end=2022-05-11T21:52:43.841Z&step=5m`;
+
   try {
     fetch(query)
       .then((resp) => resp.json())
@@ -113,6 +78,7 @@ prometheusController.bytesReceivedPerNode = async (req, res, next) => {
   }
 };
 
+// CPU Usage by node
 prometheusController.getCpuUsageByNode = async (req, res, next) => {
   let query = `${prometheusURL}query?query=100 * avg by (instance) (rate(node_cpu_seconds_total{mode!="idle"}[1m]))`;
   try {
@@ -122,7 +88,6 @@ prometheusController.getCpuUsageByNode = async (req, res, next) => {
 
     const cpuUsageByNode = formatVectorData(result, 'instance');
 
-    // console.log('cpu usage data', cpuUsageByNode);
     res.locals.getCpuUsageByNode = cpuUsageByNode;
     return next();
   } catch (err) {
@@ -133,7 +98,7 @@ prometheusController.getCpuUsageByNode = async (req, res, next) => {
   }
 };
 
-// total memory usage per node in the last week
+// Total memory usage per node in the last week
 prometheusController.getMemoryUsageByNode = async (req, res, next) => {
   let query = `${prometheusURL}query?query=sum(container_memory_working_set_bytes{container_name!="POD"}) by (node)`;
   try {
@@ -150,6 +115,7 @@ prometheusController.getMemoryUsageByNode = async (req, res, next) => {
   }
 };
 
+// Memory usage by pod (current)
 prometheusController.getMemoryUsageByPod = async (req, res, next) => {
   const { namespace } = req.query;
   let query = '';
@@ -172,6 +138,7 @@ prometheusController.getMemoryUsageByPod = async (req, res, next) => {
   }
 };
 
+// CPU Usage by pod (current)
 prometheusController.getCpuUsageByPod = async (req, res, next) => {
   const { namespace } = req.query;
   let query;
@@ -194,6 +161,7 @@ prometheusController.getCpuUsageByPod = async (req, res, next) => {
   }
 };
 
+// CPU Utilization
 prometheusController.getCpuUtilization = async (req, res, next) => {
   let query = `${prometheusURL}query?query=1 - sum(avg by (mode) (rate(node_cpu_seconds_total{job="node-exporter", mode=~"idle|iowait|steal"}[10m])))`;
   try {
@@ -201,7 +169,6 @@ prometheusController.getCpuUtilization = async (req, res, next) => {
     const data = await response.json();
     const result = data.data.result[0].value;
     res.locals.cpuUtilization = result[1];
-    console.log(`this is CPU util: ${res.locals.cpuUtilization}`);
     return next();
   } catch (err) {
     return next({
@@ -211,14 +178,14 @@ prometheusController.getCpuUtilization = async (req, res, next) => {
   }
 };
 
+// Total CPU cores
 prometheusController.getCpuTotal = async (req, res, next) => {
-  let query = `${prometheusURL}query?query=sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate)`;
+  let query = `${prometheusURL}query?query=count without(cpu, mode) (node_cpu_seconds_total{mode="idle"})`;
   try {
     const response = await fetch(query);
     const data = await response.json();
     const result = data.data.result[0].value;
     res.locals.getCpuTotal = result[1];
-    console.log(`this is CPU total: ${res.locals.getCpuTotal}`);
     return next();
   } catch (err) {
     return next({
@@ -228,6 +195,7 @@ prometheusController.getCpuTotal = async (req, res, next) => {
   }
 };
 
+// Memory utilization
 prometheusController.getMemoryUtilization = async (req, res, next) => {
   let query = `${prometheusURL}query?query=node_memory_Active_bytes/node_memory_MemTotal_bytes`;
   try {
@@ -235,7 +203,6 @@ prometheusController.getMemoryUtilization = async (req, res, next) => {
     const data = await response.json();
     const result = data.data.result[0].value;
     res.locals.memoryUtilization = result[1];
-    console.log(`this is memory util: ${res.locals.memoryUtilization}`);
     return next();
   } catch (err) {
     return next({
@@ -245,6 +212,7 @@ prometheusController.getMemoryUtilization = async (req, res, next) => {
   }
 };
 
+// Total memory
 prometheusController.getMemoryTotal = async (req, res, next) => {
   let query = `${prometheusURL}query?query=sum(container_memory_working_set_bytes)`;
   try {
@@ -252,7 +220,6 @@ prometheusController.getMemoryTotal = async (req, res, next) => {
     const data = await response.json();
     const result = data.data.result[0].value;
     res.locals.getMemoryTotal = result[1];
-    console.log(`this is memory total: ${res.locals.getMemoryTotal}`);
     return next();
   } catch (err) {
     return next({

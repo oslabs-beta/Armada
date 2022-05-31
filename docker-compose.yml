@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  armada:
+    image: 'armadak8s/armada'
+    container_name: armada
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+volumes:
+  node_modules:

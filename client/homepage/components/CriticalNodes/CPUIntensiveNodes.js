@@ -2,6 +2,7 @@ import React from 'react';
 import ComponentWrapper from '../../../utils/ComponentWrapper';
 import BarChart from '../Charts/BarChartTemplate';
 
+// Horizontal bar chart showing CPU usage by node
 const CPUIntensiveNodes = ({ nodes }) => {
   return (
     <ComponentWrapper title='CPU Intensive Nodes'>
@@ -15,5 +16,3 @@ const CPUIntensiveNodes = ({ nodes }) => {
 };
 
 export default CPUIntensiveNodes;
-
-// horizontal bar charts

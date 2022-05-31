@@ -11,6 +11,7 @@ const HEADERS = [
   'MESSAGE',
 ];
 
+// get logs for logs page through kubectl
 logsController.getLogs = (req, res, next) => {
   try {
     const rawLogs = cmd

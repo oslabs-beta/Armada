@@ -1,6 +1,7 @@
 import React from 'react';
 import { ListItemButton, List, Typography, ListItemText } from '@mui/material';
 
+// Component used within ProblematicNodes and ProblematicPods to render each status element
 function ProblematicItem({ name, conditions }) {
   const conditionsText = () => {
     return conditions

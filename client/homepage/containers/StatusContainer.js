@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Box } from '@mui/material';
 import NodesStatus from '../components/Statuses/NodesStatus';
 import PodsStatus from '../components/Statuses/PodsStatus';
-import ServicesStatus from '../components/Statuses/ServicesStatus';
 
 const StatusContainer = (props) => {
   const { nodes, pods, services } = props;

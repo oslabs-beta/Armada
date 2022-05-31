@@ -58,8 +58,6 @@ function Alerts() {
         id: 'expander', // Make sure it has an ID
         Cell: ({ row }) => (
           // Use Cell to render an expander for each row.
-          // We can use the getToggleRowExpandedProps prop-getter
-          // to build the expander.
           <span {...row.getToggleRowExpandedProps()}>
             {row.isExpanded ? (
               <span className='material-symbols-outlined'>expand_less</span>
@@ -108,7 +106,6 @@ function Alerts() {
     );
   });
 
-  // filtering
   // default UI for filtering
   function DefaultColumnFilter({
     column: { filterValue, preFilteredRows, setFilter },
@@ -166,7 +163,6 @@ function Alerts() {
   function TableInstance({ columns, data }) {
     const defaultColumn = React.useMemo(
       () => ({
-        // Let's set up our default Filter UI
         Filter: DefaultColumnFilter,
       }),
       []
@@ -216,8 +212,6 @@ function Alerts() {
           <TableBody>
             {rows.map((row, i) => {
               prepareRow(row);
-
-              // console.log('row', row);
               return (
                 <React.Fragment>
                   <TableRow {...row.getRowProps()}>
