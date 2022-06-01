@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: armada-depl
+  name: armada
 spec:
   replicas: 1
   selector:
@@ -14,24 +14,28 @@ spec:
     spec:
       containers:
         - name: armada
-          image: armadak8s/armada:latest
+          image: armadak8s
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: armada-srv
+  name: armada
   labels:
     prometheus: cluster-monitoring
     k8s-app: kube-state-metrics
 spec:
   selector:
     app: armada
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - name: armada
       protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8080
+      targetPort: 8080
 # NOTE: The service account `default:default` already exists in k8s cluster.
 # You can create a new account following like this:
 #---
