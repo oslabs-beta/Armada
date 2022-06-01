@@ -1,0 +1,11 @@
+Accessing the API from within a pod: https://kubernetes.io/docs/tasks/run-application/access-api-from-pod/
+
+build by running build_docker.sh on the same machine you are running docker desktop kubernetes
+The kubernetes deployment should pull the image you just built from your docker build cache (i.e., what `docker images` says) instead of from dockerhub
+more reading on that here: https://www.docker.com/blog/how-kubernetes-works-under-the-hood-with-docker-desktop/
+
+
+
+
+
+
