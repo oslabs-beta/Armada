@@ -34,11 +34,13 @@ The alerts page displays all Prometheus rules, filterable by group, name, status
 
 - [React](https://reactjs.org/)
 - [React Router](https://reactrouter.com/)
+- [Redux](https://redux.js.org/)
 - [Node](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [Kubernetes-client](https://github.com/kubernetes-client/)
 - [Prometheus](https://prometheus.io/)
 - [Material UI](https://mui.com/)
+- [Chart.js](https://www.chartjs.org/)
 
 ## The Team
 
