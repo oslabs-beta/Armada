@@ -149,6 +149,12 @@ const MainContainer = (props) => {
 
   return (
     <Grid container spacing={2}>
+      {!promConnect && (
+        <Alert severity='error'>
+          <AlertTitle>Error</AlertTitle>
+          Prometheus connection failed.
+        </Alert>
+      )}
       <Grid
         container
         item
@@ -170,7 +176,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='center'
       >
-        <UtilizationContainer />
+        {promConnect && <UtilizationContainer />}
       </Grid>
       <Grid
         container
@@ -224,7 +230,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <CriticalPodsContainer namespace={namespace} />
+        {promConnect && <CriticalPodsContainer namespace={namespace} />}
       </Grid>
       <Grid
         container
@@ -235,7 +241,9 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+        {promConnect && (
+          <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+        )}
       </Grid>
     </Grid>
   );
