@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: armada
-          image: armadak8s
+          image: armadak8s:latest
           ports:
             - containerPort: 80
               protocol: TCP

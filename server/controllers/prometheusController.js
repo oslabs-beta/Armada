@@ -4,8 +4,9 @@ const fetch = (...args) =>
 const formatChartData = require('../utils/formatChartData');
 const formatTimeToAvg = require('../utils/formatTimeToAvg');
 const formatVectorData = require('../utils/formatVectorData');
+const { prometheusURL } = require('../utils/constants');
 
-const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
+// const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
 
 // prometheusController handles fetch requests to Prometheus for the homepage
 const prometheusController = {};

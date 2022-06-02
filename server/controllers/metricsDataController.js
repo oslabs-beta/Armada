@@ -4,7 +4,9 @@ const fetch = (...args) =>
 const metricsFetch = require('../utils/metricsFetch');
 const { TIMESTEP } = require('../utils/constants');
 
-const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
+const { prometheusURL } = require('../utils/constants');
+
+// const prometheusURL = 'http://127.0.0.1:9090/api/v1/';
 
 // metricsDataController handles all fetch requests to Prometheus for the Metrics page and Custom Metrics page
 const metricsDataController = {};

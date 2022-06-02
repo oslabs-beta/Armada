@@ -83,6 +83,16 @@ const MainContainer = (props) => {
       .catch((error) => console.log(error));
   };
 
+  const checkProm = () => {
+    fetch(`/api/prometheus/up`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.hasOwnProperty('err')) {
+          setPromConnect(true);
+        }
+      })
+      .catch((err) => setPromConnect(false));
+  };
   const getPromMetrics = () => {
     let now = new Date();
     let nowCopy = new Date(now.getTime());
@@ -97,7 +107,7 @@ const MainContainer = (props) => {
       .then((res) => res.json())
       .then((data) => {
         if (!data.hasOwnProperty(err)) {
-          setPromConnect(true);
+          // setPromConnect(true);
           fetchPromMetrics(data);
         }
       })
@@ -105,6 +115,7 @@ const MainContainer = (props) => {
   };
 
   useEffect(() => {
+    checkProm();
     handleLoad();
   }, []);
 
@@ -146,9 +157,15 @@ const MainContainer = (props) => {
     getPromMetrics();
     filterByNamespace();
   }
-
+  console.log('promConnect', promConnect);
   return (
     <Grid container spacing={2}>
+      {!promConnect && (
+        <Alert severity='error'>
+          <AlertTitle>Error</AlertTitle>
+          Prometheus connection failed.
+        </Alert>
+      )}
       <Grid
         container
         item
@@ -170,7 +187,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='center'
       >
-        <UtilizationContainer />
+        {promConnect && <UtilizationContainer />}
       </Grid>
       <Grid
         container
@@ -224,7 +241,7 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <CriticalPodsContainer namespace={namespace} />
+        {promConnect && <CriticalPodsContainer namespace={namespace} />}
       </Grid>
       <Grid
         container
@@ -235,7 +252,9 @@ const MainContainer = (props) => {
         direction='row'
         justifyContent='space-evenly'
       >
-        <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+        {promConnect && (
+          <CriticalNodesContainer promMetrics={promMetrics} nodes={nodes} />
+        )}
       </Grid>
     </Grid>
   );
