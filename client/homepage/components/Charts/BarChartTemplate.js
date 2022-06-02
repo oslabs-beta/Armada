@@ -18,6 +18,7 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 const BarChart = ({ chartData, title, label }) => {
   const options = {
     indexAxis: 'y',
@@ -36,6 +37,10 @@ const BarChart = ({ chartData, title, label }) => {
         text: title,
         color: 'white',
         font: { weight: 'bold' },
+      },
+      datalabels: {
+        // hide datalabels for all datasets
+        display: false,
       },
     },
     scales: {

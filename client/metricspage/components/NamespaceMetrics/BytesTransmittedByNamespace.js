@@ -3,6 +3,9 @@ import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 
 const BytesTransmittedByNamespace = ({ metrics }) => {
+  /* 
+Renders Network IO (Bps) Transmitted by Namespace line chart on the Metrics Page
+*/
   return (
     <div>
       <MetricsComponentWrapper title=''>

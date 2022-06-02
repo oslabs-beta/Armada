@@ -3,23 +3,15 @@ const prometheusController = require('../controllers/prometheusController');
 const metricsDataController = require('../controllers/metricsDataController');
 const prometheusRouter = express.Router();
 
-// route to deploy prometheus onto the Cluster
+// Route to deploy Prometheus onto the cluster
 prometheusRouter.post('/install', (req, res) => {
   res.status(200).json('Prometheus Fired Up');
 });
 
-// trial route to get data from prometheus after nodeporting
+// Trial route to get data from Prometheus after nodeporting
 prometheusRouter.get('/up', prometheusController.isUp, (req, res) => {
   res.status(200).json(res.locals.query);
 });
-
-// prometheusRouter.get(
-//   '/port',
-//   prometheusController.portPrometheus,
-//   (req, res) => {
-//     res.status(200).send('port on');
-//   }
-// );
 
 prometheusRouter.get(
   '/homepage',
@@ -31,6 +23,14 @@ prometheusRouter.get(
       bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
     };
     res.status(200).json(chartData);
+  }
+);
+
+prometheusRouter.get(
+  '/getqueries',
+  metricsDataController.allQueries,
+  (req, res) => {
+    res.status(200).json(res.locals.allQueries);
   }
 );
 
@@ -68,6 +68,15 @@ prometheusRouter.get(
   }
 );
 
+prometheusRouter.get(
+  '/custommetrics',
+  metricsDataController.getCustomQueryMetrics,
+  (req, res) => {
+    res.status(200).json(res.locals.getCustomQueryMetrics);
+  }
+);
+
+/* Endpoint routes to metrics on the homepage */
 prometheusRouter.get(
   '/cpubynode',
   prometheusController.getCpuUsageByNode,

@@ -4,15 +4,12 @@ import ComponentWrapper from '../../../utils/ComponentWrapper';
 import GaugeChartTemplate from '../Charts/GaugeChartTemplate';
 
 function CpuUtilization({ cpu }) {
-  const percentage = Math.floor();
   return (
-    <ComponentWrapper title='Total Cluster CPU Utilization'>
-      <GaugeChartTemplate
-        chartData={cpu}
-        title='Total Cluster CPU Utilization'
-        label='Total Cluster CPU Utilization'
-      />
-    </ComponentWrapper>
+    <GaugeChartTemplate
+      chartData={cpu}
+      title='Cluster CPU Usage'
+      label='Cluster CPU Usage'
+    />
   );
 }
 

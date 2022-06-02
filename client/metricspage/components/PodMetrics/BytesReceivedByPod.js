@@ -3,6 +3,9 @@ import LineChart from '../../../homepage/components/Charts/LineChartTemplate';
 import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 
 const BytesReceivedByPod = ({ metrics }) => {
+  /* 
+Renders the Network IO (Bps) Received by Pod line chart on the Metrics Page
+*/
   return (
     <div>
       <MetricsComponentWrapper title=''>

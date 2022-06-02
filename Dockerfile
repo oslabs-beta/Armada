@@ -1,14 +1,31 @@
-FROM node:16-alpine
-# stuff needed to get Electron to run
-# RUN apt-get update && apt-get install \
-#     git libx11-xcb1 libxcb-dri3-0 libxtst6 libnss3 libatk-bridge2.0-0 libgtk-3-0 libxss1 libasound2 \
-#     -yq --no-install-suggests --no-install-recommends \
-#     && apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN npm install -g nodemon
-WORKDIR /app
-COPY package.json ./
+FROM node:16 as kubebuild
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl
+RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
+RUN apt-get update && apt-get install -y kubectl
+
+
+
+#ADD https://storage.googleapis.com/kubernetes-release/release/v1.6.4/bin/linux/amd64/kubectl /usr/local/bin/kubectl
+#ENV HOME=/config \
+#    KUBECONFIG=/etc/kubernetes/admin.conf
+#RUN set -x && \
+#    apk add --no-cache curl ca-certificates && \
+#    chmod +x /usr/local/bin/kubectl
+
+#your app container
+FROM kubebuild as armada
+
+WORKDIR /usr/src/app
+
+RUN npm install -g webpack nodemon
+
+COPY . /usr/src/app/
+
 RUN npm install
-COPY ./ ./
+
+RUN npm run build
+
 EXPOSE 3001
-EXPOSE 8080
-CMD ["npm", "run", "dev"]
+
+CMD [ "npm", "run", "dev" ]

@@ -2,6 +2,7 @@ import React from 'react';
 import ComponentWrapper from '../../../utils/ComponentWrapper';
 import BarChart from '../Charts/BarChartTemplate';
 
+// Horizontal bar chart showing memory usage bby node
 const MemoryIntensiveNodes = ({ nodes }) => {
   const unitConverted = nodes.map((el) => {
     return { ...el, data: el.data / 1000000000 };

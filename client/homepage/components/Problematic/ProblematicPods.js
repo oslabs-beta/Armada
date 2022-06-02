@@ -26,6 +26,7 @@ const ProblematicPods = ({ items, namespace }) => {
     setOpenState({ ...openState, [key]: !openState[key] });
   };
 
+  // Filters by namespace
   useEffect(() => {
     if (namespace !== '' && namespace !== 'All') {
       setFilteredItems(
@@ -38,6 +39,7 @@ const ProblematicPods = ({ items, namespace }) => {
 
   const phases = Object.keys(POD_STATUS);
 
+  // Formats pod phases
   const parseItems = () => {
     return phases.map((p) => {
       let pods = filteredItems.filter((i) => i.status.phase === p);
@@ -50,7 +52,6 @@ const ProblematicPods = ({ items, namespace }) => {
       };
     });
   };
-  // console.log('Pods', parseItems());
 
   const icons = [
     { icon: 'pending' },

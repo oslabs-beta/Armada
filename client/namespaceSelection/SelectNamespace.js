@@ -9,11 +9,11 @@ function SelectNamespace({
   fetchNamespacesList,
 }) {
   const [namespaceOptions, setNamespaceOptions] = useState([]);
+  /* Fetch list of Namespaces from backend API endpoint that connects to prometheus*/
   const getNamespaceList = () => {
     fetch('/api/namespaceList')
       .then((res) => res.json())
       .then((data) => {
-        // setNamespaces(data);
         let names = ['All'];
         data.items.forEach((item) => {
           names.push(item.metadata.name);
@@ -34,7 +34,6 @@ function SelectNamespace({
   }, []);
 
   function handleNamespaceChange(namespace) {
-    // setSelectedState({ ...selectedState, namespace: namespace.value });
     setNamespace(namespace.value);
   }
 
@@ -48,6 +47,7 @@ function SelectNamespace({
     />
   );
 }
+/* Exports map state to props to create Global namespace variable*/
 const mapStateToProps = ({ namespace }) => {
   return { ...namespace };
 };

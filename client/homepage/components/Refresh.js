@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 
+// Refresh omponent to refetch data. Passed down handleRefresh from MainContainer
 const Refresh = ({ handleRefresh, lastUpdated }) => {
   useEffect(() => {}, [handleRefresh, lastUpdated]);
   return (

@@ -4,11 +4,13 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import MainContainer from './homepage/containers/MainContainer';
 import NavBar from './homepage/containers/NavBar';
 import MetricsContainer from './metricspage/containers/MetricsContainer';
-// import Metrics from './pages/Metrics';
 import Alerts from './alertspage/Alerts';
 import { Container, Box } from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
 import LogsContainer from './logspage/containers/LogsContainer';
+import CustomMetricsContainer from './custompage/containers/CustomMetricsContainer';
+
+/* Applies MUI dark theme */
 
 const darkTheme = createTheme({
   palette: {
@@ -23,23 +25,23 @@ const darkTheme = createTheme({
   },
 });
 
+/* Leveraging React Router to create multiple views within single page application */
 function App() {
   return (
     <ThemeProvider theme={darkTheme}>
-      {/* <Box sx={{ backgroundColor: blueGrey['50'], minHeight: '100vh' }}> */}
       <BrowserRouter>
         <NavBar>
           <Container maxWidth='xl'>
             <Routes>
               <Route path='/' element={<MainContainer />} />
               <Route path='/metrics' element={<MetricsContainer />} />
+              <Route path='/custom' element={<CustomMetricsContainer />} />
               <Route path='/alerts' element={<Alerts />} />
               <Route path='/logs' element={<LogsContainer />} />
             </Routes>
           </Container>
         </NavBar>
       </BrowserRouter>
-      {/* </Box> */}
     </ThemeProvider>
   );
 }

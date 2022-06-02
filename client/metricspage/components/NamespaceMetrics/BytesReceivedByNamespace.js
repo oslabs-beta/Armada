@@ -4,6 +4,9 @@ import MetricsComponentWrapper from '../../../utils/MetricsComponentWrapper';
 import { Button } from '@mui/material';
 
 const BytesReceivedByNamespace = ({ metrics }) => {
+  /* 
+Renders the Network IO (Bps) Received by Namespace line chart on the Metrics Page
+*/
   return (
     <div>
       <MetricsComponentWrapper title=''>
@@ -13,9 +16,6 @@ const BytesReceivedByNamespace = ({ metrics }) => {
           label='Network IO Received by Namespace'
           query={metrics.queryString}
         />
-        {/* <Button variant='text' size='small' onClick={() => {}}>
-          GET QUERY
-        </Button> */}
       </MetricsComponentWrapper>
     </div>
   );
