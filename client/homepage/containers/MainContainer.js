@@ -83,6 +83,16 @@ const MainContainer = (props) => {
       .catch((error) => console.log(error));
   };
 
+  const checkProm = () => {
+    fetch(`/api/prometheus/up`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.hasOwnProperty('err')) {
+          setPromConnect(true);
+        }
+      })
+      .catch((err) => setPromConnect(false));
+  };
   const getPromMetrics = () => {
     let now = new Date();
     let nowCopy = new Date(now.getTime());
@@ -97,7 +107,7 @@ const MainContainer = (props) => {
       .then((res) => res.json())
       .then((data) => {
         if (!data.hasOwnProperty(err)) {
-          setPromConnect(true);
+          // setPromConnect(true);
           fetchPromMetrics(data);
         }
       })
@@ -105,6 +115,7 @@ const MainContainer = (props) => {
   };
 
   useEffect(() => {
+    checkProm();
     handleLoad();
   }, []);
 
@@ -146,7 +157,7 @@ const MainContainer = (props) => {
     getPromMetrics();
     filterByNamespace();
   }
-
+  console.log('promConnect', promConnect);
   return (
     <Grid container spacing={2}>
       {!promConnect && (

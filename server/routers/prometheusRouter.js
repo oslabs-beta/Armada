@@ -8,11 +8,12 @@ prometheusRouter.post('/install', (req, res) => {
   res.status(200).json('Prometheus Fired Up');
 });
 
-// Trial route to get data from Prometheus after nodeporting
+// Get data from Prometheus after nodeporting & check whether Prometheus connection is up
 prometheusRouter.get('/up', prometheusController.isUp, (req, res) => {
   res.status(200).json(res.locals.query);
 });
 
+// Get metrics for homepage
 prometheusRouter.get(
   '/homepage',
   prometheusController.bytesTransmittedPerNode,
@@ -26,6 +27,7 @@ prometheusRouter.get(
   }
 );
 
+// Get PromQL queries for custom metrics page
 prometheusRouter.get(
   '/getqueries',
   metricsDataController.allQueries,
@@ -63,7 +65,6 @@ prometheusRouter.get(
       bytesReceivedPerNode: res.locals.bytesReceivedPerNode,
       bytesReceivedPerPod: res.locals.bytesReceivedPerPod,
     };
-    console.log(res.locals.getCPUUsageByNamespace);
     res.status(200).json(chartData);
   }
 );
